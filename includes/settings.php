@@ -1,0 +1,156 @@
+<?php
+defined( 'ABSPATH' ) || exit;
+
+// ── Default settings ─────────────────────────────────────────────
+/**
+ * Defaults for a single digest configuration.
+ */
+function dsagfe_digest_defaults(): array {
+	return [
+		'id'            => '',
+		'label'         => 'Entry digest',
+		'form_ids'      => [ 1 ],          // Free: exactly one. Pro: many (aggregated).
+		'to_email'      => '',
+		'roles'         => [],             // Pro: WP roles whose members also receive the digest.
+		'email_subject' => 'Your Gravity Forms entry digest',
+		'frequency'     => 'weekly',       // 'weekly' | 'daily'
+		'send_day'      => 'monday',       // used only when frequency = weekly
+		'send_time'     => '08:00',
+		'fields'        => [],             // map: form_id => [ field/input keys ]; empty = all for that form
+		'filters'       => [],             // Pro: map: form_id => [ 'logic' => all|any, 'rules' => [ {field,op,value} ] ]
+		'attach_format' => 'none',         // Pro: 'none' | 'xlsx' | 'csv'
+	];
+}
+
+/**
+ * Top-level option defaults.
+ */
+function dsagfe_defaults(): array {
+	return [
+		'schema'  => DSAGFE_SCHEMA_VERSION,
+		'digests' => [],
+	];
+}
+
+/**
+ * Generate a short, unique digest id.
+ */
+function dsagfe_new_id(): string {
+	return 'd_' . substr( md5( uniqid( '', true ) ), 0, 10 );
+}
+
+/**
+ * Normalize one digest config: fill defaults, coerce types.
+ */
+function dsagfe_normalize_digest( array $d, string $id = '' ): array {
+	$def = dsagfe_digest_defaults();
+	$out = wp_parse_args( $d, $def );
+
+	$out['id']            = $id ?: ( ! empty( $d['id'] ) ? (string) $d['id'] : dsagfe_new_id() );
+	$out['label']         = (string) $out['label'];
+	$out['to_email']      = (string) $out['to_email'];
+	$out['email_subject'] = (string) $out['email_subject'];
+	$out['frequency']     = in_array( $out['frequency'], [ 'daily', 'weekly' ], true ) ? $out['frequency'] : 'weekly';
+	$out['send_day']      = (string) $out['send_day'];
+	$out['send_time']     = (string) $out['send_time'];
+	$out['attach_format'] = in_array( $out['attach_format'], [ 'none', 'xlsx', 'csv' ], true ) ? $out['attach_format'] : 'none';
+
+	$out['form_ids'] = array_values( array_unique( array_map( 'intval', (array) $out['form_ids'] ) ) );
+	$out['form_ids'] = array_values( array_filter( $out['form_ids'], static fn( $f ) => $f > 0 ) );
+	if ( empty( $out['form_ids'] ) ) {
+		$out['form_ids'] = [ 1 ];
+	}
+
+	$out['roles']   = array_values( array_filter( array_map( 'sanitize_key', (array) $out['roles'] ) ) );
+	$out['fields']  = is_array( $out['fields'] )  ? $out['fields']  : [];
+	$out['filters'] = is_array( $out['filters'] ) ? $out['filters'] : [];
+
+	return $out;
+}
+
+/**
+ * Migrate the legacy flat (v1) settings blob into a single v2 digest.
+ */
+function dsagfe_migrate_legacy( array $old ): array {
+	$form_id = max( 1, (int) ( $old['form_id'] ?? 1 ) );
+	return dsagfe_normalize_digest( [
+		'label'         => 'Digest',
+		'form_ids'      => [ $form_id ],
+		'to_email'      => (string) ( $old['to_email'] ?? '' ),
+		'email_subject' => (string) ( $old['email_subject'] ?? 'Your Gravity Forms entry digest' ),
+		'frequency'     => (string) ( $old['frequency'] ?? 'weekly' ),
+		'send_day'      => (string) ( $old['send_day'] ?? 'monday' ),
+		'send_time'     => (string) ( $old['send_time'] ?? '08:00' ),
+		'fields'        => [ (string) $form_id => (array) ( $old['include_fields'] ?? [] ) ],
+		// Attachments are now a Pro feature. Preserve the prior choice so it
+		// returns automatically if/when the site activates Pro.
+		'attach_format' => ! empty( $old['attach_xlsx'] ) ? 'xlsx' : 'none',
+	] );
+}
+
+/**
+ * Load all settings, running migration and normalization.
+ */
+function dsagfe_get_settings(): array {
+	$raw = get_option( DSAGFE_OPTION_KEY, [] );
+	$raw = is_array( $raw ) ? $raw : [];
+
+	// Legacy v1 detection: a flat config carried 'form_id' at the top level.
+	if ( isset( $raw['form_id'] ) && ! isset( $raw['digests'] ) ) {
+		$migrated = dsagfe_migrate_legacy( $raw );
+		$raw      = [ 'schema' => DSAGFE_SCHEMA_VERSION, 'digests' => [ $migrated['id'] => $migrated ] ];
+		update_option( DSAGFE_OPTION_KEY, $raw );
+	}
+
+	$raw = wp_parse_args( $raw, dsagfe_defaults() );
+	if ( ! is_array( $raw['digests'] ) ) {
+		$raw['digests'] = [];
+	}
+
+	$normalized = [];
+	foreach ( $raw['digests'] as $id => $d ) {
+		$id                = (string) $id;
+		$normalized[ $id ] = dsagfe_normalize_digest( (array) $d, $id );
+	}
+	$raw['digests'] = $normalized;
+
+	return $raw;
+}
+
+/**
+ * All configured digests (associative by id, insertion order preserved).
+ */
+function dsagfe_get_digests(): array {
+	return dsagfe_get_settings()['digests'];
+}
+
+/**
+ * The digests that are actually scheduled / sent. Free tier is capped to the
+ * first DSAGFE_FREE_DIGEST_LIMIT; Pro returns them all.
+ */
+function dsagfe_active_digests(): array {
+	$digests = dsagfe_get_digests();
+	if ( dsagfe_is_pro() ) {
+		return $digests;
+	}
+	return array_slice( $digests, 0, DSAGFE_FREE_DIGEST_LIMIT, true );
+}
+
+/**
+ * Fetch a single digest by id, or null.
+ */
+function dsagfe_get_digest( string $id ): ?array {
+	$digests = dsagfe_get_digests();
+	return $digests[ $id ] ?? null;
+}
+
+/**
+ * Persist the full digests map and re-sync the cron schedule.
+ */
+function dsagfe_save_digests( array $digests ): void {
+	update_option( DSAGFE_OPTION_KEY, [
+		'schema'  => DSAGFE_SCHEMA_VERSION,
+		'digests' => $digests,
+	] );
+	dsagfe_reschedule_all();
+}
