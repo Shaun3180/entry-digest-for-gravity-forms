@@ -10,6 +10,7 @@ function dsagfe_render_editor( string $action, string $notice ): void {
 	$gf       = class_exists( 'GFAPI' );
 
 	if ( 'edit' === $action ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- $_GET['digest'] identifies which record to display; it is read-only and not a form submission.
 		$id = isset( $_GET['digest'] ) ? sanitize_text_field( wp_unslash( $_GET['digest'] ) ) : '';
 		$d  = dsagfe_get_digest( $id );
 		if ( ! $d ) {
@@ -27,10 +28,10 @@ function dsagfe_render_editor( string $action, string $notice ): void {
 	$ops       = dsagfe_filter_operators();
 	?>
 	<div class="wrap">
-		<h1><?php echo 'new' === $action ? 'Add Digest' : 'Edit Digest'; ?></h1>
+        <h1><?php echo esc_html( 'new' === $action ? 'Add Digest' : 'Edit Digest' ); ?></h1>
 		<p><a href="<?php echo esc_url( $base_url ); ?>">&larr; Back to all digests</a></p>
 
-		<?php echo $notice; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+        <?php echo esc_html( $notice ); ?>
 
 		<?php if ( ! $gf ) : ?>
 			<div class="notice notice-error"><p>Gravity Forms is not active — the form and field lists below are unavailable.</p></div>
@@ -84,7 +85,7 @@ function dsagfe_render_editor( string $action, string $notice ): void {
 							<p class="description" style="margin-bottom:8px;">Also deliver to every user in the selected role(s).</p>
 							<?php foreach ( wp_roles()->get_names() as $role_key => $role_name ) : ?>
 								<label style="display:inline-block;margin:0 14px 4px 0;">
-									<input type="checkbox" name="dsagfe_digest[roles][]" value="<?php echo esc_attr( $role_key ); ?>" <?php checked( in_array( $role_key, $d['roles'], true ) ); ?> <?php echo $lock; ?>>
+                                    <input type="checkbox" name="dsagfe_digest[roles][]" value="<?php echo esc_attr( $role_key ); ?>" <?php checked( in_array( $role_key, $d['roles'], true ) ); ?> <?php echo esc_attr( $lock ); ?>>
 									<?php echo esc_html( $role_name ); ?>
 								</label>
 							<?php endforeach; ?>
@@ -139,7 +140,7 @@ function dsagfe_render_editor( string $action, string $notice ): void {
 				<tr>
 					<th scope="row">Attachment <?php echo $is_pro ? '' : dsagfe_pro_badge(); // phpcs:ignore ?></th>
 					<td>
-						<select name="dsagfe_digest[attach_format]" <?php echo $lock; ?>>
+						<select name="dsagfe_digest[attach_format]" <?php echo esc_attr( $lock ); ?>>
 							<option value="none" <?php selected( $d['attach_format'], 'none' ); ?>>None</option>
 							<option value="xlsx" <?php selected( $d['attach_format'], 'xlsx' ); ?>>Excel (.xlsx)</option>
 							<option value="csv"  <?php selected( $d['attach_format'], 'csv' ); ?>>CSV</option>
