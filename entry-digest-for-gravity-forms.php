@@ -88,11 +88,3 @@ register_activation_hook( __FILE__, function () {
 register_deactivation_hook( __FILE__, function () {
 	dsagfe_unschedule_all();
 } );
-
-// ── Uninstall ────────────────────────────────────────────────────────
-function edfgf_uninstall_cleanup() {
-    // Delete plugin option.
-    delete_option( 'dsagfe_settings' );
-    // Add any other cleanup here.
-}
-edfgf_fs()->add_action( 'after_uninstall', 'edfgf_uninstall_cleanup' );
