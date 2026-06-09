@@ -6,8 +6,9 @@ defined( 'ABSPATH' ) || exit;
  */
 function dsagfe_handle_save(): string {
 	$is_pro = dsagfe_is_pro();
-	$raw    = (array) ( $_POST['dsagfe_digest'] ?? [] );
-	$raw    = wp_unslash( $raw );
+	// Nonce already verified by check_admin_referer() in menu.php before this function is called.
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- nonce checked upstream; individual values sanitized below.
+	$raw = wp_unslash( (array) ( $_POST['dsagfe_digest'] ?? [] ) );
 
 	$digests = dsagfe_get_digests();
 	$id      = sanitize_text_field( $raw['id'] ?? '' );
