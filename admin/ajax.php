@@ -28,7 +28,6 @@ function dsagfe_ajax_entry_count(): void {
 
 	$frequency = in_array( $raw['frequency'] ?? '', [ 'daily', 'weekly' ], true ) ? $raw['frequency'] : 'weekly';
 	$filters   = dsagfe_parse_posted_filters( $raw, $form_ids, $is_pro );
-	// (debug logs removed)
 
 	$result = dsagfe_count_entries_for( $form_ids, $frequency, $filters, $is_pro );
 
