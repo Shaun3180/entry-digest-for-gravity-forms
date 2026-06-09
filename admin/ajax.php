@@ -18,7 +18,8 @@ function dsagfe_ajax_entry_count(): void {
 	}
 
 	$is_pro = dsagfe_is_pro();
-	$raw    = wp_unslash( (array) ( $_POST['dsagfe_digest'] ?? [] ) );
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- wp_unslash() applied; individual values are sanitized below via sanitize_text_field/intval/etc.
+	$raw = wp_unslash( (array) ( $_POST['dsagfe_digest'] ?? [] ) );
 
 	$form_ids = array_values( array_unique( array_map( 'intval', (array) ( $raw['form_ids'] ?? [] ) ) ) );
 	$form_ids = array_values( array_filter( $form_ids, static fn( $f ) => $f > 0 ) );
