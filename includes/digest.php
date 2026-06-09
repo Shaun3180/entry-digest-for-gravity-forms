@@ -229,14 +229,7 @@ function dsagfe_count_entries_for( array $form_ids, string $frequency, array $fi
 		$rules = ( $is_pro && ! empty( $filters[ (string) $fid ]['rules'] ) ) ? $filters[ (string) $fid ]['rules'] : [];
 
 		if ( empty( $rules ) ) {
-			// Use GFAPI::count_entries if available; fallback to get_entries count
-			if ( method_exists( 'GFAPI', 'count_entries' ) ) {
-				$count = (int) GFAPI::count_entries( $fid, $search );
-			} else {
-				$entries = GFAPI::get_entries( $fid, $search, null, [ 'offset' => 0, 'page_size' => 2000 ] );
-				$entries = is_array( $entries ) ? $entries : [];
-				$count = count( $entries );
-			}
+			$count = (int) GFAPI::get_entry_count( $fid, $search );
 		} else {
 			$logic   = ( 'any' === ( $filters[ (string) $fid ]['logic'] ?? 'all' ) ) ? 'any' : 'all';
 			$entries = GFAPI::get_entries( $fid, $search, null, [ 'offset' => 0, 'page_size' => 2000 ] );
