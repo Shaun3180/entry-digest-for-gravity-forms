@@ -1,7 +1,7 @@
 === Entry Digest for Gravity Forms ===
 Contributors: Shaun3180
 Tags: gravity forms, email digest, form notifications, scheduled email, form entries
-Requires at least: 6.0
+Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
 Stable tag: 1.2.1
