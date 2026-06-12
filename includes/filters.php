@@ -6,14 +6,14 @@ defined( 'ABSPATH' ) || exit;
 // ════════════════════════════════════════════════════════════════
 function dsagfe_filter_operators(): array {
 	return [
-		'is'           => 'is',
-		'is_not'       => 'is not',
-		'contains'     => 'contains',
-		'not_contains' => 'does not contain',
-		'gt'           => 'greater than',
-		'lt'           => 'less than',
-		'empty'        => 'is empty',
-		'not_empty'    => 'is not empty',
+		'is'           => __( 'is', 'entry-digest-for-gravity-forms' ),
+		'is_not'       => __( 'is not', 'entry-digest-for-gravity-forms' ),
+		'contains'     => __( 'contains', 'entry-digest-for-gravity-forms' ),
+		'not_contains' => __( 'does not contain', 'entry-digest-for-gravity-forms' ),
+		'gt'           => __( 'greater than', 'entry-digest-for-gravity-forms' ),
+		'lt'           => __( 'less than', 'entry-digest-for-gravity-forms' ),
+		'empty'        => __( 'is empty', 'entry-digest-for-gravity-forms' ),
+		'not_empty'    => __( 'is not empty', 'entry-digest-for-gravity-forms' ),
 	];
 }
 

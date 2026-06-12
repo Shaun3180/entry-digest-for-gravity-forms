@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,13 +23,15 @@ Gravity Forms' built-in notifications fire on every single submission. For a bus
 * A **summary block** with the new-entry count and reporting period.
 * An **inline entry table** showing the fields you choose, formatted for easy reading on desktop and mobile.
 * **Daily or weekly** scheduling, sent at the time and on the day you pick, in your site's timezone.
+* **One-time sends** — schedule a digest for a specific future date and time, on its own or alongside a recurring schedule, with a custom lookback window.
 * A **"Send Now"** button to preview a digest on demand.
-* Works cleanly even when no entries arrived — you get a tidy "no new entries" note rather than silence.
+* **Graceful quiet periods** — when no entries arrived you can either receive a tidy "no new entries" note (the default, so you're never left wondering) or choose to stay silent, per digest.
 
 = Free features =
 
 * One scheduled digest covering one form.
-* Daily or weekly delivery on a chosen day/time.
+* Daily or weekly delivery on a chosen day/time, and/or a one-time send on a future date you pick.
+* Configurable quiet-period behavior: send a "no new entries" note or stay silent.
 * Per-field selection for the entry table.
 * Summary block with entry count and date range.
 * Clean, branded HTML email that renders well across mail clients.
@@ -63,6 +65,14 @@ Under **Forms › Entry Digest** in the WordPress admin (the Gravity Forms menu)
 
 Digests run on WP-Cron at the day/time you choose, in your site's timezone. Weekly digests cover the previous 7 days; daily digests cover the previous 24 hours. Note that WP-Cron fires on site traffic, so a very low-traffic site may benefit from a real server cron job.
 
+= Can I send a digest just once on a specific date? =
+
+Yes. Each digest has an optional **one-time send** field: pick a future date and time and the digest goes out once, then the date clears itself automatically. You can use it on its own (choose "One-time only") or in addition to a daily/weekly schedule. A separate lookback setting controls how far back the one-time send reaches for entries, and defaults to everything since the form was created.
+
+= What happens when no new entries came in? =
+
+By default the digest still sends a tidy "no new entries" note so recipients know it ran and nothing was missed. If you'd rather stay silent during quiet periods, set that digest's "When there are no new entries" option to "Don't send anything."
+
 = Can I preview a digest without waiting for the schedule? =
 
 Yes. Each digest has a **Send Now** button that builds and emails it immediately.
@@ -85,6 +95,15 @@ The free version covers one form in one digest. Multi-form aggregation and unlim
 
 == Changelog ==
 
+= 1.2.1 =
+* Now translation-ready: every user-facing string is internationalized (text domain `entry-digest-for-gravity-forms`).
+* Bundled translations for Spanish, Chinese (Simplified), German, French, Italian, Portuguese (Brazil), Russian, and Japanese, plus a .pot template for further translation.
+
+= 1.2.0 =
+* One-time scheduling: send a digest on a specific future date/time, on its own or alongside a daily/weekly schedule. The date clears itself after sending.
+* Configurable lookback window for one-time sends, defaulting to "everything since the form was created."
+* Configurable quiet-period behavior: choose per digest whether a zero-entry period sends a "no new entries" note or stays silent.
+
 = 1.1.0 =
 * Multi-digest architecture with per-digest scheduling.
 * Per-form field selection and (Pro) conditional filtering and role/recipient routing.
@@ -95,6 +114,12 @@ The free version covers one form in one digest. Multi-form aggregation and unlim
 * Initial release: single scheduled digest with summary block and entry table, daily/weekly delivery.
 
 == Upgrade Notice ==
+
+= 1.2.1 =
+Adds full translation readiness and bundled translations for eight languages. No functional changes to existing digests. Safe to update.
+
+= 1.2.0 =
+Adds one-time (future-date) scheduling and a configurable quiet-period option. Existing digests are unaffected. Safe to update.
 
 = 1.1.0 =
 Adds per-digest scheduling and field selection, and migrates older settings automatically. Safe to update.

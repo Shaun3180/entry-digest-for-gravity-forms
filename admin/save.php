@@ -19,7 +19,12 @@ function dsagfe_handle_save(): string {
 
 	// Free-tier guard: block creating a 2nd digest.
 	if ( $is_new && ! $is_pro && count( $digests ) >= DSAGFE_FREE_DIGEST_LIMIT ) {
-		return dsagfe_notice( 'The free plan includes one digest. <a href="' . esc_url( dsagfe_upgrade_url() ) . '">Upgrade to Pro</a> for unlimited digests.', 'warning' );
+		return dsagfe_notice( sprintf(
+			/* translators: 1: opening anchor tag to the upgrade page; 2: closing anchor tag. */
+			__( 'The free plan includes one digest. %1$sUpgrade to Pro%2$s for unlimited digests.', 'entry-digest-for-gravity-forms' ),
+			'<a href="' . esc_url( dsagfe_upgrade_url() ) . '">',
+			'</a>'
+		), 'warning' );
 	}
 
 	$def = dsagfe_digest_defaults();
@@ -54,11 +59,32 @@ function dsagfe_handle_save(): string {
 	$d['form_ids'] = $form_ids;
 
 	// Schedule.
-	$d['frequency'] = in_array( $raw['frequency'] ?? '', [ 'daily', 'weekly' ], true ) ? $raw['frequency'] : $def['frequency'];
+	$d['frequency'] = in_array( $raw['frequency'] ?? '', [ 'daily', 'weekly', 'none' ], true ) ? $raw['frequency'] : $def['frequency'];
 	$valid_days     = [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ];
 	$d['send_day']  = in_array( $raw['send_day'] ?? '', $valid_days, true ) ? $raw['send_day'] : $def['send_day'];
 	$time           = sanitize_text_field( $raw['send_time'] ?? $def['send_time'] );
 	$d['send_time'] = preg_match( '/^\d{2}:\d{2}$/', $time ) ? $time : $def['send_time'];
+
+	// One-time send. The datetime-local field arrives as 'Y-m-d\TH:i'; we store
+	// 'Y-m-d H:i'. Only keep it if it's a real, still-future moment.
+	$d['onetime_at'] = '';
+	$onetime_raw     = str_replace( 'T', ' ', sanitize_text_field( $raw['onetime_at'] ?? '' ) );
+	if ( preg_match( '/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/', $onetime_raw ) ) {
+		$dt = DateTime::createFromFormat( 'Y-m-d H:i', $onetime_raw, wp_timezone() );
+		if ( $dt && $dt->getTimestamp() > time() ) {
+			$d['onetime_at'] = $onetime_raw;
+		}
+	}
+	$d['onetime_lookback_days'] = max( 0, (int) ( $raw['onetime_lookback_days'] ?? 0 ) );
+
+	// A digest must do something: with no recurring schedule and no pending
+	// one-time date, fall back to weekly so it doesn't silently never send.
+	if ( 'none' === $d['frequency'] && '' === $d['onetime_at'] ) {
+		$d['frequency'] = 'weekly';
+	}
+
+	// Quiet-period behavior.
+	$d['quiet_behavior'] = in_array( $raw['quiet_behavior'] ?? '', [ 'send', 'skip' ], true ) ? $raw['quiet_behavior'] : $def['quiet_behavior'];
 
 	// Per-form fields.
 	$fields_in = (array) ( $raw['fields'] ?? [] );
@@ -111,5 +137,8 @@ function dsagfe_handle_save(): string {
 	$digests[ $id ] = dsagfe_normalize_digest( $d, $id );
 	dsagfe_save_digests( $digests );
 
-	return dsagfe_notice( $is_new ? 'Digest created.' : 'Digest saved.' );
+	return dsagfe_notice( $is_new
+		? __( 'Digest created.', 'entry-digest-for-gravity-forms' )
+		: __( 'Digest saved.', 'entry-digest-for-gravity-forms' )
+	);
 }

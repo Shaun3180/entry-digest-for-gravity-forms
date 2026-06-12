@@ -49,7 +49,11 @@ function dsagfe_build_attachments( string $format, array $sections ): array {
  */
 function dsagfe_section_table( array $sec ): array {
 	$field_map = $sec['field_map'];
-	$headers   = array_merge( [ 'Entry ID', 'Date Submitted (UTC)', 'IP Address' ], array_values( $field_map ) );
+	$headers   = array_merge( [
+		__( 'Entry ID', 'entry-digest-for-gravity-forms' ),
+		__( 'Date Submitted (UTC)', 'entry-digest-for-gravity-forms' ),
+		__( 'IP Address', 'entry-digest-for-gravity-forms' ),
+	], array_values( $field_map ) );
 	$rows      = [];
 	foreach ( $sec['entries'] as $entry ) {
 		$row = [ $entry['id'] ?? '', $entry['date_created'] ?? '', $entry['ip'] ?? '' ];
@@ -86,20 +90,42 @@ function dsagfe_unique_sheet_name( string $title, array &$used ): string {
 // ════════════════════════════════════════════════════════════════
 //  CSV writer
 // ════════════════════════════════════════════════════════════════
+/**
+ * Encode one CSV row per RFC-4180 (double-quote escaping).
+ *
+ * @param string[] $fields
+ */
+function dsagfe_csv_line( array $fields ): string {
+	$cells = [];
+	foreach ( $fields as $field ) {
+		$field = (string) $field;
+		if ( str_contains( $field, ',' ) || str_contains( $field, '"' ) || str_contains( $field, "\n" ) || str_contains( $field, "\r" ) ) {
+			$field = '"' . str_replace( '"', '""', $field ) . '"';
+		}
+		$cells[] = $field;
+	}
+	return implode( ',', $cells ) . "\r\n";
+}
+
 function dsagfe_write_csv( string $filepath, array $headers, array $rows ): bool {
-	$fh = fopen( $filepath, 'w' );
-	if ( ! $fh ) {
+	global $wp_filesystem;
+	if ( ! function_exists( 'WP_Filesystem' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+	}
+	if ( empty( $wp_filesystem ) ) {
+		WP_Filesystem();
+	}
+	if ( ! is_object( $wp_filesystem ) ) {
 		return false;
 	}
-	fwrite( $fh, "\xEF\xBB\xBF" ); // UTF-8 BOM for Excel.
-	// Empty escape char => RFC-4180 doubled-quote escaping (Excel-friendly),
-	// rather than PHP's default backslash escaping.
-	fputcsv( $fh, $headers, ',', '"', '' );
+
+	$content  = "\xEF\xBB\xBF"; // UTF-8 BOM for Excel.
+	$content .= dsagfe_csv_line( $headers );
 	foreach ( $rows as $row ) {
-		fputcsv( $fh, array_map( 'strval', $row ), ',', '"', '' );
+		$content .= dsagfe_csv_line( array_map( 'strval', $row ) );
 	}
-	fclose( $fh );
-	return file_exists( $filepath );
+
+	return (bool) $wp_filesystem->put_contents( $filepath, $content, FS_CHMOD_FILE );
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -111,7 +137,6 @@ function dsagfe_write_csv( string $filepath, array $headers, array $rows ): bool
  */
 function dsagfe_write_xlsx( string $filepath, array $sheets ): bool {
 	if ( ! class_exists( 'ZipArchive' ) ) {
-		error_log( 'Entry Digest: the ZipArchive PHP extension is required to generate xlsx files.' );
 		return false;
 	}
 	if ( empty( $sheets ) ) {

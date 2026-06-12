@@ -1,0 +1,510 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Entry Digest for Gravity Forms 1.2.0\n"
+"Report-Msgid-Bugs-To: https://addasitebuilders.com/plugins/entry-digest-for-gravity-forms/\n"
+"POT-Creation-Date: 2026-06-12 01:52\n"
+"PO-Revision-Date: 2026-06-12 01:52\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Domain: entry-digest-for-gravity-forms\n"
+
+msgid "Entry Digest"
+msgstr "エントリーダイジェスト"
+
+msgid "Insufficient permissions."
+msgstr "権限が不足しています。"
+
+msgid "Digest deleted."
+msgstr "ダイジェストを削除しました。"
+
+msgid "&#10003; Digest triggered. Check %s."
+msgstr "&#10003; ダイジェストを送信しました。%s を確認してください。"
+
+msgid "Add Digest"
+msgstr "ダイジェストを追加"
+
+msgid "Gravity Forms is not active. Digests will not send until it is."
+msgstr "Gravity Forms が有効ではありません。有効になるまでダイジェストは送信されません。"
+
+msgid "You're on the free plan."
+msgstr "無料プランをご利用中です。"
+
+msgid ""
+"Pro unlocks unlimited digests, multi-form aggregation, role & recipient "
+"routing, conditional filtering, and CSV/Excel attachments."
+msgstr ""
+"Pro では、無制限のダイジェスト、複数フォームの集約、ロール・受信者別のルーティング、条件付きフィルタリング、CSV/Excel 添付が利用できます。"
+
+msgid "Start a free Pro trial"
+msgstr "無料の Pro トライアルを開始"
+
+msgid "Set up your first digest"
+msgstr "最初のダイジェストを設定する"
+
+msgid ""
+"A digest bundles new Gravity Forms entries into one scheduled email — daily "
+"or weekly — so you get a clean summary instead of a flood of individual "
+"notifications."
+msgstr ""
+"ダイジェストは新しい Gravity Forms のエントリーを 1 "
+"通のスケジュール配信メールにまとめ（毎日または毎週）、大量の個別通知の代わりにすっきりした要約をお届けします。"
+
+msgid "Create your first digest"
+msgstr "最初のダイジェストを作成"
+
+msgid "Digest"
+msgstr "ダイジェスト"
+
+msgid "Forms"
+msgstr "フォーム"
+
+msgid "Recipients"
+msgstr "受信者"
+
+msgid "Schedule"
+msgstr "スケジュール"
+
+msgid "Next run"
+msgstr "次回の実行"
+
+msgid "Actions"
+msgstr "操作"
+
+msgid "Form %d (missing)"
+msgstr "フォーム %d（見つかりません）"
+
+msgid "Form %d"
+msgstr "フォーム %d"
+
+msgid "Daily %s"
+msgstr "毎日 %s"
+
+msgid "Weekly %1$s %2$s"
+msgstr "毎週 %1$s %2$s"
+
+msgid "Once: %s"
+msgstr "1 回のみ：%s"
+
+msgid "Untitled digest"
+msgstr "無題のダイジェスト"
+
+msgid "Inactive (free plan limit — upgrade to enable)"
+msgstr "無効（無料プランの上限 — 有効にするにはアップグレード）"
+
+msgid "— none —"
+msgstr "— なし —"
+
+msgid "Edit"
+msgstr "編集"
+
+msgid "Send Now"
+msgstr "今すぐ送信"
+
+msgid "Delete this digest?"
+msgstr "このダイジェストを削除しますか？"
+
+msgid "Delete"
+msgstr "削除"
+
+msgid "Schedules use your site timezone: %s."
+msgstr "スケジュールはサイトのタイムゾーンを使用します：%s。"
+
+msgid ""
+"Weekly digests cover the past 7 days; daily digests cover the past 24 hours."
+msgstr "毎週のダイジェストは過去 7 日間、毎日のダイジェストは過去 24 時間を対象とします。"
+
+msgid ""
+"The free plan includes one digest. %1$sUpgrade to Pro%2$s for unlimited "
+"digests."
+msgstr "無料プランにはダイジェストが 1 つ含まれます。無制限のダイジェストには %1$sPro にアップグレード%2$s してください。"
+
+msgid "Digest created."
+msgstr "ダイジェストを作成しました。"
+
+msgid "Digest saved."
+msgstr "ダイジェストを保存しました。"
+
+msgid "Security check failed — reload the page."
+msgstr "セキュリティチェックに失敗しました — ページを再読み込みしてください。"
+
+msgid "Gravity Forms is not active."
+msgstr "Gravity Forms が有効ではありません。"
+
+msgid "Digest not found."
+msgstr "ダイジェストが見つかりません。"
+
+msgid "Edit Digest"
+msgstr "ダイジェストを編集"
+
+msgid "Back to all digests"
+msgstr "すべてのダイジェストに戻る"
+
+msgid ""
+"Gravity Forms is not active — the form and field lists below are "
+"unavailable."
+msgstr "Gravity Forms が有効ではありません — 下記のフォームとフィールドの一覧は利用できません。"
+
+msgid "Digest name"
+msgstr "ダイジェスト名"
+
+msgid "For your reference (and used as the header on multi-form digests)."
+msgstr "参照用です（複数フォームのダイジェストでは見出しとして使用されます）。"
+
+msgid "Select one or more forms to aggregate into this digest."
+msgstr "このダイジェストに集約するフォームを 1 つ以上選択してください。"
+
+msgid ""
+"Free plan: one form per digest. Multi-form aggregation is a Pro feature."
+msgstr "無料プラン：ダイジェストごとに 1 フォーム。複数フォームの集約は Pro 機能です。"
+
+msgid "(ID %s)"
+msgstr "(ID %s)"
+
+msgid "Enter a form ID (Gravity Forms inactive — can't list forms)."
+msgstr "フォーム ID を入力してください（Gravity Forms が無効 — フォームを一覧表示できません）。"
+
+msgid "Recipient email(s)"
+msgstr "受信者のメールアドレス"
+
+msgid "Comma-separated, e.g. %s"
+msgstr "カンマ区切り、例：%s"
+
+msgid "Send to roles"
+msgstr "ロールに送信"
+
+msgid "Also deliver to every user in the selected role(s)."
+msgstr "選択したロールのすべてのユーザーにも送信します。"
+
+msgid "%1$sUpgrade to Pro%2$s to route by role."
+msgstr "ロール別にルーティングするには %1$sPro にアップグレード%2$s してください。"
+
+msgid "Email subject"
+msgstr "メールの件名"
+
+msgid "Recurring frequency"
+msgstr "繰り返しの頻度"
+
+msgid "Weekly"
+msgstr "毎週"
+
+msgid "Daily"
+msgstr "毎日"
+
+msgid "One-time only (no recurring)"
+msgstr "1 回のみ（繰り返しなし）"
+
+msgid ""
+"Weekly covers the past 7 days; daily covers the past 24 hours. Choose %s to "
+"send just once on a date you pick below."
+msgstr "毎週は過去 7 日間、毎日は過去 24 時間を対象とします。下で選んだ日付に 1 回だけ送信するには %s を選択してください。"
+
+msgid "One-time only"
+msgstr "1 回のみ"
+
+msgid "Send day"
+msgstr "送信する曜日"
+
+msgid "Weekly only."
+msgstr "毎週のみ。"
+
+msgid "Send time"
+msgstr "送信時刻"
+
+msgid "For the recurring send. Site timezone: %s"
+msgstr "繰り返し送信用です。サイトのタイムゾーン：%s"
+
+msgid "One-time send"
+msgstr "1 回限りの送信"
+
+msgid "Clear"
+msgstr "クリア"
+
+msgid ""
+"Optional. Pick a future date & time to send this digest once, on top of (or "
+"instead of) the recurring schedule. Site timezone: %s. The date clears "
+"itself automatically after it sends."
+msgstr ""
+"任意。このダイジェストを 1 "
+"回送信する将来の日時を選択します（繰り返しスケジュールに加えて、またはその代わりに）。サイトのタイムゾーン：%s。送信後、日付は自動的にクリアされます。"
+
+msgid "One-time lookback (days)"
+msgstr "1 回限りの遡及（日数）"
+
+msgid ""
+"How far back the one-time send looks for entries. %s = every entry up to the"
+" send moment."
+msgstr "1 回限りの送信がエントリーをどこまで遡って探すか。%s = 送信時点までのすべてのエントリー。"
+
+msgid "When there are no new entries"
+msgstr "新しいエントリーがない場合"
+
+msgid "Send a \"no new entries\" note"
+msgstr "「新しいエントリーはありません」という通知を送信"
+
+msgid "Don't send anything"
+msgstr "何も送信しない"
+
+msgid ""
+"By default a quiet period still gets a tidy \"no new entries\" email, so "
+"recipients are never left wondering. Choose \"Don't send anything\" to stay "
+"silent when nothing came in."
+msgstr ""
+"デフォルトでは、活動のない期間でも「新しいエントリーはありません」という簡潔なメールが送信され、受信者が不安に思うことはありません。何も届かなかったときに送信しないようにするには「何も送信しない」を選択してください。"
+
+msgid "Entries right now"
+msgstr "現在のエントリー数"
+
+msgid "Calculating…"
+msgstr "計算中…"
+
+msgid ""
+"How many active entries would be included if this digest ran right now, "
+"using your current settings. Updates live as you change them; the real send "
+"uses the same rolling window (%s) at send time."
+msgstr ""
+"現在の設定で、このダイジェストを今実行した場合に含まれる有効なエントリー数です。設定を変更するとリアルタイムで更新されます。実際の送信では送信時点で同じローリングウィンドウ（%s）が使われます。"
+
+msgid "Attachment"
+msgstr "添付ファイル"
+
+msgid "None"
+msgstr "なし"
+
+msgid "Excel (.xlsx)"
+msgstr "Excel (.xlsx)"
+
+msgid "CSV"
+msgstr "CSV"
+
+msgid ""
+"Attach the full period's entries. Excel produces one sheet per form; CSV "
+"produces one file per form."
+msgstr "対象期間のすべてのエントリーを添付します。Excel はフォームごとに 1 シート、CSV はフォームごとに 1 ファイルを生成します。"
+
+msgid "Pro feature"
+msgstr "Pro 機能"
+
+msgid "Per-form fields & filters"
+msgstr "フォームごとのフィールドとフィルター"
+
+msgid "Choose which fields appear, and (Pro) which entries to include."
+msgstr "表示するフィールドと、（Pro）含めるエントリーを選択します。"
+
+msgid "Fields to include"
+msgstr "含めるフィールド"
+
+msgid "(none checked = all)"
+msgstr "（未選択 = すべて）"
+
+msgid "Conditional filtering"
+msgstr "条件付きフィルタリング"
+
+msgid "Match"
+msgstr "一致条件"
+
+msgid "all"
+msgstr "すべて"
+
+msgid "any"
+msgstr "いずれか"
+
+msgid "of these rules:"
+msgstr "これらのルールの："
+
+msgid "field"
+msgstr "フィールド"
+
+msgid "value"
+msgstr "値"
+
+msgid ""
+"Leave fields blank to ignore a row. Add more rules by saving and reopening."
+msgstr "行を無視するにはフィールドを空のままにします。保存して再度開くと、さらにルールを追加できます。"
+
+msgid ""
+"Send only entries matching conditions (e.g. %1$s). %2$sUpgrade to Pro%3$s."
+msgstr "条件に一致するエントリーのみを送信します（例：%1$s）。%2$sPro にアップグレード%3$s。"
+
+msgid "Status is Complete"
+msgstr "ステータスが「完了」"
+
+msgid "Create Digest"
+msgstr "ダイジェストを作成"
+
+msgid "Save Digest"
+msgstr "ダイジェストを保存"
+
+msgid "Gravity Forms is not active — counts unavailable."
+msgstr "Gravity Forms が有効ではありません — 件数を表示できません。"
+
+msgid "Select a form to see a count."
+msgstr "件数を表示するにはフォームを選択してください。"
+
+msgid "Unable to calculate."
+msgstr "計算できません。"
+
+msgid "entry"
+msgstr "件"
+
+msgid "entries"
+msgstr "件"
+
+msgid "past 24 hours"
+msgstr "過去 24 時間"
+
+msgid "past 7 days"
+msgstr "過去 7 日間"
+
+msgid "Monday"
+msgstr "月曜日"
+
+msgid "Tuesday"
+msgstr "火曜日"
+
+msgid "Wednesday"
+msgstr "水曜日"
+
+msgid "Thursday"
+msgstr "木曜日"
+
+msgid "Friday"
+msgstr "金曜日"
+
+msgid "Saturday"
+msgstr "土曜日"
+
+msgid "Sunday"
+msgstr "日曜日"
+
+msgid "Entry digest"
+msgstr "エントリーダイジェスト"
+
+msgid "Your Gravity Forms entry digest"
+msgstr "あなたの Gravity Forms エントリーダイジェスト"
+
+msgid "is"
+msgstr "が次と等しい"
+
+msgid "is not"
+msgstr "が次と等しくない"
+
+msgid "contains"
+msgstr "を含む"
+
+msgid "does not contain"
+msgstr "を含まない"
+
+msgid "greater than"
+msgstr "より大きい"
+
+msgid "less than"
+msgstr "より小さい"
+
+msgid "is empty"
+msgstr "が空"
+
+msgid "is not empty"
+msgstr "が空でない"
+
+msgid "whole history"
+msgstr "全履歴"
+
+msgid "All entries through %s"
+msgstr "%s までのすべてのエントリー"
+
+msgid "One-time"
+msgstr "1 回のみ"
+
+msgid "Entry digest · %s"
+msgstr "エントリーダイジェスト · %s"
+
+msgid "Period:"
+msgstr "期間："
+
+msgid "Forms:"
+msgstr "フォーム："
+
+msgid "Form:"
+msgstr "フォーム："
+
+msgid "(ID %d)"
+msgstr "(ID %d)"
+
+msgid "No new entries were submitted during this period."
+msgstr "この期間に新しいエントリーは送信されませんでした。"
+
+msgid "Sent automatically by Entry Digest for Gravity Forms."
+msgstr "Entry Digest for Gravity Forms によって自動送信されました。"
+
+msgid "Delivered daily at %s."
+msgstr "毎日 %s に配信されます。"
+
+msgid "Delivered every %1$s at %2$s."
+msgstr "毎週%1$sの %2$s に配信されます。"
+
+msgid "No new entries for this form."
+msgstr "このフォームに新しいエントリーはありません。"
+
+msgid "Submitted"
+msgstr "送信日時"
+
+msgid " — the complete set is in the attachment."
+msgstr " — 完全なデータは添付ファイルにあります。"
+
+msgid "Showing the first %1$d of %2$d entries%3$s"
+msgstr "%2$d 件中、最初の %1$d 件を表示しています%3$s"
+
+msgid "Entry ID"
+msgstr "エントリー ID"
+
+msgid "Date Submitted (UTC)"
+msgstr "送信日時 (UTC)"
+
+msgid "IP Address"
+msgstr "IP アドレス"
+
+msgctxt "precedes a time window such as \"past 7 days\""
+msgid "in the"
+msgstr "・"
+
+msgctxt "precedes a time window in the per-form count badge"
+msgid "in"
+msgstr "・"
+
+msgid ""
+"This form was created about %d day ago — the default covers everything since"
+" then."
+msgid_plural ""
+"This form was created about %d days ago — the default covers everything "
+"since then."
+msgstr[0] "このフォームは約 %d 日前に作成されました — デフォルトではそれ以降のすべてが対象です。"
+
+msgid "past %d day"
+msgid_plural "past %d days"
+msgstr[0] "過去 %d 日間"
+
+msgid "new entry"
+msgid_plural "new entries"
+msgstr[0] "新しいエントリー"
+
+msgid "new entry today"
+msgid_plural "new entries today"
+msgstr[0] "本日の新しいエントリー"
+
+msgid "new entry this week"
+msgid_plural "new entries this week"
+msgstr[0] "今週の新しいエントリー"
+
+msgid "across %d form"
+msgid_plural "across %d forms"
+msgstr[0] "%d 個のフォームにわたって"
+
+msgid "%d entry"
+msgid_plural "%d entries"
+msgstr[0] "%d 件"

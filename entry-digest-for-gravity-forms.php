@@ -3,7 +3,7 @@
  * Plugin Name:       Entry Digest for Gravity Forms
  * Plugin URI:        https://addasitebuilders.com/plugins
  * Description:       Sends scheduled, readable email digests of your Gravity Forms entries — a summary block plus an inline table of submissions — on a daily or weekly schedule. Pro adds unlimited digests, multi-form aggregation, role/recipient routing, conditional filtering, and CSV/Excel attachments. Find it under Forms › Entry Digest (or Tools › Entry Digest if Gravity Forms is inactive).
- * Version:           1.1.0
+ * Version:           1.2.1
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Add-A-Site Apps
@@ -11,6 +11,7 @@
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       entry-digest-for-gravity-forms
+ * Domain Path:        /languages
  */
 defined( 'ABSPATH' ) || exit;
 
@@ -58,6 +59,14 @@ define( 'DSAGFE_SCHEMA_VERSION',  2 );
 define( 'DSAGFE_MAX_TABLE_ROWS',  100 ); // Cap inline table; full data goes in the attachment.
 define( 'DSAGFE_MAX_CELL_CHARS',  200 ); // Truncate long cell values in the inline table.
 define( 'DSAGFE_FREE_DIGEST_LIMIT', 1 ); // Free tier: one digest, one form, no routing/filters/attachments.
+
+// ── Translations ─────────────────────────────────────────────────
+// Load bundled translations from /languages. (Translations delivered from
+// WordPress.org load automatically, but the .mo files shipped inside the
+// plugin need this explicit call.)
+add_action( 'init', function () {
+	load_plugin_textdomain( 'entry-digest-for-gravity-forms', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+} );
 
 // ── Module includes ──────────────────────────────────────────────
 define( 'EDFGF_DIR', plugin_dir_path( __FILE__ ) );

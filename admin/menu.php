@@ -14,7 +14,7 @@ function dsagfe_register_gf_menu( $menu_items ) {
 	$menu_items   = is_array( $menu_items ) ? $menu_items : [];
 	$menu_items[] = [
 		'name'       => 'entry-digest',
-		'label'      => 'Entry Digest',
+		'label'      => __( 'Entry Digest', 'entry-digest-for-gravity-forms' ),
 		'callback'   => 'dsagfe_admin_router',
 		'permission' => apply_filters( 'dsagfe_menu_capability', 'manage_options' ),
 	];
@@ -28,8 +28,8 @@ function dsagfe_register_gf_menu( $menu_items ) {
 add_action( 'admin_menu', function () {
 	if ( ! class_exists( 'GFForms' ) ) {
 		add_management_page(
-			'Entry Digest',
-			'Entry Digest',
+			__( 'Entry Digest', 'entry-digest-for-gravity-forms' ),
+			__( 'Entry Digest', 'entry-digest-for-gravity-forms' ),
 			apply_filters( 'dsagfe_menu_capability', 'manage_options' ),
 			'entry-digest',
 			'dsagfe_admin_router'
@@ -51,7 +51,7 @@ function dsagfe_page_url(): string {
  */
 function dsagfe_admin_router(): void {
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( 'Insufficient permissions.' );
+		wp_die( esc_html__( 'Insufficient permissions.', 'entry-digest-for-gravity-forms' ) );
 	}
 
 	// ── Handle POSTs ──────────────────────────────────────────────
@@ -64,13 +64,21 @@ function dsagfe_admin_router(): void {
 		$digests = dsagfe_get_digests();
 		unset( $digests[ $id ] );
 		dsagfe_save_digests( $digests );
-		$notice = dsagfe_notice( 'Digest deleted.' );
+		$notice = dsagfe_notice( __( 'Digest deleted.', 'entry-digest-for-gravity-forms' ) );
 	} elseif ( isset( $_POST['dsagfe_send_now'] ) && check_admin_referer( 'dsagfe_send_now' ) ) {
 		$id = sanitize_text_field( wp_unslash( $_POST['digest_id'] ?? '' ) );
-		dsagfe_run_digest( $id );
+		// For a one-time-only digest, send a test using its one-time window; the
+		// stored date is left intact (manual sends never clear the schedule).
+		$d_now = dsagfe_get_digest( $id );
+		$mode  = ( $d_now && 'none' === ( $d_now['frequency'] ?? 'weekly' ) ) ? 'once' : 'recurring';
+		dsagfe_run_digest( $id, $mode );
 		$d      = dsagfe_get_digest( $id );
 		$rcpts  = $d ? dsagfe_resolve_recipients( $d ) : [];
-		$notice = dsagfe_notice( '&#10003; Digest triggered. Check <strong>' . esc_html( implode( ', ', $rcpts ) ) . '</strong>.' );
+		$notice = dsagfe_notice( sprintf(
+			/* translators: %s: comma-separated list of recipient email addresses. */
+			__( '&#10003; Digest triggered. Check %s.', 'entry-digest-for-gravity-forms' ),
+			'<strong>' . esc_html( implode( ', ', $rcpts ) ) . '</strong>'
+		) );
 	}
 
 	$action = isset( $_GET['action'] ) ? sanitize_key( $_GET['action'] ) : 'list';

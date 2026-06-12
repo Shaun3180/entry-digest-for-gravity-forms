@@ -1,0 +1,504 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Entry Digest for Gravity Forms 1.2.0\n"
+"Report-Msgid-Bugs-To: https://addasitebuilders.com/plugins/entry-digest-for-gravity-forms/\n"
+"POT-Creation-Date: 2026-06-12 01:42\n"
+"PO-Revision-Date: 2026-06-12 01:42\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Domain: entry-digest-for-gravity-forms\n"
+
+msgid "Entry Digest"
+msgstr "条目摘要"
+
+msgid "Insufficient permissions."
+msgstr "权限不足。"
+
+msgid "Digest deleted."
+msgstr "摘要已删除。"
+
+msgid "&#10003; Digest triggered. Check %s."
+msgstr "&#10003; 摘要已触发。请查看 %s。"
+
+msgid "Add Digest"
+msgstr "添加摘要"
+
+msgid "Gravity Forms is not active. Digests will not send until it is."
+msgstr "Gravity Forms 未启用。在启用之前，摘要将不会发送。"
+
+msgid "You're on the free plan."
+msgstr "您正在使用免费版。"
+
+msgid ""
+"Pro unlocks unlimited digests, multi-form aggregation, role & recipient "
+"routing, conditional filtering, and CSV/Excel attachments."
+msgstr "专业版可解锁无限摘要、多表单聚合、按角色和收件人路由、条件筛选以及 CSV/Excel 附件。"
+
+msgid "Start a free Pro trial"
+msgstr "开始免费的专业版试用"
+
+msgid "Set up your first digest"
+msgstr "设置您的第一个摘要"
+
+msgid ""
+"A digest bundles new Gravity Forms entries into one scheduled email — daily "
+"or weekly — so you get a clean summary instead of a flood of individual "
+"notifications."
+msgstr "摘要会将新的 Gravity Forms 条目汇集到一封定时发送的邮件中（每日或每周），让您收到一份清晰的汇总，而不是大量单独的通知。"
+
+msgid "Create your first digest"
+msgstr "创建您的第一个摘要"
+
+msgid "Digest"
+msgstr "摘要"
+
+msgid "Forms"
+msgstr "表单"
+
+msgid "Recipients"
+msgstr "收件人"
+
+msgid "Schedule"
+msgstr "计划"
+
+msgid "Next run"
+msgstr "下次运行"
+
+msgid "Actions"
+msgstr "操作"
+
+msgid "Form %d (missing)"
+msgstr "表单 %d（缺失）"
+
+msgid "Form %d"
+msgstr "表单 %d"
+
+msgid "Daily %s"
+msgstr "每日 %s"
+
+msgid "Weekly %1$s %2$s"
+msgstr "每周 %1$s %2$s"
+
+msgid "Once: %s"
+msgstr "一次性：%s"
+
+msgid "Untitled digest"
+msgstr "未命名摘要"
+
+msgid "Inactive (free plan limit — upgrade to enable)"
+msgstr "未激活（免费版限制 — 升级以启用）"
+
+msgid "— none —"
+msgstr "— 无 —"
+
+msgid "Edit"
+msgstr "编辑"
+
+msgid "Send Now"
+msgstr "立即发送"
+
+msgid "Delete this digest?"
+msgstr "删除此摘要？"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "Schedules use your site timezone: %s."
+msgstr "计划使用您站点的时区：%s。"
+
+msgid ""
+"Weekly digests cover the past 7 days; daily digests cover the past 24 hours."
+msgstr "每周摘要涵盖过去 7 天；每日摘要涵盖过去 24 小时。"
+
+msgid ""
+"The free plan includes one digest. %1$sUpgrade to Pro%2$s for unlimited "
+"digests."
+msgstr "免费版包含一个摘要。%1$s升级到专业版%2$s即可获得无限摘要。"
+
+msgid "Digest created."
+msgstr "摘要已创建。"
+
+msgid "Digest saved."
+msgstr "摘要已保存。"
+
+msgid "Security check failed — reload the page."
+msgstr "安全校验失败 — 请重新加载页面。"
+
+msgid "Gravity Forms is not active."
+msgstr "Gravity Forms 未启用。"
+
+msgid "Digest not found."
+msgstr "未找到摘要。"
+
+msgid "Edit Digest"
+msgstr "编辑摘要"
+
+msgid "Back to all digests"
+msgstr "返回所有摘要"
+
+msgid ""
+"Gravity Forms is not active — the form and field lists below are "
+"unavailable."
+msgstr "Gravity Forms 未启用 — 下方的表单和字段列表不可用。"
+
+msgid "Digest name"
+msgstr "摘要名称"
+
+msgid "For your reference (and used as the header on multi-form digests)."
+msgstr "供您参考（并用作多表单摘要的标题）。"
+
+msgid "Select one or more forms to aggregate into this digest."
+msgstr "选择一个或多个表单以聚合到此摘要中。"
+
+msgid ""
+"Free plan: one form per digest. Multi-form aggregation is a Pro feature."
+msgstr "免费版：每个摘要一个表单。多表单聚合是专业版功能。"
+
+msgid "(ID %s)"
+msgstr "(ID %s)"
+
+msgid "Enter a form ID (Gravity Forms inactive — can't list forms)."
+msgstr "请输入表单 ID（Gravity Forms 未启用 — 无法列出表单）。"
+
+msgid "Recipient email(s)"
+msgstr "收件人邮箱"
+
+msgid "Comma-separated, e.g. %s"
+msgstr "以逗号分隔，例如 %s"
+
+msgid "Send to roles"
+msgstr "发送给角色"
+
+msgid "Also deliver to every user in the selected role(s)."
+msgstr "同时发送给所选角色中的每个用户。"
+
+msgid "%1$sUpgrade to Pro%2$s to route by role."
+msgstr "%1$s升级到专业版%2$s即可按角色路由。"
+
+msgid "Email subject"
+msgstr "邮件主题"
+
+msgid "Recurring frequency"
+msgstr "重复频率"
+
+msgid "Weekly"
+msgstr "每周"
+
+msgid "Daily"
+msgstr "每日"
+
+msgid "One-time only (no recurring)"
+msgstr "仅一次（不重复）"
+
+msgid ""
+"Weekly covers the past 7 days; daily covers the past 24 hours. Choose %s to "
+"send just once on a date you pick below."
+msgstr "每周涵盖过去 7 天；每日涵盖过去 24 小时。选择 %s 即可在下方所选的日期仅发送一次。"
+
+msgid "One-time only"
+msgstr "仅一次"
+
+msgid "Send day"
+msgstr "发送日"
+
+msgid "Weekly only."
+msgstr "仅每周。"
+
+msgid "Send time"
+msgstr "发送时间"
+
+msgid "For the recurring send. Site timezone: %s"
+msgstr "用于重复发送。站点时区：%s"
+
+msgid "One-time send"
+msgstr "一次性发送"
+
+msgid "Clear"
+msgstr "清除"
+
+msgid ""
+"Optional. Pick a future date & time to send this digest once, on top of (or "
+"instead of) the recurring schedule. Site timezone: %s. The date clears "
+"itself automatically after it sends."
+msgstr "可选。选择一个未来的日期和时间，在重复计划之外（或代替它）发送此摘要一次。站点时区：%s。发送后该日期会自动清除。"
+
+msgid "One-time lookback (days)"
+msgstr "一次性回溯（天）"
+
+msgid ""
+"How far back the one-time send looks for entries. %s = every entry up to the"
+" send moment."
+msgstr "一次性发送回溯查找条目的范围。%s = 直到发送时刻的所有条目。"
+
+msgid "When there are no new entries"
+msgstr "当没有新条目时"
+
+msgid "Send a \"no new entries\" note"
+msgstr "发送“无新条目”提示"
+
+msgid "Don't send anything"
+msgstr "不发送任何内容"
+
+msgid ""
+"By default a quiet period still gets a tidy \"no new entries\" email, so "
+"recipients are never left wondering. Choose \"Don't send anything\" to stay "
+"silent when nothing came in."
+msgstr ""
+"默认情况下，即使在没有活动的时段也会发送一封简洁的“无新条目”邮件，让收件人不会心存疑虑。选择“不发送任何内容”可在没有任何条目时保持静默。"
+
+msgid "Entries right now"
+msgstr "当前条目"
+
+msgid "Calculating…"
+msgstr "正在计算…"
+
+msgid ""
+"How many active entries would be included if this digest ran right now, "
+"using your current settings. Updates live as you change them; the real send "
+"uses the same rolling window (%s) at send time."
+msgstr "如果此摘要现在运行，按您当前的设置将包含多少个有效条目。会随您的更改实时更新；实际发送时使用相同的滚动时间窗口（%s）。"
+
+msgid "Attachment"
+msgstr "附件"
+
+msgid "None"
+msgstr "无"
+
+msgid "Excel (.xlsx)"
+msgstr "Excel (.xlsx)"
+
+msgid "CSV"
+msgstr "CSV"
+
+msgid ""
+"Attach the full period's entries. Excel produces one sheet per form; CSV "
+"produces one file per form."
+msgstr "附上整个时间段的条目。Excel 为每个表单生成一个工作表；CSV 为每个表单生成一个文件。"
+
+msgid "Pro feature"
+msgstr "专业版功能"
+
+msgid "Per-form fields & filters"
+msgstr "各表单的字段和筛选"
+
+msgid "Choose which fields appear, and (Pro) which entries to include."
+msgstr "选择显示哪些字段，以及（专业版）包含哪些条目。"
+
+msgid "Fields to include"
+msgstr "要包含的字段"
+
+msgid "(none checked = all)"
+msgstr "（未勾选 = 全部）"
+
+msgid "Conditional filtering"
+msgstr "条件筛选"
+
+msgid "Match"
+msgstr "匹配"
+
+msgid "all"
+msgstr "全部"
+
+msgid "any"
+msgstr "任一"
+
+msgid "of these rules:"
+msgstr "以下规则："
+
+msgid "field"
+msgstr "字段"
+
+msgid "value"
+msgstr "值"
+
+msgid ""
+"Leave fields blank to ignore a row. Add more rules by saving and reopening."
+msgstr "将字段留空以忽略某一行。保存并重新打开即可添加更多规则。"
+
+msgid ""
+"Send only entries matching conditions (e.g. %1$s). %2$sUpgrade to Pro%3$s."
+msgstr "仅发送符合条件的条目（例如 %1$s）。%2$s升级到专业版%3$s。"
+
+msgid "Status is Complete"
+msgstr "状态为已完成"
+
+msgid "Create Digest"
+msgstr "创建摘要"
+
+msgid "Save Digest"
+msgstr "保存摘要"
+
+msgid "Gravity Forms is not active — counts unavailable."
+msgstr "Gravity Forms 未启用 — 无法统计数量。"
+
+msgid "Select a form to see a count."
+msgstr "选择一个表单以查看数量。"
+
+msgid "Unable to calculate."
+msgstr "无法计算。"
+
+msgid "entry"
+msgstr "条目"
+
+msgid "entries"
+msgstr "条目"
+
+msgid "past 24 hours"
+msgstr "过去 24 小时"
+
+msgid "past 7 days"
+msgstr "过去 7 天"
+
+msgid "Monday"
+msgstr "星期一"
+
+msgid "Tuesday"
+msgstr "星期二"
+
+msgid "Wednesday"
+msgstr "星期三"
+
+msgid "Thursday"
+msgstr "星期四"
+
+msgid "Friday"
+msgstr "星期五"
+
+msgid "Saturday"
+msgstr "星期六"
+
+msgid "Sunday"
+msgstr "星期日"
+
+msgid "Entry digest"
+msgstr "条目摘要"
+
+msgid "Your Gravity Forms entry digest"
+msgstr "您的 Gravity Forms 条目摘要"
+
+msgid "is"
+msgstr "等于"
+
+msgid "is not"
+msgstr "不等于"
+
+msgid "contains"
+msgstr "包含"
+
+msgid "does not contain"
+msgstr "不包含"
+
+msgid "greater than"
+msgstr "大于"
+
+msgid "less than"
+msgstr "小于"
+
+msgid "is empty"
+msgstr "为空"
+
+msgid "is not empty"
+msgstr "不为空"
+
+msgid "whole history"
+msgstr "全部历史"
+
+msgid "All entries through %s"
+msgstr "截至 %s 的所有条目"
+
+msgid "One-time"
+msgstr "一次性"
+
+msgid "Entry digest · %s"
+msgstr "条目摘要 · %s"
+
+msgid "Period:"
+msgstr "时间段："
+
+msgid "Forms:"
+msgstr "表单："
+
+msgid "Form:"
+msgstr "表单："
+
+msgid "(ID %d)"
+msgstr "(ID %d)"
+
+msgid "No new entries were submitted during this period."
+msgstr "在此期间没有提交任何新条目。"
+
+msgid "Sent automatically by Entry Digest for Gravity Forms."
+msgstr "由 Entry Digest for Gravity Forms 自动发送。"
+
+msgid "Delivered daily at %s."
+msgstr "每日 %s 发送。"
+
+msgid "Delivered every %1$s at %2$s."
+msgstr "每个%1$s的 %2$s 发送。"
+
+msgid "No new entries for this form."
+msgstr "此表单没有新条目。"
+
+msgid "Submitted"
+msgstr "提交时间"
+
+msgid " — the complete set is in the attachment."
+msgstr " — 完整数据见附件。"
+
+msgid "Showing the first %1$d of %2$d entries%3$s"
+msgstr "显示 %2$d 个条目中的前 %1$d 个%3$s"
+
+msgid "Entry ID"
+msgstr "条目 ID"
+
+msgid "Date Submitted (UTC)"
+msgstr "提交日期 (UTC)"
+
+msgid "IP Address"
+msgstr "IP 地址"
+
+msgctxt "precedes a time window such as \"past 7 days\""
+msgid "in the"
+msgstr "在"
+
+msgctxt "precedes a time window in the per-form count badge"
+msgid "in"
+msgstr "在"
+
+msgid ""
+"This form was created about %d day ago — the default covers everything since"
+" then."
+msgid_plural ""
+"This form was created about %d days ago — the default covers everything "
+"since then."
+msgstr[0] "此表单创建于约 %d 天前 — 默认值涵盖自那以后的所有内容。"
+
+msgid "past %d day"
+msgid_plural "past %d days"
+msgstr[0] "过去 %d 天"
+
+msgid "new entry"
+msgid_plural "new entries"
+msgstr[0] "新条目"
+
+msgid "new entry today"
+msgid_plural "new entries today"
+msgstr[0] "今日新条目"
+
+msgid "new entry this week"
+msgid_plural "new entries this week"
+msgstr[0] "本周新条目"
+
+msgid "across %d form"
+msgid_plural "across %d forms"
+msgstr[0] "跨 %d 个表单"
+
+msgid "%d entry"
+msgid_plural "%d entries"
+msgstr[0] "%d 个条目"

@@ -1,0 +1,510 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Entry Digest for Gravity Forms 1.2.0\n"
+"Report-Msgid-Bugs-To: https://addasitebuilders.com/plugins/entry-digest-for-gravity-forms/\n"
+"POT-Creation-Date: 2026-06-12 01:42\n"
+"PO-Revision-Date: 2026-06-12 01:42\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: entry-digest-for-gravity-forms\n"
+
+msgid "Entry Digest"
+msgstr ""
+
+msgid "Insufficient permissions."
+msgstr ""
+
+msgid "Digest deleted."
+msgstr ""
+
+msgid "&#10003; Digest triggered. Check %s."
+msgstr ""
+
+msgid "Add Digest"
+msgstr ""
+
+msgid "Gravity Forms is not active. Digests will not send until it is."
+msgstr ""
+
+msgid "You're on the free plan."
+msgstr ""
+
+msgid ""
+"Pro unlocks unlimited digests, multi-form aggregation, role & recipient "
+"routing, conditional filtering, and CSV/Excel attachments."
+msgstr ""
+
+msgid "Start a free Pro trial"
+msgstr ""
+
+msgid "Set up your first digest"
+msgstr ""
+
+msgid ""
+"A digest bundles new Gravity Forms entries into one scheduled email — daily "
+"or weekly — so you get a clean summary instead of a flood of individual "
+"notifications."
+msgstr ""
+
+msgid "Create your first digest"
+msgstr ""
+
+msgid "Digest"
+msgstr ""
+
+msgid "Forms"
+msgstr ""
+
+msgid "Recipients"
+msgstr ""
+
+msgid "Schedule"
+msgstr ""
+
+msgid "Next run"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Form %d (missing)"
+msgstr ""
+
+msgid "Form %d"
+msgstr ""
+
+msgid "Daily %s"
+msgstr ""
+
+msgid "Weekly %1$s %2$s"
+msgstr ""
+
+msgid "Once: %s"
+msgstr ""
+
+msgid "Untitled digest"
+msgstr ""
+
+msgid "Inactive (free plan limit — upgrade to enable)"
+msgstr ""
+
+msgid "— none —"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Send Now"
+msgstr ""
+
+msgid "Delete this digest?"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Schedules use your site timezone: %s."
+msgstr ""
+
+msgid ""
+"Weekly digests cover the past 7 days; daily digests cover the past 24 hours."
+msgstr ""
+
+msgid ""
+"The free plan includes one digest. %1$sUpgrade to Pro%2$s for unlimited "
+"digests."
+msgstr ""
+
+msgid "Digest created."
+msgstr ""
+
+msgid "Digest saved."
+msgstr ""
+
+msgid "Security check failed — reload the page."
+msgstr ""
+
+msgid "Gravity Forms is not active."
+msgstr ""
+
+msgid "Digest not found."
+msgstr ""
+
+msgid "Edit Digest"
+msgstr ""
+
+msgid "Back to all digests"
+msgstr ""
+
+msgid ""
+"Gravity Forms is not active — the form and field lists below are "
+"unavailable."
+msgstr ""
+
+msgid "Digest name"
+msgstr ""
+
+msgid "For your reference (and used as the header on multi-form digests)."
+msgstr ""
+
+msgid "Select one or more forms to aggregate into this digest."
+msgstr ""
+
+msgid ""
+"Free plan: one form per digest. Multi-form aggregation is a Pro feature."
+msgstr ""
+
+msgid "(ID %s)"
+msgstr ""
+
+msgid "Enter a form ID (Gravity Forms inactive — can't list forms)."
+msgstr ""
+
+msgid "Recipient email(s)"
+msgstr ""
+
+msgid "Comma-separated, e.g. %s"
+msgstr ""
+
+msgid "Send to roles"
+msgstr ""
+
+msgid "Also deliver to every user in the selected role(s)."
+msgstr ""
+
+msgid "%1$sUpgrade to Pro%2$s to route by role."
+msgstr ""
+
+msgid "Email subject"
+msgstr ""
+
+msgid "Recurring frequency"
+msgstr ""
+
+msgid "Weekly"
+msgstr ""
+
+msgid "Daily"
+msgstr ""
+
+msgid "One-time only (no recurring)"
+msgstr ""
+
+msgid ""
+"Weekly covers the past 7 days; daily covers the past 24 hours. Choose %s to "
+"send just once on a date you pick below."
+msgstr ""
+
+msgid "One-time only"
+msgstr ""
+
+msgid "Send day"
+msgstr ""
+
+msgid "Weekly only."
+msgstr ""
+
+msgid "Send time"
+msgstr ""
+
+msgid "For the recurring send. Site timezone: %s"
+msgstr ""
+
+msgid "One-time send"
+msgstr ""
+
+msgid "Clear"
+msgstr ""
+
+msgid ""
+"Optional. Pick a future date & time to send this digest once, on top of (or "
+"instead of) the recurring schedule. Site timezone: %s. The date clears "
+"itself automatically after it sends."
+msgstr ""
+
+msgid "One-time lookback (days)"
+msgstr ""
+
+msgid ""
+"How far back the one-time send looks for entries. %s = every entry up to the"
+" send moment."
+msgstr ""
+
+msgid "When there are no new entries"
+msgstr ""
+
+msgid "Send a \"no new entries\" note"
+msgstr ""
+
+msgid "Don't send anything"
+msgstr ""
+
+msgid ""
+"By default a quiet period still gets a tidy \"no new entries\" email, so "
+"recipients are never left wondering. Choose \"Don't send anything\" to stay "
+"silent when nothing came in."
+msgstr ""
+
+msgid "Entries right now"
+msgstr ""
+
+msgid "Calculating…"
+msgstr ""
+
+msgid ""
+"How many active entries would be included if this digest ran right now, "
+"using your current settings. Updates live as you change them; the real send "
+"uses the same rolling window (%s) at send time."
+msgstr ""
+
+msgid "Attachment"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "Excel (.xlsx)"
+msgstr ""
+
+msgid "CSV"
+msgstr ""
+
+msgid ""
+"Attach the full period's entries. Excel produces one sheet per form; CSV "
+"produces one file per form."
+msgstr ""
+
+msgid "Pro feature"
+msgstr ""
+
+msgid "Per-form fields & filters"
+msgstr ""
+
+msgid "Choose which fields appear, and (Pro) which entries to include."
+msgstr ""
+
+msgid "Fields to include"
+msgstr ""
+
+msgid "(none checked = all)"
+msgstr ""
+
+msgid "Conditional filtering"
+msgstr ""
+
+msgid "Match"
+msgstr ""
+
+msgid "all"
+msgstr ""
+
+msgid "any"
+msgstr ""
+
+msgid "of these rules:"
+msgstr ""
+
+msgid "field"
+msgstr ""
+
+msgid "value"
+msgstr ""
+
+msgid ""
+"Leave fields blank to ignore a row. Add more rules by saving and reopening."
+msgstr ""
+
+msgid ""
+"Send only entries matching conditions (e.g. %1$s). %2$sUpgrade to Pro%3$s."
+msgstr ""
+
+msgid "Status is Complete"
+msgstr ""
+
+msgid "Create Digest"
+msgstr ""
+
+msgid "Save Digest"
+msgstr ""
+
+msgid "Gravity Forms is not active — counts unavailable."
+msgstr ""
+
+msgid "Select a form to see a count."
+msgstr ""
+
+msgid "Unable to calculate."
+msgstr ""
+
+msgid "entry"
+msgstr ""
+
+msgid "entries"
+msgstr ""
+
+msgid "past 24 hours"
+msgstr ""
+
+msgid "past 7 days"
+msgstr ""
+
+msgid "Monday"
+msgstr ""
+
+msgid "Tuesday"
+msgstr ""
+
+msgid "Wednesday"
+msgstr ""
+
+msgid "Thursday"
+msgstr ""
+
+msgid "Friday"
+msgstr ""
+
+msgid "Saturday"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
+
+msgid "Entry digest"
+msgstr ""
+
+msgid "Your Gravity Forms entry digest"
+msgstr ""
+
+msgid "is"
+msgstr ""
+
+msgid "is not"
+msgstr ""
+
+msgid "contains"
+msgstr ""
+
+msgid "does not contain"
+msgstr ""
+
+msgid "greater than"
+msgstr ""
+
+msgid "less than"
+msgstr ""
+
+msgid "is empty"
+msgstr ""
+
+msgid "is not empty"
+msgstr ""
+
+msgid "whole history"
+msgstr ""
+
+msgid "All entries through %s"
+msgstr ""
+
+msgid "One-time"
+msgstr ""
+
+msgid "Entry digest · %s"
+msgstr ""
+
+msgid "Period:"
+msgstr ""
+
+msgid "Forms:"
+msgstr ""
+
+msgid "Form:"
+msgstr ""
+
+msgid "(ID %d)"
+msgstr ""
+
+msgid "No new entries were submitted during this period."
+msgstr ""
+
+msgid "Sent automatically by Entry Digest for Gravity Forms."
+msgstr ""
+
+msgid "Delivered daily at %s."
+msgstr ""
+
+msgid "Delivered every %1$s at %2$s."
+msgstr ""
+
+msgid "No new entries for this form."
+msgstr ""
+
+msgid "Submitted"
+msgstr ""
+
+msgid " — the complete set is in the attachment."
+msgstr ""
+
+msgid "Showing the first %1$d of %2$d entries%3$s"
+msgstr ""
+
+msgid "Entry ID"
+msgstr ""
+
+msgid "Date Submitted (UTC)"
+msgstr ""
+
+msgid "IP Address"
+msgstr ""
+
+msgctxt "precedes a time window such as \"past 7 days\""
+msgid "in the"
+msgstr ""
+
+msgctxt "precedes a time window in the per-form count badge"
+msgid "in"
+msgstr ""
+
+msgid ""
+"This form was created about %d day ago — the default covers everything since"
+" then."
+msgid_plural ""
+"This form was created about %d days ago — the default covers everything "
+"since then."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "past %d day"
+msgid_plural "past %d days"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "new entry"
+msgid_plural "new entries"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "new entry today"
+msgid_plural "new entries today"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "new entry this week"
+msgid_plural "new entries this week"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "across %d form"
+msgid_plural "across %d forms"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "%d entry"
+msgid_plural "%d entries"
+msgstr[0] ""
+msgstr[1] ""

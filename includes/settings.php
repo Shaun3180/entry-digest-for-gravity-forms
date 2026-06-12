@@ -1,6 +1,24 @@
 <?php
 defined( 'ABSPATH' ) || exit;
 
+// ── i18n helpers ─────────────────────────────────────────────────
+/**
+ * Translated weekday label for an internal English day key ('monday'…'sunday').
+ * Falls back to a capitalized version of the key for anything unexpected.
+ */
+function dsagfe_day_label( string $day ): string {
+	$map = [
+		'monday'    => __( 'Monday', 'entry-digest-for-gravity-forms' ),
+		'tuesday'   => __( 'Tuesday', 'entry-digest-for-gravity-forms' ),
+		'wednesday' => __( 'Wednesday', 'entry-digest-for-gravity-forms' ),
+		'thursday'  => __( 'Thursday', 'entry-digest-for-gravity-forms' ),
+		'friday'    => __( 'Friday', 'entry-digest-for-gravity-forms' ),
+		'saturday'  => __( 'Saturday', 'entry-digest-for-gravity-forms' ),
+		'sunday'    => __( 'Sunday', 'entry-digest-for-gravity-forms' ),
+	];
+	return $map[ strtolower( $day ) ] ?? ucfirst( $day );
+}
+
 // ── Default settings ─────────────────────────────────────────────
 /**
  * Defaults for a single digest configuration.
@@ -8,14 +26,17 @@ defined( 'ABSPATH' ) || exit;
 function dsagfe_digest_defaults(): array {
 	return [
 		'id'            => '',
-		'label'         => 'Entry digest',
+		'label'         => __( 'Entry digest', 'entry-digest-for-gravity-forms' ),
 		'form_ids'      => [ 1 ],          // Free: exactly one. Pro: many (aggregated).
 		'to_email'      => '',
 		'roles'         => [],             // Pro: WP roles whose members also receive the digest.
-		'email_subject' => 'Your Gravity Forms entry digest',
-		'frequency'     => 'weekly',       // 'weekly' | 'daily'
+		'email_subject' => __( 'Your Gravity Forms entry digest', 'entry-digest-for-gravity-forms' ),
+		'frequency'     => 'weekly',       // 'weekly' | 'daily' | 'none' (none = no recurring digest; one-time only)
 		'send_day'      => 'monday',       // used only when frequency = weekly
-		'send_time'     => '08:00',
+		'send_time'     => '08:00',        // time-of-day for recurring sends (site timezone)
+		'onetime_at'    => '',             // optional one-time send: 'Y-m-d H:i' in site timezone, or '' for none
+		'onetime_lookback_days' => 0,      // entries window for the one-time send; 0 = everything up to the send moment
+		'quiet_behavior' => 'send',        // 'send' = always email a "no new entries" note; 'skip' = stay silent when 0 entries
 		'fields'        => [],             // map: form_id => [ field/input keys ]; empty = all for that form
 		'filters'       => [],             // Pro: map: form_id => [ 'logic' => all|any, 'rules' => [ {field,op,value} ] ]
 		'attach_format' => 'none',         // Pro: 'none' | 'xlsx' | 'csv'
@@ -50,9 +71,15 @@ function dsagfe_normalize_digest( array $d, string $id = '' ): array {
 	$out['label']         = (string) $out['label'];
 	$out['to_email']      = (string) $out['to_email'];
 	$out['email_subject'] = (string) $out['email_subject'];
-	$out['frequency']     = in_array( $out['frequency'], [ 'daily', 'weekly' ], true ) ? $out['frequency'] : 'weekly';
+	$out['frequency']     = in_array( $out['frequency'], [ 'daily', 'weekly', 'none' ], true ) ? $out['frequency'] : 'weekly';
 	$out['send_day']      = (string) $out['send_day'];
 	$out['send_time']     = (string) $out['send_time'];
+
+	// One-time send: keep only a well-formed 'Y-m-d H:i' string; anything else clears it.
+	$onetime = trim( (string) $out['onetime_at'] );
+	$out['onetime_at'] = preg_match( '/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/', $onetime ) ? $onetime : '';
+	$out['onetime_lookback_days'] = max( 0, (int) $out['onetime_lookback_days'] );
+	$out['quiet_behavior'] = in_array( $out['quiet_behavior'], [ 'send', 'skip' ], true ) ? $out['quiet_behavior'] : 'send';
 	$out['attach_format'] = in_array( $out['attach_format'], [ 'none', 'xlsx', 'csv' ], true ) ? $out['attach_format'] : 'none';
 
 	$out['form_ids'] = array_values( array_unique( array_map( 'intval', (array) $out['form_ids'] ) ) );
@@ -74,10 +101,10 @@ function dsagfe_normalize_digest( array $d, string $id = '' ): array {
 function dsagfe_migrate_legacy( array $old ): array {
 	$form_id = max( 1, (int) ( $old['form_id'] ?? 1 ) );
 	return dsagfe_normalize_digest( [
-		'label'         => 'Digest',
+		'label'         => __( 'Digest', 'entry-digest-for-gravity-forms' ),
 		'form_ids'      => [ $form_id ],
 		'to_email'      => (string) ( $old['to_email'] ?? '' ),
-		'email_subject' => (string) ( $old['email_subject'] ?? 'Your Gravity Forms entry digest' ),
+		'email_subject' => (string) ( $old['email_subject'] ?? __( 'Your Gravity Forms entry digest', 'entry-digest-for-gravity-forms' ) ),
 		'frequency'     => (string) ( $old['frequency'] ?? 'weekly' ),
 		'send_day'      => (string) ( $old['send_day'] ?? 'monday' ),
 		'send_time'     => (string) ( $old['send_time'] ?? '08:00' ),

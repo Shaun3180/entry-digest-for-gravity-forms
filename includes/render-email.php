@@ -17,14 +17,40 @@ function dsagfe_local_datetime( string $utc, string $format = 'M j, Y g:i A' ): 
  * @param int    $total_count Total entries across all sections.
  * @param string $start_date  UTC 'Y-m-d H:i:s'.
  * @param string $end_date    UTC 'Y-m-d H:i:s'.
+ * @param string $mode        'recurring' or 'once' (a one-time send).
  */
-function dsagfe_build_digest_html( array $sections, array $d, int $total_count, string $start_date, string $end_date ): string {
-	$cadence    = ( 'daily' === $d['frequency'] ) ? 'daily' : 'weekly';
-	$period     = dsagfe_local_datetime( $start_date ) . ' &ndash; ' . dsagfe_local_datetime( $end_date );
+function dsagfe_build_digest_html( array $sections, array $d, int $total_count, string $start_date, string $end_date, string $mode = 'recurring' ): string {
+	$is_once    = ( 'once' === $mode );
+	$cadence    = $is_once ? 'one-time' : ( ( 'daily' === $d['frequency'] ) ? 'daily' : 'weekly' );
+	// A "whole history" one-time send uses a sentinel start date; show it as open-ended.
+	$open_ended = $is_once && ( strtotime( $start_date ) <= strtotime( '2000-01-02 00:00:00' ) );
+	$period     = $open_ended
+		/* translators: %s: an end date/time. */
+		? sprintf( __( 'All entries through %s', 'entry-digest-for-gravity-forms' ), dsagfe_local_datetime( $end_date ) )
+		: dsagfe_local_datetime( $start_date ) . ' &ndash; ' . dsagfe_local_datetime( $end_date );
+	$cadence_label = $is_once
+		? __( 'One-time', 'entry-digest-for-gravity-forms' )
+		: ( ( 'daily' === $cadence )
+			? __( 'Daily', 'entry-digest-for-gravity-forms' )
+			: __( 'Weekly', 'entry-digest-for-gravity-forms' ) );
 	$multi_form = count( $sections ) > 1;
 	$title      = $multi_form
-		? ( ! empty( $d['label'] ) ? $d['label'] : 'Entry digest' )
-		: ( $sections[0]['form']['title'] ?? 'Entry digest' );
+		? ( ! empty( $d['label'] ) ? $d['label'] : __( 'Entry digest', 'entry-digest-for-gravity-forms' ) )
+		: ( $sections[0]['form']['title'] ?? __( 'Entry digest', 'entry-digest-for-gravity-forms' ) );
+
+	// Subtitle under the big count number.
+	if ( $is_once ) {
+		$count_label = _n( 'new entry', 'new entries', $total_count, 'entry-digest-for-gravity-forms' );
+	} elseif ( 'daily' === $cadence ) {
+		$count_label = _n( 'new entry today', 'new entries today', $total_count, 'entry-digest-for-gravity-forms' );
+	} else {
+		$count_label = _n( 'new entry this week', 'new entries this week', $total_count, 'entry-digest-for-gravity-forms' );
+	}
+	if ( $multi_form ) {
+		$n_forms = count( $sections );
+		/* translators: %d: number of forms. */
+		$count_label .= ' ' . sprintf( _n( 'across %d form', 'across %d forms', $n_forms, 'entry-digest-for-gravity-forms' ), $n_forms );
+	}
 
 	$accent = '#2563eb';
 	$muted  = '#6b7280';
@@ -33,15 +59,18 @@ function dsagfe_build_digest_html( array $sections, array $d, int $total_count, 
 	ob_start();
 	?>
 	<div style="margin:0;padding:24px;background:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;">
-		<div style="max-width:680px;margin:0 auto;background:#ffffff;border:1px solid <?php echo $border; ?>;border-radius:10px;overflow:hidden;">
+		<div style="max-width:680px;margin:0 auto;background:#ffffff;border:1px solid <?php echo esc_attr( $border ); ?>;border-radius:10px;overflow:hidden;">
 
 			<!-- Header -->
-			<div style="background:<?php echo $accent; ?>;padding:20px 24px;">
+			<div style="background:<?php echo esc_attr( $accent ); ?>;padding:20px 24px;">
 				<div style="color:#ffffff;font-size:18px;font-weight:700;">
 					<?php echo esc_html( $title ); ?>
 				</div>
 				<div style="color:rgba(255,255,255,0.85);font-size:13px;margin-top:2px;">
-					Entry digest &middot; <?php echo esc_html( ucfirst( $cadence ) ); ?>
+					<?php
+					/* translators: %s: cadence label such as Daily, Weekly, or One-time. */
+					printf( esc_html__( 'Entry digest · %s', 'entry-digest-for-gravity-forms' ), esc_html( $cadence_label ) );
+					?>
 				</div>
 			</div>
 
@@ -50,19 +79,19 @@ function dsagfe_build_digest_html( array $sections, array $d, int $total_count, 
 				<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
 					<tr>
 						<td style="padding:0 0 16px 0;">
-							<div style="font-size:40px;line-height:1;font-weight:800;color:<?php echo $accent; ?>;">
+							<div style="font-size:40px;line-height:1;font-weight:800;color:<?php echo esc_attr( $accent ); ?>;">
 								<?php echo (int) $total_count; ?>
 							</div>
-							<div style="font-size:13px;color:<?php echo $muted; ?>;margin-top:4px;">
-								new <?php echo ( 1 === $total_count ) ? 'entry' : 'entries'; ?> this <?php echo esc_html( 'daily' === $cadence ? 'day' : 'week' ); ?><?php echo $multi_form ? ' across ' . (int) count( $sections ) . ' forms' : ''; ?>
+							<div style="font-size:13px;color:<?php echo esc_attr( $muted ); ?>;margin-top:4px;">
+								<?php echo esc_html( $count_label ); ?>
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<td style="border-top:1px solid <?php echo $border; ?>;padding-top:14px;font-size:13px;color:<?php echo $muted; ?>;">
-							<strong style="color:#111827;">Period:</strong> <?php echo wp_kses_post( $period ); ?>
+						<td style="border-top:1px solid <?php echo esc_attr( $border ); ?>;padding-top:14px;font-size:13px;color:<?php echo esc_attr( $muted ); ?>;">
+							<strong style="color:#111827;"><?php esc_html_e( 'Period:', 'entry-digest-for-gravity-forms' ); ?></strong> <?php echo wp_kses_post( $period ); ?>
 							<?php if ( $multi_form ) : ?>
-								<br><strong style="color:#111827;">Forms:</strong>
+								<br><strong style="color:#111827;"><?php esc_html_e( 'Forms:', 'entry-digest-for-gravity-forms' ); ?></strong>
 								<?php
 								$bits = [];
 								foreach ( $sections as $sec ) {
@@ -71,7 +100,7 @@ function dsagfe_build_digest_html( array $sections, array $d, int $total_count, 
 								echo wp_kses_post( implode( ', ', $bits ) );
 								?>
 							<?php else : ?>
-								<br><strong style="color:#111827;">Form:</strong> <?php echo esc_html( $sections[0]['form']['title'] ); ?> (ID <?php echo (int) $sections[0]['form']['id']; ?>)
+								<br><strong style="color:#111827;"><?php esc_html_e( 'Form:', 'entry-digest-for-gravity-forms' ); ?></strong> <?php echo esc_html( $sections[0]['form']['title'] ); ?> <?php /* translators: %d: numeric form ID. */ printf( esc_html__( '(ID %d)', 'entry-digest-for-gravity-forms' ), (int) $sections[0]['form']['id'] ); ?>
 							<?php endif; ?>
 						</td>
 					</tr>
@@ -79,8 +108,8 @@ function dsagfe_build_digest_html( array $sections, array $d, int $total_count, 
 			</div>
 
 			<?php if ( 0 === $total_count ) : ?>
-				<div style="padding:0 24px 28px 24px;color:<?php echo $muted; ?>;font-size:14px;">
-					No new entries were submitted during this period.
+				<div style="padding:0 24px 28px 24px;color:<?php echo esc_attr( $muted ); ?>;font-size:14px;">
+					<?php esc_html_e( 'No new entries were submitted during this period.', 'entry-digest-for-gravity-forms' ); ?>
 				</div>
 			<?php else : ?>
 				<?php foreach ( $sections as $sec ) : ?>
@@ -89,13 +118,15 @@ function dsagfe_build_digest_html( array $sections, array $d, int $total_count, 
 			<?php endif; ?>
 
 			<!-- Footer -->
-			<div style="padding:18px 24px 24px 24px;margin-top:8px;border-top:1px solid <?php echo $border; ?>;font-size:12px;color:<?php echo $muted; ?>;">
-				Sent automatically by Entry Digest for Gravity Forms.
+			<div style="padding:18px 24px 24px 24px;margin-top:8px;border-top:1px solid <?php echo esc_attr( $border ); ?>;font-size:12px;color:<?php echo esc_attr( $muted ); ?>;">
+				<?php esc_html_e( 'Sent automatically by Entry Digest for Gravity Forms.', 'entry-digest-for-gravity-forms' ); ?>
 				<?php
 				if ( 'daily' === $cadence ) {
-					echo 'Delivered daily at ' . esc_html( $d['send_time'] ) . '.';
+					/* translators: %s: time of day, e.g. 08:00. */
+					printf( esc_html__( 'Delivered daily at %s.', 'entry-digest-for-gravity-forms' ), esc_html( $d['send_time'] ) );
 				} else {
-					echo 'Delivered every ' . esc_html( ucfirst( $d['send_day'] ) ) . ' at ' . esc_html( $d['send_time'] ) . '.';
+					/* translators: 1: weekday name; 2: time of day. */
+					printf( esc_html__( 'Delivered every %1$s at %2$s.', 'entry-digest-for-gravity-forms' ), esc_html( dsagfe_day_label( $d['send_day'] ) ), esc_html( $d['send_time'] ) );
 				}
 				?>
 			</div>
@@ -120,20 +151,23 @@ function dsagfe_render_section_table( array $sec, array $d, bool $multi_form, st
 		<?php if ( $multi_form ) : ?>
 			<div style="margin:6px 0 10px 0;font-size:15px;font-weight:700;color:#111827;">
 				<?php echo esc_html( $sec['form']['title'] ); ?>
-				<span style="font-weight:500;color:<?php echo $muted; ?>;font-size:13px;">&middot; <?php echo (int) $count; ?> <?php echo ( 1 === $count ) ? 'entry' : 'entries'; ?></span>
+				<span style="font-weight:500;color:<?php echo esc_attr( $muted ); ?>;font-size:13px;">&middot; <?php
+					/* translators: %d: number of entries for one form. */
+					printf( esc_html( _n( '%d entry', '%d entries', $count, 'entry-digest-for-gravity-forms' ) ), (int) $count );
+				?></span>
 			</div>
 		<?php endif; ?>
 
 		<?php if ( 0 === $count ) : ?>
-			<p style="font-size:13px;color:<?php echo $muted; ?>;margin:0 0 14px 0;">No new entries for this form.</p>
+			<p style="font-size:13px;color:<?php echo esc_attr( $muted ); ?>;margin:0 0 14px 0;"><?php esc_html_e( 'No new entries for this form.', 'entry-digest-for-gravity-forms' ); ?></p>
 		<?php else : ?>
 			<div style="overflow-x:auto;">
 				<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:13px;">
 					<thead>
 						<tr>
-							<th style="text-align:left;padding:8px 10px;background:#f9fafb;border:1px solid <?php echo $border; ?>;color:<?php echo $muted; ?>;font-weight:600;white-space:nowrap;">Submitted</th>
+							<th style="text-align:left;padding:8px 10px;background:#f9fafb;border:1px solid <?php echo esc_attr( $border ); ?>;color:<?php echo esc_attr( $muted ); ?>;font-weight:600;white-space:nowrap;"><?php esc_html_e( 'Submitted', 'entry-digest-for-gravity-forms' ); ?></th>
 							<?php foreach ( $field_map as $label ) : ?>
-								<th style="text-align:left;padding:8px 10px;background:#f9fafb;border:1px solid <?php echo $border; ?>;color:<?php echo $muted; ?>;font-weight:600;">
+								<th style="text-align:left;padding:8px 10px;background:#f9fafb;border:1px solid <?php echo esc_attr( $border ); ?>;color:<?php echo esc_attr( $muted ); ?>;font-weight:600;">
 									<?php echo esc_html( $label ); ?>
 								</th>
 							<?php endforeach; ?>
@@ -149,7 +183,7 @@ function dsagfe_render_section_table( array $sec, array $d, bool $multi_form, st
 							$shown++;
 							?>
 							<tr>
-								<td style="padding:8px 10px;border:1px solid <?php echo $border; ?>;white-space:nowrap;color:<?php echo $muted; ?>;">
+								<td style="padding:8px 10px;border:1px solid <?php echo esc_attr( $border ); ?>;white-space:nowrap;color:<?php echo esc_attr( $muted ); ?>;">
 									<?php echo esc_html( dsagfe_local_datetime( $entry['date_created'] ?? '', 'M j, g:i A' ) ); ?>
 								</td>
 								<?php foreach ( array_keys( $field_map ) as $fid ) : ?>
@@ -159,7 +193,7 @@ function dsagfe_render_section_table( array $sec, array $d, bool $multi_form, st
 										$val = mb_substr( $val, 0, DSAGFE_MAX_CELL_CHARS ) . '…';
 									}
 									?>
-									<td style="padding:8px 10px;border:1px solid <?php echo $border; ?>;vertical-align:top;">
+									<td style="padding:8px 10px;border:1px solid <?php echo esc_attr( $border ); ?>;vertical-align:top;">
 										<?php echo nl2br( esc_html( $val ) ); ?>
 									</td>
 								<?php endforeach; ?>
@@ -170,8 +204,14 @@ function dsagfe_render_section_table( array $sec, array $d, bool $multi_form, st
 			</div>
 
 			<?php if ( $count > DSAGFE_MAX_TABLE_ROWS ) : ?>
-				<p style="font-size:12px;color:<?php echo $muted; ?>;margin:12px 0 0 0;">
-					Showing the first <?php echo (int) DSAGFE_MAX_TABLE_ROWS; ?> of <?php echo (int) $count; ?> entries<?php echo ( 'none' !== $d['attach_format'] && dsagfe_is_pro() ) ? ' — the complete set is in the attachment.' : '.'; ?>
+				<p style="font-size:12px;color:<?php echo esc_attr( $muted ); ?>;margin:12px 0 0 0;">
+					<?php
+					$suffix = ( 'none' !== $d['attach_format'] && dsagfe_is_pro() )
+						? __( ' — the complete set is in the attachment.', 'entry-digest-for-gravity-forms' )
+						: '.';
+					/* translators: 1: number of rows shown; 2: total number of entries; 3: trailing clause (a period, or a note about the attachment). */
+					printf( esc_html__( 'Showing the first %1$d of %2$d entries%3$s', 'entry-digest-for-gravity-forms' ), (int) DSAGFE_MAX_TABLE_ROWS, (int) $count, esc_html( $suffix ) );
+					?>
 				</p>
 			<?php endif; ?>
 		<?php endif; ?>

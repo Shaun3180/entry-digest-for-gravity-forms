@@ -1,0 +1,560 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Entry Digest for Gravity Forms 1.2.0\n"
+"Report-Msgid-Bugs-To: https://addasitebuilders.com/plugins/entry-digest-for-gravity-forms/\n"
+"POT-Creation-Date: 2026-06-12 01:52\n"
+"PO-Revision-Date: 2026-06-12 01:52\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Domain: entry-digest-for-gravity-forms\n"
+
+msgid "Entry Digest"
+msgstr "Дайджест записей"
+
+msgid "Insufficient permissions."
+msgstr "Недостаточно прав."
+
+msgid "Digest deleted."
+msgstr "Дайджест удалён."
+
+msgid "&#10003; Digest triggered. Check %s."
+msgstr "&#10003; Дайджест запущен. Проверьте %s."
+
+msgid "Add Digest"
+msgstr "Добавить дайджест"
+
+msgid "Gravity Forms is not active. Digests will not send until it is."
+msgstr ""
+"Gravity Forms не активен. Дайджесты не будут отправляться, пока он не "
+"активен."
+
+msgid "You're on the free plan."
+msgstr "Вы используете бесплатный план."
+
+msgid ""
+"Pro unlocks unlimited digests, multi-form aggregation, role & recipient "
+"routing, conditional filtering, and CSV/Excel attachments."
+msgstr ""
+"Pro открывает неограниченное число дайджестов, объединение нескольких форм, "
+"маршрутизацию по ролям и получателям, условную фильтрацию и вложения "
+"CSV/Excel."
+
+msgid "Start a free Pro trial"
+msgstr "Начать бесплатный пробный период Pro"
+
+msgid "Set up your first digest"
+msgstr "Настройте свой первый дайджест"
+
+msgid ""
+"A digest bundles new Gravity Forms entries into one scheduled email — daily "
+"or weekly — so you get a clean summary instead of a flood of individual "
+"notifications."
+msgstr ""
+"Дайджест объединяет новые записи Gravity Forms в одно письмо по расписанию —"
+" ежедневно или еженедельно — чтобы вы получали аккуратную сводку вместо "
+"потока отдельных уведомлений."
+
+msgid "Create your first digest"
+msgstr "Создайте свой первый дайджест"
+
+msgid "Digest"
+msgstr "Дайджест"
+
+msgid "Forms"
+msgstr "Формы"
+
+msgid "Recipients"
+msgstr "Получатели"
+
+msgid "Schedule"
+msgstr "Расписание"
+
+msgid "Next run"
+msgstr "Следующий запуск"
+
+msgid "Actions"
+msgstr "Действия"
+
+msgid "Form %d (missing)"
+msgstr "Форма %d (отсутствует)"
+
+msgid "Form %d"
+msgstr "Форма %d"
+
+msgid "Daily %s"
+msgstr "Ежедневно %s"
+
+msgid "Weekly %1$s %2$s"
+msgstr "Еженедельно %1$s %2$s"
+
+msgid "Once: %s"
+msgstr "Однократно: %s"
+
+msgid "Untitled digest"
+msgstr "Дайджест без названия"
+
+msgid "Inactive (free plan limit — upgrade to enable)"
+msgstr ""
+"Неактивно (ограничение бесплатного плана — обновитесь, чтобы включить)"
+
+msgid "— none —"
+msgstr "— нет —"
+
+msgid "Edit"
+msgstr "Изменить"
+
+msgid "Send Now"
+msgstr "Отправить сейчас"
+
+msgid "Delete this digest?"
+msgstr "Удалить этот дайджест?"
+
+msgid "Delete"
+msgstr "Удалить"
+
+msgid "Schedules use your site timezone: %s."
+msgstr "Расписания используют часовой пояс вашего сайта: %s."
+
+msgid ""
+"Weekly digests cover the past 7 days; daily digests cover the past 24 hours."
+msgstr ""
+"Еженедельные дайджесты охватывают последние 7 дней; ежедневные — последние "
+"24 часа."
+
+msgid ""
+"The free plan includes one digest. %1$sUpgrade to Pro%2$s for unlimited "
+"digests."
+msgstr ""
+"Бесплатный план включает один дайджест. %1$sПерейдите на Pro%2$s для "
+"неограниченного числа дайджестов."
+
+msgid "Digest created."
+msgstr "Дайджест создан."
+
+msgid "Digest saved."
+msgstr "Дайджест сохранён."
+
+msgid "Security check failed — reload the page."
+msgstr "Проверка безопасности не пройдена — перезагрузите страницу."
+
+msgid "Gravity Forms is not active."
+msgstr "Gravity Forms не активен."
+
+msgid "Digest not found."
+msgstr "Дайджест не найден."
+
+msgid "Edit Digest"
+msgstr "Изменить дайджест"
+
+msgid "Back to all digests"
+msgstr "Назад ко всем дайджестам"
+
+msgid ""
+"Gravity Forms is not active — the form and field lists below are "
+"unavailable."
+msgstr "Gravity Forms не активен — списки форм и полей ниже недоступны."
+
+msgid "Digest name"
+msgstr "Название дайджеста"
+
+msgid "For your reference (and used as the header on multi-form digests)."
+msgstr ""
+"Для вашего удобства (и используется как заголовок в дайджестах с несколькими"
+" формами)."
+
+msgid "Select one or more forms to aggregate into this digest."
+msgstr "Выберите одну или несколько форм для объединения в этот дайджест."
+
+msgid ""
+"Free plan: one form per digest. Multi-form aggregation is a Pro feature."
+msgstr ""
+"Бесплатный план: одна форма на дайджест. Объединение нескольких форм — "
+"функция Pro."
+
+msgid "(ID %s)"
+msgstr "(ID %s)"
+
+msgid "Enter a form ID (Gravity Forms inactive — can't list forms)."
+msgstr "Введите ID формы (Gravity Forms неактивен — список форм недоступен)."
+
+msgid "Recipient email(s)"
+msgstr "Эл. почта получателей"
+
+msgid "Comma-separated, e.g. %s"
+msgstr "Через запятую, например %s"
+
+msgid "Send to roles"
+msgstr "Отправлять ролям"
+
+msgid "Also deliver to every user in the selected role(s)."
+msgstr "Также отправлять каждому пользователю в выбранных ролях."
+
+msgid "%1$sUpgrade to Pro%2$s to route by role."
+msgstr "%1$sПерейдите на Pro%2$s для маршрутизации по ролям."
+
+msgid "Email subject"
+msgstr "Тема письма"
+
+msgid "Recurring frequency"
+msgstr "Периодичность повтора"
+
+msgid "Weekly"
+msgstr "Еженедельно"
+
+msgid "Daily"
+msgstr "Ежедневно"
+
+msgid "One-time only (no recurring)"
+msgstr "Только один раз (без повтора)"
+
+msgid ""
+"Weekly covers the past 7 days; daily covers the past 24 hours. Choose %s to "
+"send just once on a date you pick below."
+msgstr ""
+"Еженедельно охватывает последние 7 дней; ежедневно — последние 24 часа. "
+"Выберите %s, чтобы отправить только один раз в выбранную ниже дату."
+
+msgid "One-time only"
+msgstr "Только один раз"
+
+msgid "Send day"
+msgstr "День отправки"
+
+msgid "Weekly only."
+msgstr "Только еженедельно."
+
+msgid "Send time"
+msgstr "Время отправки"
+
+msgid "For the recurring send. Site timezone: %s"
+msgstr "Для повторяющейся отправки. Часовой пояс сайта: %s"
+
+msgid "One-time send"
+msgstr "Однократная отправка"
+
+msgid "Clear"
+msgstr "Очистить"
+
+msgid ""
+"Optional. Pick a future date & time to send this digest once, on top of (or "
+"instead of) the recurring schedule. Site timezone: %s. The date clears "
+"itself automatically after it sends."
+msgstr ""
+"Необязательно. Выберите будущую дату и время, чтобы отправить этот дайджест "
+"один раз — в дополнение к повторяющемуся расписанию или вместо него. Часовой"
+" пояс сайта: %s. Дата автоматически очищается после отправки."
+
+msgid "One-time lookback (days)"
+msgstr "Окно для однократной отправки (дни)"
+
+msgid ""
+"How far back the one-time send looks for entries. %s = every entry up to the"
+" send moment."
+msgstr ""
+"Насколько далеко однократная отправка ищет записи. %s = все записи до "
+"момента отправки."
+
+msgid "When there are no new entries"
+msgstr "Когда нет новых записей"
+
+msgid "Send a \"no new entries\" note"
+msgstr "Отправлять уведомление «нет новых записей»"
+
+msgid "Don't send anything"
+msgstr "Ничего не отправлять"
+
+msgid ""
+"By default a quiet period still gets a tidy \"no new entries\" email, so "
+"recipients are never left wondering. Choose \"Don't send anything\" to stay "
+"silent when nothing came in."
+msgstr ""
+"По умолчанию в тихий период всё равно отправляется аккуратное письмо «нет "
+"новых записей», чтобы получатели не оставались в неведении. Выберите «Ничего"
+" не отправлять», чтобы молчать, когда ничего не поступило."
+
+msgid "Entries right now"
+msgstr "Записей прямо сейчас"
+
+msgid "Calculating…"
+msgstr "Вычисление…"
+
+msgid ""
+"How many active entries would be included if this digest ran right now, "
+"using your current settings. Updates live as you change them; the real send "
+"uses the same rolling window (%s) at send time."
+msgstr ""
+"Сколько активных записей было бы включено, если бы этот дайджест запустился "
+"прямо сейчас, с вашими текущими настройками. Обновляется в реальном времени "
+"по мере изменений; фактическая отправка использует то же скользящее окно "
+"(%s) в момент отправки."
+
+msgid "Attachment"
+msgstr "Вложение"
+
+msgid "None"
+msgstr "Нет"
+
+msgid "Excel (.xlsx)"
+msgstr "Excel (.xlsx)"
+
+msgid "CSV"
+msgstr "CSV"
+
+msgid ""
+"Attach the full period's entries. Excel produces one sheet per form; CSV "
+"produces one file per form."
+msgstr ""
+"Прикреплять записи за весь период. Excel создаёт по одному листу на форму; "
+"CSV — по одному файлу на форму."
+
+msgid "Pro feature"
+msgstr "Функция Pro"
+
+msgid "Per-form fields & filters"
+msgstr "Поля и фильтры по форме"
+
+msgid "Choose which fields appear, and (Pro) which entries to include."
+msgstr "Выберите, какие поля отображать и (Pro) какие записи включать."
+
+msgid "Fields to include"
+msgstr "Поля для включения"
+
+msgid "(none checked = all)"
+msgstr "(ничего не отмечено = все)"
+
+msgid "Conditional filtering"
+msgstr "Условная фильтрация"
+
+msgid "Match"
+msgstr "Совпадение с"
+
+msgid "all"
+msgstr "все"
+
+msgid "any"
+msgstr "любое"
+
+msgid "of these rules:"
+msgstr "из этих правил:"
+
+msgid "field"
+msgstr "поле"
+
+msgid "value"
+msgstr "значение"
+
+msgid ""
+"Leave fields blank to ignore a row. Add more rules by saving and reopening."
+msgstr ""
+"Оставьте поля пустыми, чтобы пропустить строку. Добавляйте новые правила, "
+"сохранив и открыв заново."
+
+msgid ""
+"Send only entries matching conditions (e.g. %1$s). %2$sUpgrade to Pro%3$s."
+msgstr ""
+"Отправлять только записи, соответствующие условиям (например, %1$s). "
+"%2$sПерейдите на Pro%3$s."
+
+msgid "Status is Complete"
+msgstr "Статус — Завершено"
+
+msgid "Create Digest"
+msgstr "Создать дайджест"
+
+msgid "Save Digest"
+msgstr "Сохранить дайджест"
+
+msgid "Gravity Forms is not active — counts unavailable."
+msgstr "Gravity Forms не активен — подсчёт недоступен."
+
+msgid "Select a form to see a count."
+msgstr "Выберите форму, чтобы увидеть количество."
+
+msgid "Unable to calculate."
+msgstr "Не удалось вычислить."
+
+msgid "entry"
+msgstr "запись"
+
+msgid "entries"
+msgstr "записей"
+
+msgid "past 24 hours"
+msgstr "последние 24 часа"
+
+msgid "past 7 days"
+msgstr "последние 7 дней"
+
+msgid "Monday"
+msgstr "понедельник"
+
+msgid "Tuesday"
+msgstr "вторник"
+
+msgid "Wednesday"
+msgstr "среда"
+
+msgid "Thursday"
+msgstr "четверг"
+
+msgid "Friday"
+msgstr "пятница"
+
+msgid "Saturday"
+msgstr "суббота"
+
+msgid "Sunday"
+msgstr "воскресенье"
+
+msgid "Entry digest"
+msgstr "Дайджест записей"
+
+msgid "Your Gravity Forms entry digest"
+msgstr "Ваш дайджест записей Gravity Forms"
+
+msgid "is"
+msgstr "равно"
+
+msgid "is not"
+msgstr "не равно"
+
+msgid "contains"
+msgstr "содержит"
+
+msgid "does not contain"
+msgstr "не содержит"
+
+msgid "greater than"
+msgstr "больше чем"
+
+msgid "less than"
+msgstr "меньше чем"
+
+msgid "is empty"
+msgstr "пусто"
+
+msgid "is not empty"
+msgstr "не пусто"
+
+msgid "whole history"
+msgstr "вся история"
+
+msgid "All entries through %s"
+msgstr "Все записи до %s"
+
+msgid "One-time"
+msgstr "Однократно"
+
+msgid "Entry digest · %s"
+msgstr "Дайджест записей · %s"
+
+msgid "Period:"
+msgstr "Период:"
+
+msgid "Forms:"
+msgstr "Формы:"
+
+msgid "Form:"
+msgstr "Форма:"
+
+msgid "(ID %d)"
+msgstr "(ID %d)"
+
+msgid "No new entries were submitted during this period."
+msgstr "За этот период новые записи не поступали."
+
+msgid "Sent automatically by Entry Digest for Gravity Forms."
+msgstr "Отправлено автоматически с помощью Entry Digest for Gravity Forms."
+
+msgid "Delivered daily at %s."
+msgstr "Доставляется ежедневно в %s."
+
+msgid "Delivered every %1$s at %2$s."
+msgstr "Доставляется каждый %1$s в %2$s."
+
+msgid "No new entries for this form."
+msgstr "Нет новых записей для этой формы."
+
+msgid "Submitted"
+msgstr "Отправлено"
+
+msgid " — the complete set is in the attachment."
+msgstr " — полный набор находится во вложении."
+
+msgid "Showing the first %1$d of %2$d entries%3$s"
+msgstr "Показаны первые %1$d из %2$d записей%3$s"
+
+msgid "Entry ID"
+msgstr "ID записи"
+
+msgid "Date Submitted (UTC)"
+msgstr "Дата отправки (UTC)"
+
+msgid "IP Address"
+msgstr "IP-адрес"
+
+msgctxt "precedes a time window such as \"past 7 days\""
+msgid "in the"
+msgstr "за"
+
+msgctxt "precedes a time window in the per-form count badge"
+msgid "in"
+msgstr "за"
+
+msgid ""
+"This form was created about %d day ago — the default covers everything since"
+" then."
+msgid_plural ""
+"This form was created about %d days ago — the default covers everything "
+"since then."
+msgstr[0] ""
+"Эта форма создана около %d дня назад — по умолчанию охватывается всё с тех "
+"пор."
+msgstr[1] ""
+"Эта форма создана около %d дней назад — по умолчанию охватывается всё с тех "
+"пор."
+msgstr[2] ""
+"Эта форма создана около %d дней назад — по умолчанию охватывается всё с тех "
+"пор."
+
+msgid "past %d day"
+msgid_plural "past %d days"
+msgstr[0] "последний %d день"
+msgstr[1] "последние %d дня"
+msgstr[2] "последние %d дней"
+
+msgid "new entry"
+msgid_plural "new entries"
+msgstr[0] "новая запись"
+msgstr[1] "новые записи"
+msgstr[2] "новых записей"
+
+msgid "new entry today"
+msgid_plural "new entries today"
+msgstr[0] "новая запись сегодня"
+msgstr[1] "новые записи сегодня"
+msgstr[2] "новых записей сегодня"
+
+msgid "new entry this week"
+msgid_plural "new entries this week"
+msgstr[0] "новая запись на этой неделе"
+msgstr[1] "новые записи на этой неделе"
+msgstr[2] "новых записей на этой неделе"
+
+msgid "across %d form"
+msgid_plural "across %d forms"
+msgstr[0] "по %d форме"
+msgstr[1] "по %d формам"
+msgstr[2] "по %d формам"
+
+msgid "%d entry"
+msgid_plural "%d entries"
+msgstr[0] "%d запись"
+msgstr[1] "%d записи"
+msgstr[2] "%d записей"

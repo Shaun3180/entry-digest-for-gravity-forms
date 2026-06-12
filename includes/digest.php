@@ -30,6 +30,43 @@ function dsagfe_build_field_map( array $form ): array {
 }
 
 /**
+ * Whole days since the oldest of the given forms was created, per Gravity
+ * Forms' own date_created (stored in UTC). Used to prefill a sensible default
+ * lookback window for one-time sends. Returns 0 when it can't be determined.
+ *
+ * @param int[] $form_ids
+ */
+function dsagfe_forms_age_days( array $form_ids ): int {
+	if ( ! class_exists( 'GFAPI' ) ) {
+		return 0;
+	}
+	$oldest = 0; // Unix timestamp of the earliest creation date seen.
+	foreach ( $form_ids as $fid ) {
+		$created = '';
+		$form    = GFAPI::get_form( (int) $fid );
+		if ( is_array( $form ) && ! empty( $form['date_created'] ) ) {
+			$created = (string) $form['date_created'];
+		} elseif ( class_exists( 'GFFormsModel' ) && method_exists( 'GFFormsModel', 'get_form' ) ) {
+			$row = GFFormsModel::get_form( (int) $fid );
+			if ( $row && ! empty( $row->date_created ) ) {
+				$created = (string) $row->date_created;
+			}
+		}
+		if ( '' === $created ) {
+			continue;
+		}
+		$ts = strtotime( $created . ' UTC' );
+		if ( $ts && ( 0 === $oldest || $ts < $oldest ) ) {
+			$oldest = $ts;
+		}
+	}
+	if ( 0 === $oldest ) {
+		return 0;
+	}
+	return max( 0, (int) floor( ( time() - $oldest ) / DAY_IN_SECONDS ) );
+}
+
+/**
  * Filter a field map down to the selected keys (empty selection = all).
  */
 function dsagfe_filter_field_map( array $field_map, array $include_fields ): array {
@@ -84,16 +121,18 @@ function dsagfe_run_all_active(): void {
 
 /**
  * Build and send one digest.
+ *
+ * @param string $digest_id Digest id.
+ * @param string $mode      'recurring' (rolling daily/weekly window) or 'once'
+ *                          (the digest's configured one-time lookback window).
  */
-function dsagfe_run_digest( string $digest_id ): void {
+function dsagfe_run_digest( string $digest_id, string $mode = 'recurring' ): void {
 	if ( ! class_exists( 'GFAPI' ) ) {
-		error_log( 'Entry Digest: Gravity Forms is not active.' );
 		return;
 	}
 
 	$d = dsagfe_get_digest( $digest_id );
 	if ( ! $d ) {
-		error_log( 'Entry Digest: digest "' . $digest_id . '" not found.' );
 		return;
 	}
 
@@ -104,16 +143,24 @@ function dsagfe_run_digest( string $digest_id ): void {
 
 	$recipients = dsagfe_resolve_recipients( $d );
 	if ( empty( $recipients ) ) {
-		error_log( 'Entry Digest: no valid recipients for digest "' . $digest_id . '".' );
 		return;
 	}
 	$to      = implode( ', ', $recipients );
-	$subject = ! empty( $d['email_subject'] ) ? $d['email_subject'] : 'Your Gravity Forms entry digest';
+	$subject = ! empty( $d['email_subject'] ) ? $d['email_subject'] : __( 'Your Gravity Forms entry digest', 'entry-digest-for-gravity-forms' );
 
-	// Reporting window (daily = 1 day, weekly = 7 days).
-	$days_back  = ( 'daily' === $d['frequency'] ) ? 1 : 7;
-	$start_date = gmdate( 'Y-m-d H:i:s', strtotime( '-' . $days_back . ' days' ) );
-	$end_date   = gmdate( 'Y-m-d H:i:s' );
+	// Reporting window. Recurring runs use the rolling daily (1 day) / weekly
+	// (7 days) window. A one-time send uses its configured lookback; a lookback
+	// of 0 means "everything up to now" (no lower bound).
+	$end_date = gmdate( 'Y-m-d H:i:s' );
+	if ( 'once' === $mode ) {
+		$lookback   = max( 0, (int) ( $d['onetime_lookback_days'] ?? 0 ) );
+		$start_date = ( $lookback > 0 )
+			? gmdate( 'Y-m-d H:i:s', strtotime( '-' . $lookback . ' days' ) )
+			: '2000-01-01 00:00:00';
+	} else {
+		$days_back  = ( 'daily' === $d['frequency'] ) ? 1 : 7;
+		$start_date = gmdate( 'Y-m-d H:i:s', strtotime( '-' . $days_back . ' days' ) );
+	}
 
 	$search_criteria = [
 		'status'     => 'active',
@@ -129,13 +176,11 @@ function dsagfe_run_digest( string $digest_id ): void {
 		$fid  = (int) $fid;
 		$form = GFAPI::get_form( $fid );
 		if ( ! $form ) {
-			error_log( 'Entry Digest: form ID ' . $fid . ' not found (digest ' . $digest_id . ').' );
 			continue;
 		}
 
 		$entries = GFAPI::get_entries( $fid, $search_criteria, null, $paging );
 		if ( is_wp_error( $entries ) ) {
-			error_log( 'Entry Digest: ' . $entries->get_error_message() );
 			continue;
 		}
 		$entries = is_array( $entries ) ? $entries : [];
@@ -165,12 +210,18 @@ function dsagfe_run_digest( string $digest_id ): void {
 	}
 
 	if ( empty( $sections ) ) {
-		error_log( 'Entry Digest: no valid forms for digest "' . $digest_id . '".' );
+		return;
+	}
+
+	// Graceful when quiet: by default a 0-entry period still sends a tidy
+	// "no new entries" note (never radio silence). Sites that prefer silence
+	// can opt out per digest by setting quiet_behavior to 'skip'.
+	if ( 0 === $total_count && 'skip' === ( $d['quiet_behavior'] ?? 'send' ) ) {
 		return;
 	}
 
 	// Compose HTML.
-	$html = dsagfe_build_digest_html( $sections, $d, $total_count, $start_date, $end_date );
+	$html = dsagfe_build_digest_html( $sections, $d, $total_count, $start_date, $end_date, $mode );
 
 	// Attachments (Pro).
 	$attachments = [];
@@ -191,11 +242,8 @@ function dsagfe_run_digest( string $digest_id ): void {
 
 	foreach ( $tmp_files as $f ) {
 		if ( $f && file_exists( $f ) ) {
-			@unlink( $f );
+			wp_delete_file( $f );
 		}
-	}
-	if ( ! $sent ) {
-		error_log( 'Entry Digest: wp_mail() failed for digest "' . $digest_id . '". Check site mail configuration.' );
 	}
 }
 // ════════════════════════════════════════════════════════════════
@@ -212,11 +260,28 @@ function dsagfe_run_digest( string $digest_id ): void {
  *
  * @return array{per_form: array<string,int>, total: int, days_back: int, window: string}
  */
-function dsagfe_count_entries_for( array $form_ids, string $frequency, array $filters, bool $is_pro ): array {
-	$days_back  = ( 'daily' === $frequency ) ? 1 : 7;
-	$start_date = gmdate( 'Y-m-d H:i:s', strtotime( '-' . $days_back . ' days' ) );
-	$end_date   = gmdate( 'Y-m-d H:i:s' );
-	$search     = [ 'status' => 'active', 'start_date' => $start_date, 'end_date' => $end_date ];
+function dsagfe_count_entries_for( array $form_ids, string $frequency, array $filters, bool $is_pro, ?int $days_back_override = null ): array {
+	$end_date = gmdate( 'Y-m-d H:i:s' );
+
+	// A non-null override drives a one-time-style window: N days back, or
+	// "everything up to now" when 0.
+	if ( null !== $days_back_override ) {
+		$days_back  = max( 0, $days_back_override );
+		$start_date = ( $days_back > 0 )
+			? gmdate( 'Y-m-d H:i:s', strtotime( '-' . $days_back . ' days' ) )
+			: '2000-01-01 00:00:00';
+		$window = ( $days_back > 0 )
+			/* translators: %d: number of days in the lookback window. */
+			? sprintf( _n( 'past %d day', 'past %d days', $days_back, 'entry-digest-for-gravity-forms' ), $days_back )
+			: __( 'whole history', 'entry-digest-for-gravity-forms' );
+	} else {
+		$days_back  = ( 'daily' === $frequency ) ? 1 : 7;
+		$start_date = gmdate( 'Y-m-d H:i:s', strtotime( '-' . $days_back . ' days' ) );
+		$window     = ( 1 === $days_back )
+			? __( 'past 24 hours', 'entry-digest-for-gravity-forms' )
+			: __( 'past 7 days', 'entry-digest-for-gravity-forms' );
+	}
+	$search = [ 'status' => 'active', 'start_date' => $start_date, 'end_date' => $end_date ];
 
 	if ( ! $is_pro ) {
 		$form_ids = array_slice( $form_ids, 0, 1 );
@@ -229,7 +294,13 @@ function dsagfe_count_entries_for( array $form_ids, string $frequency, array $fi
 		$rules = ( $is_pro && ! empty( $filters[ (string) $fid ]['rules'] ) ) ? $filters[ (string) $fid ]['rules'] : [];
 
 		if ( empty( $rules ) ) {
-			$count = (int) GFAPI::get_entry_count( $fid, $search );
+			// get_entry_count() was added in GF 2.8; fall back for older installs.
+			if ( method_exists( 'GFAPI', 'get_entry_count' ) ) {
+				$count = (int) GFAPI::get_entry_count( $fid, $search );
+			} else {
+				$entries = GFAPI::get_entries( $fid, $search, null, [ 'offset' => 0, 'page_size' => 2000 ] );
+				$count   = is_array( $entries ) ? count( $entries ) : 0;
+			}
 		} else {
 			$logic   = ( 'any' === ( $filters[ (string) $fid ]['logic'] ?? 'all' ) ) ? 'any' : 'all';
 			$entries = GFAPI::get_entries( $fid, $search, null, [ 'offset' => 0, 'page_size' => 2000 ] );
@@ -250,6 +321,6 @@ function dsagfe_count_entries_for( array $form_ids, string $frequency, array $fi
 		'per_form'  => $per_form,
 		'total'     => $total,
 		'days_back' => $days_back,
-		'window'    => ( 1 === $days_back ) ? 'past 24 hours' : 'past 7 days',
+		'window'    => $window,
 	];
 }

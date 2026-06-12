@@ -1,0 +1,554 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Entry Digest for Gravity Forms 1.2.0\n"
+"Report-Msgid-Bugs-To: https://addasitebuilders.com/plugins/entry-digest-for-gravity-forms/\n"
+"POT-Creation-Date: 2026-06-12 01:52\n"
+"PO-Revision-Date: 2026-06-12 01:52\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Domain: entry-digest-for-gravity-forms\n"
+
+msgid "Entry Digest"
+msgstr "Resumo de entradas"
+
+msgid "Insufficient permissions."
+msgstr "Permissões insuficientes."
+
+msgid "Digest deleted."
+msgstr "Resumo excluído."
+
+msgid "&#10003; Digest triggered. Check %s."
+msgstr "&#10003; Resumo acionado. Verifique %s."
+
+msgid "Add Digest"
+msgstr "Adicionar resumo"
+
+msgid "Gravity Forms is not active. Digests will not send until it is."
+msgstr ""
+"O Gravity Forms não está ativo. Os resumos não serão enviados até que "
+"esteja."
+
+msgid "You're on the free plan."
+msgstr "Você está no plano gratuito."
+
+msgid ""
+"Pro unlocks unlimited digests, multi-form aggregation, role & recipient "
+"routing, conditional filtering, and CSV/Excel attachments."
+msgstr ""
+"O Pro desbloqueia resumos ilimitados, agregação de vários formulários, "
+"roteamento por função e destinatário, filtragem condicional e anexos "
+"CSV/Excel."
+
+msgid "Start a free Pro trial"
+msgstr "Iniciar um teste gratuito do Pro"
+
+msgid "Set up your first digest"
+msgstr "Configure seu primeiro resumo"
+
+msgid ""
+"A digest bundles new Gravity Forms entries into one scheduled email — daily "
+"or weekly — so you get a clean summary instead of a flood of individual "
+"notifications."
+msgstr ""
+"Um resumo agrupa as novas entradas do Gravity Forms em um único e-mail "
+"programado — diário ou semanal — para que você receba um resumo claro em vez"
+" de uma enxurrada de notificações individuais."
+
+msgid "Create your first digest"
+msgstr "Crie seu primeiro resumo"
+
+msgid "Digest"
+msgstr "Resumo"
+
+msgid "Forms"
+msgstr "Formulários"
+
+msgid "Recipients"
+msgstr "Destinatários"
+
+msgid "Schedule"
+msgstr "Agendamento"
+
+msgid "Next run"
+msgstr "Próxima execução"
+
+msgid "Actions"
+msgstr "Ações"
+
+msgid "Form %d (missing)"
+msgstr "Formulário %d (ausente)"
+
+msgid "Form %d"
+msgstr "Formulário %d"
+
+msgid "Daily %s"
+msgstr "Diário %s"
+
+msgid "Weekly %1$s %2$s"
+msgstr "Semanal %1$s %2$s"
+
+msgid "Once: %s"
+msgstr "Uma vez: %s"
+
+msgid "Untitled digest"
+msgstr "Resumo sem título"
+
+msgid "Inactive (free plan limit — upgrade to enable)"
+msgstr "Inativo (limite do plano gratuito — faça upgrade para ativar)"
+
+msgid "— none —"
+msgstr "— nenhum —"
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "Send Now"
+msgstr "Enviar agora"
+
+msgid "Delete this digest?"
+msgstr "Excluir este resumo?"
+
+msgid "Delete"
+msgstr "Excluir"
+
+msgid "Schedules use your site timezone: %s."
+msgstr "Os agendamentos usam o fuso horário do seu site: %s."
+
+msgid ""
+"Weekly digests cover the past 7 days; daily digests cover the past 24 hours."
+msgstr ""
+"Os resumos semanais cobrem os últimos 7 dias; os diários cobrem as últimas "
+"24 horas."
+
+msgid ""
+"The free plan includes one digest. %1$sUpgrade to Pro%2$s for unlimited "
+"digests."
+msgstr ""
+"O plano gratuito inclui um resumo. %1$sFaça upgrade para o Pro%2$s para "
+"resumos ilimitados."
+
+msgid "Digest created."
+msgstr "Resumo criado."
+
+msgid "Digest saved."
+msgstr "Resumo salvo."
+
+msgid "Security check failed — reload the page."
+msgstr "Falha na verificação de segurança — recarregue a página."
+
+msgid "Gravity Forms is not active."
+msgstr "O Gravity Forms não está ativo."
+
+msgid "Digest not found."
+msgstr "Resumo não encontrado."
+
+msgid "Edit Digest"
+msgstr "Editar resumo"
+
+msgid "Back to all digests"
+msgstr "Voltar para todos os resumos"
+
+msgid ""
+"Gravity Forms is not active — the form and field lists below are "
+"unavailable."
+msgstr ""
+"O Gravity Forms não está ativo — as listas de formulários e campos abaixo "
+"estão indisponíveis."
+
+msgid "Digest name"
+msgstr "Nome do resumo"
+
+msgid "For your reference (and used as the header on multi-form digests)."
+msgstr ""
+"Para sua referência (e usado como cabeçalho em resumos de vários "
+"formulários)."
+
+msgid "Select one or more forms to aggregate into this digest."
+msgstr "Selecione um ou mais formulários para agregar a este resumo."
+
+msgid ""
+"Free plan: one form per digest. Multi-form aggregation is a Pro feature."
+msgstr ""
+"Plano gratuito: um formulário por resumo. A agregação de vários formulários "
+"é um recurso Pro."
+
+msgid "(ID %s)"
+msgstr "(ID %s)"
+
+msgid "Enter a form ID (Gravity Forms inactive — can't list forms)."
+msgstr ""
+"Insira um ID de formulário (Gravity Forms inativo — não é possível listar os"
+" formulários)."
+
+msgid "Recipient email(s)"
+msgstr "E-mail(s) do destinatário"
+
+msgid "Comma-separated, e.g. %s"
+msgstr "Separados por vírgula, p. ex. %s"
+
+msgid "Send to roles"
+msgstr "Enviar para funções"
+
+msgid "Also deliver to every user in the selected role(s)."
+msgstr "Também enviar para todos os usuários das funções selecionadas."
+
+msgid "%1$sUpgrade to Pro%2$s to route by role."
+msgstr "%1$sFaça upgrade para o Pro%2$s para rotear por função."
+
+msgid "Email subject"
+msgstr "Assunto do e-mail"
+
+msgid "Recurring frequency"
+msgstr "Frequência recorrente"
+
+msgid "Weekly"
+msgstr "Semanal"
+
+msgid "Daily"
+msgstr "Diário"
+
+msgid "One-time only (no recurring)"
+msgstr "Apenas uma vez (sem recorrência)"
+
+msgid ""
+"Weekly covers the past 7 days; daily covers the past 24 hours. Choose %s to "
+"send just once on a date you pick below."
+msgstr ""
+"Semanal cobre os últimos 7 dias; diário cobre as últimas 24 horas. Escolha "
+"%s para enviar apenas uma vez em uma data escolhida abaixo."
+
+msgid "One-time only"
+msgstr "Apenas uma vez"
+
+msgid "Send day"
+msgstr "Dia de envio"
+
+msgid "Weekly only."
+msgstr "Apenas semanal."
+
+msgid "Send time"
+msgstr "Hora de envio"
+
+msgid "For the recurring send. Site timezone: %s"
+msgstr "Para o envio recorrente. Fuso horário do site: %s"
+
+msgid "One-time send"
+msgstr "Envio único"
+
+msgid "Clear"
+msgstr "Limpar"
+
+msgid ""
+"Optional. Pick a future date & time to send this digest once, on top of (or "
+"instead of) the recurring schedule. Site timezone: %s. The date clears "
+"itself automatically after it sends."
+msgstr ""
+"Opcional. Escolha uma data e hora futuras para enviar este resumo uma vez, "
+"além de (ou em vez de) o agendamento recorrente. Fuso horário do site: %s. A"
+" data é limpa automaticamente após o envio."
+
+msgid "One-time lookback (days)"
+msgstr "Retrospecto único (dias)"
+
+msgid ""
+"How far back the one-time send looks for entries. %s = every entry up to the"
+" send moment."
+msgstr ""
+"Até onde o envio único busca entradas. %s = todas as entradas até o momento "
+"do envio."
+
+msgid "When there are no new entries"
+msgstr "Quando não há novas entradas"
+
+msgid "Send a \"no new entries\" note"
+msgstr "Enviar um aviso de \"nenhuma nova entrada\""
+
+msgid "Don't send anything"
+msgstr "Não enviar nada"
+
+msgid ""
+"By default a quiet period still gets a tidy \"no new entries\" email, so "
+"recipients are never left wondering. Choose \"Don't send anything\" to stay "
+"silent when nothing came in."
+msgstr ""
+"Por padrão, um período sem atividade ainda recebe um e-mail claro de "
+"\"nenhuma nova entrada\", para que os destinatários nunca fiquem na dúvida. "
+"Escolha \"Não enviar nada\" para ficar em silêncio quando nada chegou."
+
+msgid "Entries right now"
+msgstr "Entradas agora"
+
+msgid "Calculating…"
+msgstr "Calculando…"
+
+msgid ""
+"How many active entries would be included if this digest ran right now, "
+"using your current settings. Updates live as you change them; the real send "
+"uses the same rolling window (%s) at send time."
+msgstr ""
+"Quantas entradas ativas seriam incluídas se este resumo fosse executado "
+"agora, com suas configurações atuais. Atualiza em tempo real conforme você "
+"as altera; o envio real usa a mesma janela contínua (%s) no momento do "
+"envio."
+
+msgid "Attachment"
+msgstr "Anexo"
+
+msgid "None"
+msgstr "Nenhum"
+
+msgid "Excel (.xlsx)"
+msgstr "Excel (.xlsx)"
+
+msgid "CSV"
+msgstr "CSV"
+
+msgid ""
+"Attach the full period's entries. Excel produces one sheet per form; CSV "
+"produces one file per form."
+msgstr ""
+"Anexe as entradas de todo o período. O Excel gera uma planilha por "
+"formulário; o CSV gera um arquivo por formulário."
+
+msgid "Pro feature"
+msgstr "Recurso Pro"
+
+msgid "Per-form fields & filters"
+msgstr "Campos e filtros por formulário"
+
+msgid "Choose which fields appear, and (Pro) which entries to include."
+msgstr "Escolha quais campos aparecem e (Pro) quais entradas incluir."
+
+msgid "Fields to include"
+msgstr "Campos a incluir"
+
+msgid "(none checked = all)"
+msgstr "(nenhum marcado = todos)"
+
+msgid "Conditional filtering"
+msgstr "Filtragem condicional"
+
+msgid "Match"
+msgstr "Corresponder a"
+
+msgid "all"
+msgstr "todas"
+
+msgid "any"
+msgstr "qualquer"
+
+msgid "of these rules:"
+msgstr "destas regras:"
+
+msgid "field"
+msgstr "campo"
+
+msgid "value"
+msgstr "valor"
+
+msgid ""
+"Leave fields blank to ignore a row. Add more rules by saving and reopening."
+msgstr ""
+"Deixe os campos em branco para ignorar uma linha. Adicione mais regras "
+"salvando e reabrindo."
+
+msgid ""
+"Send only entries matching conditions (e.g. %1$s). %2$sUpgrade to Pro%3$s."
+msgstr ""
+"Enviar apenas entradas que correspondam às condições (p. ex. %1$s). %2$sFaça"
+" upgrade para o Pro%3$s."
+
+msgid "Status is Complete"
+msgstr "O status é Concluído"
+
+msgid "Create Digest"
+msgstr "Criar resumo"
+
+msgid "Save Digest"
+msgstr "Salvar resumo"
+
+msgid "Gravity Forms is not active — counts unavailable."
+msgstr "O Gravity Forms não está ativo — contagens indisponíveis."
+
+msgid "Select a form to see a count."
+msgstr "Selecione um formulário para ver uma contagem."
+
+msgid "Unable to calculate."
+msgstr "Não foi possível calcular."
+
+msgid "entry"
+msgstr "entrada"
+
+msgid "entries"
+msgstr "entradas"
+
+msgid "past 24 hours"
+msgstr "últimas 24 horas"
+
+msgid "past 7 days"
+msgstr "últimos 7 dias"
+
+msgid "Monday"
+msgstr "segunda-feira"
+
+msgid "Tuesday"
+msgstr "terça-feira"
+
+msgid "Wednesday"
+msgstr "quarta-feira"
+
+msgid "Thursday"
+msgstr "quinta-feira"
+
+msgid "Friday"
+msgstr "sexta-feira"
+
+msgid "Saturday"
+msgstr "sábado"
+
+msgid "Sunday"
+msgstr "domingo"
+
+msgid "Entry digest"
+msgstr "Resumo de entradas"
+
+msgid "Your Gravity Forms entry digest"
+msgstr "Seu resumo de entradas do Gravity Forms"
+
+msgid "is"
+msgstr "é"
+
+msgid "is not"
+msgstr "não é"
+
+msgid "contains"
+msgstr "contém"
+
+msgid "does not contain"
+msgstr "não contém"
+
+msgid "greater than"
+msgstr "maior que"
+
+msgid "less than"
+msgstr "menor que"
+
+msgid "is empty"
+msgstr "está vazio"
+
+msgid "is not empty"
+msgstr "não está vazio"
+
+msgid "whole history"
+msgstr "todo o histórico"
+
+msgid "All entries through %s"
+msgstr "Todas as entradas até %s"
+
+msgid "One-time"
+msgstr "Uma vez"
+
+msgid "Entry digest · %s"
+msgstr "Resumo de entradas · %s"
+
+msgid "Period:"
+msgstr "Período:"
+
+msgid "Forms:"
+msgstr "Formulários:"
+
+msgid "Form:"
+msgstr "Formulário:"
+
+msgid "(ID %d)"
+msgstr "(ID %d)"
+
+msgid "No new entries were submitted during this period."
+msgstr "Nenhuma nova entrada foi enviada durante este período."
+
+msgid "Sent automatically by Entry Digest for Gravity Forms."
+msgstr "Enviado automaticamente pelo Entry Digest for Gravity Forms."
+
+msgid "Delivered daily at %s."
+msgstr "Entregue diariamente às %s."
+
+msgid "Delivered every %1$s at %2$s."
+msgstr "Entregue toda %1$s às %2$s."
+
+msgid "No new entries for this form."
+msgstr "Nenhuma nova entrada para este formulário."
+
+msgid "Submitted"
+msgstr "Enviado"
+
+msgid " — the complete set is in the attachment."
+msgstr " — o conjunto completo está no anexo."
+
+msgid "Showing the first %1$d of %2$d entries%3$s"
+msgstr "Mostrando as primeiras %1$d de %2$d entradas%3$s"
+
+msgid "Entry ID"
+msgstr "ID da entrada"
+
+msgid "Date Submitted (UTC)"
+msgstr "Data de envio (UTC)"
+
+msgid "IP Address"
+msgstr "Endereço IP"
+
+msgctxt "precedes a time window such as \"past 7 days\""
+msgid "in the"
+msgstr "nos"
+
+msgctxt "precedes a time window in the per-form count badge"
+msgid "in"
+msgstr "nos"
+
+msgid ""
+"This form was created about %d day ago — the default covers everything since"
+" then."
+msgid_plural ""
+"This form was created about %d days ago — the default covers everything "
+"since then."
+msgstr[0] ""
+"Este formulário foi criado há cerca de %d dia — o padrão cobre tudo desde "
+"então."
+msgstr[1] ""
+"Este formulário foi criado há cerca de %d dias — o padrão cobre tudo desde "
+"então."
+
+msgid "past %d day"
+msgid_plural "past %d days"
+msgstr[0] "último %d dia"
+msgstr[1] "últimos %d dias"
+
+msgid "new entry"
+msgid_plural "new entries"
+msgstr[0] "nova entrada"
+msgstr[1] "novas entradas"
+
+msgid "new entry today"
+msgid_plural "new entries today"
+msgstr[0] "nova entrada hoje"
+msgstr[1] "novas entradas hoje"
+
+msgid "new entry this week"
+msgid_plural "new entries this week"
+msgstr[0] "nova entrada esta semana"
+msgstr[1] "novas entradas esta semana"
+
+msgid "across %d form"
+msgid_plural "across %d forms"
+msgstr[0] "em %d formulário"
+msgstr[1] "em %d formulários"
+
+msgid "%d entry"
+msgid_plural "%d entries"
+msgstr[0] "%d entrada"
+msgstr[1] "%d entradas"
