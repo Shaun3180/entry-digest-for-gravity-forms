@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Development / planning files (not for distribution)
+launch-plan.md
+SUBMISSION-STEPS.md
+
+# Local testing / environment files (never distribute)
+temp-pro-enable.php
+temp-*.php
+wp-config.php
+
+# Editor
+*.swp
+.idea/
+.vscode/
+
+# Composer (vendor is committed, but these shouldn't be)
+/node_modules/

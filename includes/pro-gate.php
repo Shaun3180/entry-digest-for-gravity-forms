@@ -13,15 +13,11 @@ defined( 'ABSPATH' ) || exit;
 //  deployed via Freemius. Until then this returns false for everyone.
 // ════════════════════════════════════════════════════════════════
 function dsagfe_is_pro(): bool {
-	$pro = function_exists( 'edfgf_fs' ) && edfgf_fs()->can_use_premium_code();
-
-	// Local testing only: allow forcing Pro on (e.g. add_filter( 'dsagfe_is_pro', '__return_true' ))
-	// when WP_DEBUG is on. In production the live Freemius license/trial state is authoritative.
-	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-		$pro = (bool) apply_filters( 'dsagfe_is_pro', $pro );
-	}
-
-	return (bool) $pro;
+	// The Freemius premium build running with a valid license or an active
+	// trial is the single source of truth. There is intentionally no filter or
+	// constant override here, so Pro features can never be unlocked by site
+	// configuration (such as WP_DEBUG) — only by a genuine license.
+	return function_exists( 'edfgf_fs' ) && edfgf_fs()->can_use_premium_code();
 }
 
 /**
@@ -32,6 +28,8 @@ function dsagfe_pro_badge(): string {
 }
 
 function dsagfe_upgrade_url(): string {
-	// Placeholder — point this at the Freemius checkout / pricing page at launch.
-	return (string) apply_filters( 'dsagfe_upgrade_url', 'https://entrydigest.com/pro/' );
+    if ( function_exists( 'edfgf_fs' ) ) {
+        return edfgf_fs()->get_upgrade_url();
+    }
+    return 'https://addasitebuilders.com/plugins/entry-digest-for-gravity-forms/';
 }
