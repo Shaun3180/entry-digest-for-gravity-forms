@@ -139,6 +139,9 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring' ): voi
 	}
 
 	$form_ids = (array) $d['form_ids'];
+	if ( ! dsagfe_multiform_enabled() ) {
+		$form_ids = array_slice( $form_ids, 0, 1 );
+	}
 
 	$recipients = dsagfe_resolve_recipients( $d );
 	if ( empty( $recipients ) ) {

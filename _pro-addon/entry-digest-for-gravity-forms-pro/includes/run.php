@@ -2,6 +2,13 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * Pro: enable multi-form aggregation. With this on, the free plugin's editor
+ * shows checkboxes (instead of a single radio) and a digest may combine entries
+ * from several forms into one email.
+ */
+add_filter( 'dsagfe_allow_multiform', '__return_true' );
+
+/**
  * Pro: apply per-form conditional filtering during a digest run.
  *
  * @param array $entries Entries fetched for this form.

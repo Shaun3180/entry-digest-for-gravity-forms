@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Entry Digest for Gravity Forms — Pro
  * Plugin URI:        https://addasitebuilders.com/plugins/entry-digest-for-gravity-forms/
- * Description:       Pro add-on for Entry Digest for Gravity Forms. Adds role-based recipients, conditional filtering, and CSV/Excel attachments. Requires the free Entry Digest for Gravity Forms plugin.
+ * Description:       Pro add-on for Entry Digest for Gravity Forms. Adds multi-form aggregation, role-based recipients, conditional filtering, and CSV/Excel attachments. Requires the free Entry Digest for Gravity Forms plugin.
  * Version:           1.0.0
  * Requires at least: 6.1
  * Requires PHP:      7.4

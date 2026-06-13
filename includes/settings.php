@@ -1,6 +1,28 @@
 <?php
 defined( 'ABSPATH' ) || exit;
 
+// ── Capability helpers ───────────────────────────────────────────
+/**
+ * Whether a single digest may aggregate more than one form.
+ *
+ * Core ships single-form digests (one form per digest). The optional Pro add-on
+ * enables multi-form aggregation by returning true on the 'dsagfe_allow_multiform'
+ * filter. This is a neutral extension point — there is no license check here.
+ */
+function dsagfe_multiform_enabled(): bool {
+	return (bool) apply_filters( 'dsagfe_allow_multiform', false );
+}
+
+/**
+ * Marketing URL for the optional Pro add-on (filterable).
+ */
+function dsagfe_pro_url(): string {
+	return (string) apply_filters(
+		'dsagfe_pro_url',
+		'https://addasitebuilders.com/plugins/entry-digest-for-gravity-forms/'
+	);
+}
+
 // ── i18n helpers ─────────────────────────────────────────────────
 /**
  * Translated weekday label for an internal English day key ('monday'…'sunday').
@@ -27,7 +49,7 @@ function dsagfe_digest_defaults(): array {
 	return [
 		'id'            => '',
 		'label'         => __( 'Entry digest', 'entry-digest-for-gravity-forms' ),
-		'form_ids'      => [ 1 ],          // One or more forms aggregated into this digest.
+		'form_ids'      => [ 1 ],          // One form per digest in core; Pro add-on allows several.
 		'to_email'      => '',
 		'roles'         => [],             // Add-on: WP roles whose members also receive the digest.
 		'email_subject' => __( 'Your Gravity Forms entry digest', 'entry-digest-for-gravity-forms' ),

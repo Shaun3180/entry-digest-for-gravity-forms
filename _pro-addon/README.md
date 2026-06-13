@@ -10,7 +10,8 @@ WordPress.org requires every plugin it hosts to be fully functional with no
 locked or license-gated features. So the monetized features live here, in a
 standalone plugin that activates *alongside* the free one and layers its
 features on through the free plugin's documented hooks. The free plugin works
-completely on its own; this add-on simply enriches it when present and licensed.
+completely on its own as a single-form digest tool; this add-on adds multi-form
+aggregation and the advanced options when present and licensed.
 
 ## How it hooks in
 
@@ -18,6 +19,7 @@ The free plugin (v2.0.0+) exposes these extension points, all used here:
 
 | Hook | Type | Purpose |
 |------|------|---------|
+| `dsagfe_allow_multiform` | filter | Enable multi-form aggregation (checkbox form picker) |
 | `dsagfe_recipients` | filter | Append role-based recipient emails |
 | `dsagfe_run_entries` | filter | Apply conditional filtering during a run |
 | `dsagfe_attachments` | filter | Build CSV/XLSX attachment files |

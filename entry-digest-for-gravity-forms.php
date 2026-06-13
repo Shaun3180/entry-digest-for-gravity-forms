@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Entry Digest for Gravity Forms
  * Plugin URI:        https://addasitebuilders.com/plugins
- * Description:       Sends scheduled, readable email digests of your Gravity Forms entries — a summary block plus an inline table of submissions — on a daily, weekly, or one-time schedule. Unlimited digests and multi-form aggregation included. Find it under Forms › Entry Digest (or Tools › Entry Digest if Gravity Forms is inactive).
+ * Description:       Sends scheduled, readable email digests of your Gravity Forms entries — a summary block plus an inline table of submissions — on a daily, weekly, or one-time schedule. Unlimited digests, one form each. Find it under Forms › Entry Digest (or Tools › Entry Digest if Gravity Forms is inactive).
  * Version:           2.0.0
  * Requires at least: 6.1
  * Requires PHP:      7.4

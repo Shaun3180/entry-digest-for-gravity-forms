@@ -32,7 +32,6 @@ Gravity Forms' built-in notifications fire on every single submission. For a bus
 Everything here is free and fully functional — no feature is locked, time-limited, or gated behind a key:
 
 * Unlimited digests — create as many as you need.
-* Multi-form aggregation — combine entries from several forms into a single digest email.
 * Daily or weekly delivery on a chosen day/time, and/or a one-time send on a future date you pick.
 * Configurable lookback window for one-time sends.
 * Configurable quiet-period behavior: send a "no new entries" note or stay silent, per digest.
@@ -42,10 +41,13 @@ Everything here is free and fully functional — no feature is locked, time-limi
 * "Send Now" button to preview a digest on demand.
 * Clean, branded HTML email that renders well across mail clients.
 
+Each digest covers one form. (Need to combine several forms into a single email? See the optional Pro add-on below.)
+
 = Optional Pro add-on =
 
-A separate, optional Pro add-on — distributed from [addasitebuilders.com](https://addasitebuilders.com/plugins), not from WordPress.org — adds advanced routing and exports for teams and agencies:
+A separate, optional Pro add-on — distributed from [addasitebuilders.com](https://addasitebuilders.com/plugins), not from WordPress.org — adds aggregation, routing, and exports for teams and agencies:
 
+* Multi-form aggregation — combine entries from several forms into a single digest email.
 * Role-based recipients (deliver to every user in a chosen WordPress role).
 * Conditional filtering — include only entries that match your rules.
 * CSV and Excel (.xlsx) attachments of the full period's entries.
@@ -86,9 +88,9 @@ Yes. Each digest has a **Send Now** button that builds and emails it immediately
 
 Digests use your site's `wp_mail()` setup. If other WordPress emails aren't being delivered, a transactional email/SMTP plugin usually resolves it. The plugin logs delivery problems to your PHP error log.
 
-= How many digests and forms can I create? =
+= How many digests can I create? =
 
-As many as you like. Unlimited digests and multi-form aggregation are included for free. Role-based recipients, conditional filtering, and CSV/Excel attachments are available through the optional Pro add-on sold separately at addasitebuilders.com.
+As many as you like — there is no limit on the number of digests. Each digest covers one form. Combining several forms into a single digest (multi-form aggregation), role-based recipients, conditional filtering, and CSV/Excel attachments are available through the optional Pro add-on sold separately at addasitebuilders.com.
 
 == Screenshots ==
 
@@ -101,8 +103,8 @@ As many as you like. Unlimited digests and multi-form aggregation are included f
 == Changelog ==
 
 = 2.0.0 =
-* Unlimited digests and multi-form aggregation are now included for free — no feature is locked or gated.
-* Advanced features (role recipients, conditional filtering, CSV/Excel attachments) moved to an optional Pro add-on distributed separately at addasitebuilders.com; the add-on hooks in only if installed.
+* Unlimited single-form digests are now fully free — no feature is locked, time-limited, or gated.
+* Advanced features (multi-form aggregation, role recipients, conditional filtering, CSV/Excel attachments) moved to an optional Pro add-on distributed separately at addasitebuilders.com; the add-on hooks in only if installed.
 * Editor JavaScript is now properly enqueued (no inline scripts).
 * Internal cleanup: removed bundled monetization SDK.
 
@@ -127,7 +129,7 @@ As many as you like. Unlimited digests and multi-form aggregation are included f
 == Upgrade Notice ==
 
 = 2.0.0 =
-Unlimited digests and multi-form aggregation are now free for everyone. Existing digests keep working unchanged. Safe to update.
+Unlimited single-form digests are now free for everyone. Existing digests keep working unchanged. Safe to update.
 
 = 1.2.1 =
 Adds full translation readiness and bundled translations for eight languages. No functional changes to existing digests. Safe to update.
