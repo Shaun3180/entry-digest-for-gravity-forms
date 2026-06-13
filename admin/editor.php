@@ -58,21 +58,36 @@ function dsagfe_render_editor( string $action, string $notice ): void {
 				</tr>
 
 				<tr>
-					<th scope="row"><?php esc_html_e( 'Forms', 'entry-digest-for-gravity-forms' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Form', 'entry-digest-for-gravity-forms' ); ?></th>
 					<td>
 						<?php if ( $gf && $all_forms ) : ?>
+							<?php $multiform = dsagfe_multiform_enabled(); ?>
 							<fieldset>
 								<p class="description" style="margin-bottom:8px;">
-									<?php esc_html_e( 'Select one or more forms to aggregate into this digest.', 'entry-digest-for-gravity-forms' ); ?>
+									<?php echo $multiform
+										? esc_html__( 'Select one or more forms to aggregate into this digest.', 'entry-digest-for-gravity-forms' )
+										: esc_html__( 'Choose the form this digest covers.', 'entry-digest-for-gravity-forms' ); ?>
 								</p>
 								<?php foreach ( $all_forms as $form ) : ?>
 									<?php $fid = (string) $form['id']; $checked = in_array( (int) $fid, $d['form_ids'], true ); ?>
 									<label style="display:block;margin-bottom:4px;">
-										<input type="checkbox" name="dsagfe_digest[form_ids][]" value="<?php echo esc_attr( $fid ); ?>" class="dsagfe-form-toggle" data-fid="<?php echo esc_attr( $fid ); ?>" <?php checked( $checked ); ?>>
+										<input type="<?php echo $multiform ? 'checkbox' : 'radio'; ?>" name="dsagfe_digest[form_ids][]" value="<?php echo esc_attr( $fid ); ?>" class="dsagfe-form-toggle" data-fid="<?php echo esc_attr( $fid ); ?>" <?php checked( $checked ); ?>>
 										<?php echo esc_html( $form['title'] ); ?> <span style="color:#888;"><?php /* translators: %s: numeric form ID. */ printf( esc_html__( '(ID %s)', 'entry-digest-for-gravity-forms' ), esc_html( $fid ) ); ?></span>
 									</label>
 								<?php endforeach; ?>
 							</fieldset>
+							<?php if ( ! $multiform ) : ?>
+								<p class="description" style="margin-top:6px;">
+									<?php
+									printf(
+										/* translators: 1: opening anchor tag to the Pro page; 2: closing anchor tag. */
+										esc_html__( 'Tip: combining several forms into a single digest is available in %1$sEntry Digest Pro%2$s.', 'entry-digest-for-gravity-forms' ),
+										'<a href="' . esc_url( dsagfe_pro_url() ) . '" target="_blank" rel="noopener">',
+										'</a>'
+									); // phpcs:ignore WordPress.Security.EscapeOutput
+									?>
+								</p>
+							<?php endif; ?>
 						<?php else : ?>
 							<input type="number" name="dsagfe_digest[form_ids][]" value="<?php echo esc_attr( $d['form_ids'][0] ?? 1 ); ?>" min="1" class="small-text">
 							<p class="description"><?php esc_html_e( "Enter a form ID (Gravity Forms inactive — can't list forms).", 'entry-digest-for-gravity-forms' ); ?></p>

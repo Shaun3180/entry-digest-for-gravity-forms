@@ -31,11 +31,14 @@ function dsagfe_handle_save(): string {
 	) );
 	$d['to_email'] = implode( ', ', $emails );
 
-	// Forms — one or more, aggregated into this digest.
+	// Forms — one per digest in core; the Pro add-on enables aggregating several.
 	$form_ids = array_values( array_unique( array_map( 'intval', (array) ( $raw['form_ids'] ?? [] ) ) ) );
 	$form_ids = array_values( array_filter( $form_ids, static fn( $f ) => $f > 0 ) );
 	if ( empty( $form_ids ) ) {
 		$form_ids = [ 1 ];
+	}
+	if ( ! dsagfe_multiform_enabled() ) {
+		$form_ids = array_slice( $form_ids, 0, 1 );
 	}
 	$d['form_ids'] = $form_ids;
 

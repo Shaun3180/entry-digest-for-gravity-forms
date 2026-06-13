@@ -22,6 +22,9 @@ function dsagfe_ajax_entry_count(): void {
 
 	$form_ids = array_values( array_unique( array_map( 'intval', (array) ( $raw['form_ids'] ?? [] ) ) ) );
 	$form_ids = array_values( array_filter( $form_ids, static fn( $f ) => $f > 0 ) );
+	if ( ! dsagfe_multiform_enabled() ) {
+		$form_ids = array_slice( $form_ids, 0, 1 );
+	}
 
 	$frequency = in_array( $raw['frequency'] ?? '', [ 'daily', 'weekly', 'none' ], true ) ? $raw['frequency'] : 'weekly';
 
