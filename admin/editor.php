@@ -5,7 +5,6 @@ defined( 'ABSPATH' ) || exit;
  * The digest editor screen (new or edit).
  */
 function dsagfe_render_editor( string $action, string $notice ): void {
-	$is_pro   = dsagfe_is_pro();
 	$base_url = dsagfe_page_url();
 	$gf       = class_exists( 'GFAPI' );
 
@@ -24,8 +23,6 @@ function dsagfe_render_editor( string $action, string $notice ): void {
 
 	$all_forms = $gf ? GFAPI::get_forms() : [];
 	$days      = [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ];
-	$lock      = $is_pro ? '' : 'disabled';
-	$ops       = dsagfe_filter_operators();
 
 	// One-time send: datetime-local needs 'Y-m-d\TH:i'; we store 'Y-m-d H:i'.
 	$onetime_input = $d['onetime_at'] ? str_replace( ' ', 'T', $d['onetime_at'] ) : '';
@@ -61,17 +58,17 @@ function dsagfe_render_editor( string $action, string $notice ): void {
 				</tr>
 
 				<tr>
-					<th scope="row"><?php esc_html_e( 'Forms', 'entry-digest-for-gravity-forms' ); ?> <?php echo $is_pro ? '' : dsagfe_pro_badge(); // phpcs:ignore ?></th>
+					<th scope="row"><?php esc_html_e( 'Forms', 'entry-digest-for-gravity-forms' ); ?></th>
 					<td>
 						<?php if ( $gf && $all_forms ) : ?>
 							<fieldset>
 								<p class="description" style="margin-bottom:8px;">
-									<?php echo $is_pro ? esc_html__( 'Select one or more forms to aggregate into this digest.', 'entry-digest-for-gravity-forms' ) : esc_html__( 'Free plan: one form per digest. Multi-form aggregation is a Pro feature.', 'entry-digest-for-gravity-forms' ); ?>
+									<?php esc_html_e( 'Select one or more forms to aggregate into this digest.', 'entry-digest-for-gravity-forms' ); ?>
 								</p>
 								<?php foreach ( $all_forms as $form ) : ?>
 									<?php $fid = (string) $form['id']; $checked = in_array( (int) $fid, $d['form_ids'], true ); ?>
 									<label style="display:block;margin-bottom:4px;">
-										<input type="<?php echo $is_pro ? 'checkbox' : 'radio'; ?>" name="dsagfe_digest[form_ids][]" value="<?php echo esc_attr( $fid ); ?>" class="dsagfe-form-toggle" data-fid="<?php echo esc_attr( $fid ); ?>" <?php checked( $checked ); ?>>
+										<input type="checkbox" name="dsagfe_digest[form_ids][]" value="<?php echo esc_attr( $fid ); ?>" class="dsagfe-form-toggle" data-fid="<?php echo esc_attr( $fid ); ?>" <?php checked( $checked ); ?>>
 										<?php echo esc_html( $form['title'] ); ?> <span style="color:#888;"><?php /* translators: %s: numeric form ID. */ printf( esc_html__( '(ID %s)', 'entry-digest-for-gravity-forms' ), esc_html( $fid ) ); ?></span>
 									</label>
 								<?php endforeach; ?>
@@ -92,24 +89,16 @@ function dsagfe_render_editor( string $action, string $notice ): void {
 						?></p></td>
 				</tr>
 
-				<tr>
-					<th scope="row"><?php esc_html_e( 'Send to roles', 'entry-digest-for-gravity-forms' ); ?> <?php echo $is_pro ? '' : dsagfe_pro_badge(); // phpcs:ignore ?></th>
-					<td>
-						<fieldset>
-							<p class="description" style="margin-bottom:8px;"><?php esc_html_e( 'Also deliver to every user in the selected role(s).', 'entry-digest-for-gravity-forms' ); ?></p>
-							<?php foreach ( wp_roles()->get_names() as $role_key => $role_name ) : ?>
-								<label style="display:inline-block;margin:0 14px 4px 0;">
-                                    <input type="checkbox" name="dsagfe_digest[roles][]" value="<?php echo esc_attr( $role_key ); ?>" <?php checked( in_array( $role_key, $d['roles'], true ) ); ?> <?php echo esc_attr( $lock ); ?>>
-									<?php echo esc_html( translate_user_role( $role_name ) ); ?>
-								</label>
-							<?php endforeach; ?>
-						</fieldset>
-						<?php if ( ! $is_pro ) : ?><p class="description"><?php
-							/* translators: 1: opening anchor tag; 2: closing anchor tag. */
-							printf( esc_html__( '%1$sUpgrade to Pro%2$s to route by role.', 'entry-digest-for-gravity-forms' ), '<a href="' . esc_url( dsagfe_upgrade_url() ) . '">', '</a>' ); // phpcs:ignore WordPress.Security.EscapeOutput
-						?></p><?php endif; ?>
-					</td>
-				</tr>
+				<?php
+				/**
+				 * Fires inside the digest editor's settings table, just after the
+				 * recipient email row. Add-ons can render extra recipient controls
+				 * here (for example, role-based routing) as additional table rows.
+				 *
+				 * @param array $d The digest configuration being edited.
+				 */
+				do_action( 'dsagfe_editor_after_recipients', $d );
+				?>
 
 				<tr>
 					<th scope="row"><label for="dsagfe_subject"><?php esc_html_e( 'Email subject', 'entry-digest-for-gravity-forms' ); ?></label></th>
@@ -206,25 +195,21 @@ function dsagfe_render_editor( string $action, string $notice ): void {
 					</td>
 				</tr>
 
-				<tr>
-					<th scope="row"><?php esc_html_e( 'Attachment', 'entry-digest-for-gravity-forms' ); ?> <?php echo $is_pro ? '' : dsagfe_pro_badge(); // phpcs:ignore ?></th>
-					<td>
-						<select name="dsagfe_digest[attach_format]" <?php echo esc_attr( $lock ); ?>>
-							<option value="none" <?php selected( $d['attach_format'], 'none' ); ?>><?php esc_html_e( 'None', 'entry-digest-for-gravity-forms' ); ?></option>
-							<option value="xlsx" <?php selected( $d['attach_format'], 'xlsx' ); ?>><?php esc_html_e( 'Excel (.xlsx)', 'entry-digest-for-gravity-forms' ); ?></option>
-							<option value="csv"  <?php selected( $d['attach_format'], 'csv' ); ?>><?php esc_html_e( 'CSV', 'entry-digest-for-gravity-forms' ); ?></option>
-						</select>
-						<p class="description">
-							<?php esc_html_e( "Attach the full period's entries. Excel produces one sheet per form; CSV produces one file per form.", 'entry-digest-for-gravity-forms' ); ?>
-							<?php if ( ! $is_pro ) : ?><a href="<?php echo esc_url( dsagfe_upgrade_url() ); ?>"><?php esc_html_e( 'Pro feature', 'entry-digest-for-gravity-forms' ); ?></a>.<?php endif; ?>
-						</p>
-					</td>
-				</tr>
+				<?php
+				/**
+				 * Fires inside the digest editor's settings table, after the quiet-
+				 * period row. Add-ons can render extra delivery options here (for
+				 * example, a CSV/Excel attachment selector) as additional rows.
+				 *
+				 * @param array $d The digest configuration being edited.
+				 */
+				do_action( 'dsagfe_editor_after_schedule', $d );
+				?>
 
 			</tbody></table>
 
-			<h2><?php esc_html_e( 'Per-form fields & filters', 'entry-digest-for-gravity-forms' ); ?></h2>
-			<p class="description"><?php esc_html_e( 'Choose which fields appear, and (Pro) which entries to include.', 'entry-digest-for-gravity-forms' ); ?></p>
+			<h2><?php esc_html_e( 'Per-form fields', 'entry-digest-for-gravity-forms' ); ?></h2>
+			<p class="description"><?php esc_html_e( 'Choose which fields appear in the entry table for each form.', 'entry-digest-for-gravity-forms' ); ?></p>
 
 			<?php
 			$form_lookup = [];
@@ -238,8 +223,6 @@ function dsagfe_render_editor( string $action, string $notice ): void {
 				$selected  = in_array( (int) $fid, $d['form_ids'], true );
 				$field_map = dsagfe_build_field_map( $form );
 				$sel_fields = (array) ( $d['fields'][ $fid ] ?? [] );
-				$f_filters  = (array) ( $d['filters'][ $fid ]['rules'] ?? [] );
-				$f_logic    = $d['filters'][ $fid ]['logic'] ?? 'all';
 				?>
 				<div class="dsagfe-form-block" data-fid="<?php echo esc_attr( $fid ); ?>" style="<?php echo $selected ? '' : 'display:none;'; ?>border:1px solid #dcdcde;border-radius:6px;padding:14px 18px;margin:0 0 14px 0;background:#fff;">
 					<h3 style="margin-top:4px;"><?php echo esc_html( $form['title'] ); ?> <span style="color:#888;font-weight:400;"><?php /* translators: %s: numeric form ID. */ printf( esc_html__( '(ID %s)', 'entry-digest-for-gravity-forms' ), esc_html( $fid ) ); ?></span> <span class="dsagfe-form-count" data-fid="<?php echo esc_attr( $fid ); ?>" style="color:#2271b1;font-weight:400;font-size:13px;"></span></h3>
@@ -254,216 +237,26 @@ function dsagfe_render_editor( string $action, string $notice ): void {
 						<?php endforeach; ?>
 					</fieldset>
 
-					<p style="font-weight:600;margin:14px 0 6px;"><?php esc_html_e( 'Conditional filtering', 'entry-digest-for-gravity-forms' ); ?> <?php echo $is_pro ? '' : dsagfe_pro_badge(); // phpcs:ignore ?></p>
-					<?php if ( $is_pro ) : ?>
-						<p class="description" style="margin-bottom:6px;">
-							<?php esc_html_e( 'Match', 'entry-digest-for-gravity-forms' ); ?>
-							<select name="dsagfe_digest[filter_logic][<?php echo esc_attr( $fid ); ?>]">
-								<option value="all" <?php selected( $f_logic, 'all' ); ?>><?php esc_html_e( 'all', 'entry-digest-for-gravity-forms' ); ?></option>
-								<option value="any" <?php selected( $f_logic, 'any' ); ?>><?php esc_html_e( 'any', 'entry-digest-for-gravity-forms' ); ?></option>
-							</select>
-							<?php esc_html_e( 'of these rules:', 'entry-digest-for-gravity-forms' ); ?>
-						</p>
-						<table class="dsagfe-filters" data-fid="<?php echo esc_attr( $fid ); ?>" style="margin-bottom:8px;">
-							<tbody>
-								<?php
-								$render_rule = static function ( $i, $rule, $field_map, $ops, $fid ) {
-									$rf = $rule['field'] ?? '';
-									$ro = $rule['op'] ?? 'is';
-									$rv = $rule['value'] ?? '';
-									?>
-									<tr>
-										<td>
-											<select name="dsagfe_digest[filters][<?php echo esc_attr( $fid ); ?>][<?php echo (int) $i; ?>][field]">
-												<option value="">— <?php esc_html_e( 'field', 'entry-digest-for-gravity-forms' ); ?> —</option>
-												<?php foreach ( $field_map as $k => $lab ) : ?>
-													<option value="<?php echo esc_attr( $k ); ?>" <?php selected( (string) $rf, (string) $k ); ?>><?php echo esc_html( $lab ); ?></option>
-												<?php endforeach; ?>
-											</select>
-										</td>
-										<td>
-											<select name="dsagfe_digest[filters][<?php echo esc_attr( $fid ); ?>][<?php echo (int) $i; ?>][op]">
-												<?php foreach ( $ops as $ok => $olabel ) : ?>
-													<option value="<?php echo esc_attr( $ok ); ?>" <?php selected( $ro, $ok ); ?>><?php echo esc_html( $olabel ); ?></option>
-												<?php endforeach; ?>
-											</select>
-										</td>
-										<td><input type="text" name="dsagfe_digest[filters][<?php echo esc_attr( $fid ); ?>][<?php echo (int) $i; ?>][value]" value="<?php echo esc_attr( $rv ); ?>" placeholder="<?php esc_attr_e( 'value', 'entry-digest-for-gravity-forms' ); ?>"></td>
-									</tr>
-									<?php
-								};
-								$existing = $f_filters ?: [ [ 'field' => '', 'op' => 'is', 'value' => '' ] ];
-								foreach ( $existing as $i => $rule ) {
-									$render_rule( $i, $rule, $field_map, $ops, $fid );
-								}
-								// One spare blank row for adding a rule.
-								$render_rule( count( $existing ), [ 'field' => '', 'op' => 'is', 'value' => '' ], $field_map, $ops, $fid );
-								?>
-							</tbody>
-						</table>
-						<p class="description"><?php esc_html_e( 'Leave fields blank to ignore a row. Add more rules by saving and reopening.', 'entry-digest-for-gravity-forms' ); ?></p>
-					<?php else : ?>
-						<p class="description"><?php
-							/* translators: 1: an example condition in em tags; 2: opening anchor tag; 3: closing anchor tag. */
-							printf( esc_html__( 'Send only entries matching conditions (e.g. %1$s). %2$sUpgrade to Pro%3$s.', 'entry-digest-for-gravity-forms' ), '<em>' . esc_html__( 'Status is Complete', 'entry-digest-for-gravity-forms' ) . '</em>', '<a href="' . esc_url( dsagfe_upgrade_url() ) . '">', '</a>' ); // phpcs:ignore WordPress.Security.EscapeOutput
-						?></p>
-					<?php endif; ?>
+					<?php
+					/**
+					 * Fires inside each per-form configuration block in the digest
+					 * editor. Add-ons can render per-form controls here (for example,
+					 * conditional filtering rules).
+					 *
+					 * @param string $fid       The Gravity Forms form ID (as a string).
+					 * @param array  $d         The digest configuration being edited.
+					 * @param array  $field_map [ field_key => label ] for this form.
+					 */
+					do_action( 'dsagfe_editor_form_block', $fid, $d, $field_map );
+					?>
 				</div>
 			<?php endforeach; ?>
 
 			<?php submit_button( 'new' === $action ? __( 'Create Digest', 'entry-digest-for-gravity-forms' ) : __( 'Save Digest', 'entry-digest-for-gravity-forms' ), 'primary', 'dsagfe_save_digest' ); ?>
 		</form>
 	</div>
-
-	<script>
-	var DSAGFE_I18N = {
-		calculating: <?php echo wp_json_encode( __( 'Calculating…', 'entry-digest-for-gravity-forms' ) ); ?>,
-		unable:      <?php echo wp_json_encode( __( 'Unable to calculate.', 'entry-digest-for-gravity-forms' ) ); ?>,
-		gfInactive:  <?php echo wp_json_encode( __( 'Gravity Forms is not active — counts unavailable.', 'entry-digest-for-gravity-forms' ) ); ?>,
-		selectForm:  <?php echo wp_json_encode( __( 'Select a form to see a count.', 'entry-digest-for-gravity-forms' ) ); ?>,
-		entry:       <?php echo wp_json_encode( __( 'entry', 'entry-digest-for-gravity-forms' ) ); ?>,
-		entries:     <?php echo wp_json_encode( __( 'entries', 'entry-digest-for-gravity-forms' ) ); ?>,
-		inThe:       <?php echo wp_json_encode( _x( 'in the', 'precedes a time window such as "past 7 days"', 'entry-digest-for-gravity-forms' ) ); ?>,
-		inWord:      <?php echo wp_json_encode( _x( 'in', 'precedes a time window in the per-form count badge', 'entry-digest-for-gravity-forms' ) ); ?>
-	};
-	</script>
-
-	<script>
-	( function () {
-		function sync() {
-			var checked = {};
-			document.querySelectorAll( '.dsagfe-form-toggle' ).forEach( function ( el ) {
-				if ( el.checked ) { checked[ el.dataset.fid ] = true; }
-			} );
-			document.querySelectorAll( '.dsagfe-form-block' ).forEach( function ( block ) {
-				block.style.display = checked[ block.dataset.fid ] ? '' : 'none';
-			} );
-		}
-		document.querySelectorAll( '.dsagfe-form-toggle' ).forEach( function ( el ) {
-			el.addEventListener( 'change', sync );
-		} );
-		sync();
-	} )();
-	</script>
-
-	<script>
-	( function () {
-		var freq     = document.getElementById( 'dsagfe_freq' );
-		var onetime  = document.getElementById( 'dsagfe_onetime' );
-		var clearBtn = document.getElementById( 'dsagfe_onetime_clear' );
-		if ( ! freq ) { return; }
-
-		function show( sel, on ) {
-			document.querySelectorAll( sel ).forEach( function ( el ) {
-				el.style.display = on ? '' : 'none';
-			} );
-		}
-		function sync() {
-			var f = freq.value;
-			show( '.dsagfe-weekly-row', f === 'weekly' );           // send day: weekly only
-			show( '.dsagfe-recurring-row', f === 'daily' || f === 'weekly' ); // recurring send time
-			show( '.dsagfe-onetime-row', !! ( onetime && onetime.value ) );   // lookback: only with a date
-		}
-		freq.addEventListener( 'change', sync );
-		if ( onetime ) { onetime.addEventListener( 'input', sync ); }
-		if ( clearBtn && onetime ) {
-			clearBtn.addEventListener( 'click', function () {
-				onetime.value = '';
-				sync();
-				onetime.dispatchEvent( new Event( 'change', { bubbles: true } ) );
-			} );
-		}
-		sync();
-	} )();
-	</script>
-
-	<script>
-	var DSAGFE_COUNT = {
-		url:   <?php echo wp_json_encode( admin_url( 'admin-ajax.php' ) ); ?>,
-		nonce: <?php echo wp_json_encode( wp_create_nonce( 'dsagfe_entry_count' ) ); ?>,
-		gf:    <?php echo $gf ? 'true' : 'false'; ?>
-	};
-	( function () {
-		var preview = document.getElementById( 'dsagfe-count-preview' );
-		if ( ! preview || typeof DSAGFE_COUNT === 'undefined' ) { return; }
-		if ( ! DSAGFE_COUNT.gf ) {
-			preview.innerHTML = '<em>' + esc( DSAGFE_I18N.gfInactive ) + '</em>';
-			return;
-		}
-		var theForm = preview.closest( 'form' );
-		var badges  = document.querySelectorAll( '.dsagfe-form-count' );
-		var timer   = null;
-		var seq     = 0;
-
-		function esc( s ) { var d = document.createElement( 'div' ); d.textContent = s; return d.innerHTML; }
-
-		function render( data ) {
-			var total = data.total | 0;
-			var word  = ( total === 1 ) ? DSAGFE_I18N.entry : DSAGFE_I18N.entries;
-			var html  = '<strong>' + total + '</strong> ' + esc( word ) + ' ' + esc( DSAGFE_I18N.inThe ) + ' ' + esc( data.window );
-			var fids  = Object.keys( data.per_form || {} );
-			if ( fids.length > 1 ) {
-				html += '<ul style="margin:6px 0 0 18px;list-style:disc;">';
-				fids.forEach( function ( fid ) {
-					var t = ( data.titles && data.titles[ fid ] ) ? data.titles[ fid ] : ( 'Form ' + fid );
-					html += '<li>' + esc( t ) + ': <strong>' + ( data.per_form[ fid ] | 0 ) + '</strong></li>';
-				} );
-				html += '</ul>';
-			} else if ( fids.length === 0 ) {
-				html = '<em>' + esc( DSAGFE_I18N.selectForm ) + '</em>';
-			}
-			preview.innerHTML = html;
-
-			badges.forEach( function ( b ) {
-				var fid = b.dataset.fid;
-				if ( data.per_form && Object.prototype.hasOwnProperty.call( data.per_form, fid ) ) {
-					var n = data.per_form[ fid ] | 0;
-					var w = ( n === 1 ) ? DSAGFE_I18N.entry : DSAGFE_I18N.entries;
-					b.textContent = '· ' + n + ' ' + w + ' ' + DSAGFE_I18N.inWord + ' ' + data.window;
-				} else {
-					b.textContent = '';
-				}
-			} );
-		}
-
-		function update() {
-			var mySeq = ++seq;
-			preview.innerHTML = '<em>' + esc( DSAGFE_I18N.calculating ) + '</em>';
-			var fd = new FormData( theForm );
-			fd.append( 'action', 'dsagfe_entry_count' );
-			fd.append( 'nonce', DSAGFE_COUNT.nonce );
-			fetch( DSAGFE_COUNT.url, { method: 'POST', body: fd, credentials: 'same-origin' } )
-				.then( function ( r ) { return r.json(); } )
-				.then( function ( json ) {
-					if ( mySeq !== seq ) { return; }
-					if ( json && json.success ) {
-						render( json.data );
-					} else {
-						preview.innerHTML = '<em>' + esc( ( json && json.data && json.data.message ) || DSAGFE_I18N.unable ) + '</em>';
-					}
-				} )
-				.catch( function () {
-					if ( mySeq === seq ) { preview.innerHTML = '<em>' + esc( DSAGFE_I18N.unable ) + '</em>'; }
-				} );
-		}
-
-		function debounced() { clearTimeout( timer ); timer = setTimeout( update, 350 ); }
-
-		theForm.addEventListener( 'change', function ( e ) {
-			if ( e.target.closest && (
-				e.target.id === 'dsagfe_freq' ||
-				e.target.id === 'dsagfe_onetime' ||
-				e.target.id === 'dsagfe_lookback' ||
-				e.target.classList.contains( 'dsagfe-form-toggle' ) ||
-				( e.target.name && ( e.target.name.indexOf( '[filters]' ) !== -1 || e.target.name.indexOf( '[filter_logic]' ) !== -1 ) )
-			) ) { debounced(); }
-		} );
-		theForm.addEventListener( 'input', function ( e ) {
-			if ( e.target.name && ( e.target.name.indexOf( '[filters]' ) !== -1 || e.target.id === 'dsagfe_lookback' ) ) { debounced(); }
-		} );
-
-		update();
-	} )();
-	</script>
 	<?php
+	// The editor's JavaScript (form-block toggling, schedule-row visibility, and
+	// the live entry-count preview) is enqueued from admin/enqueue.php as
+	// admin/js/editor.js, with its data passed via wp_localize_script().
 }

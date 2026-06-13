@@ -82,26 +82,28 @@ function dsagfe_filter_field_map( array $field_map, array $include_fields ): arr
 	return $filtered ?: $field_map;
 }
 // ════════════════════════════════════════════════════════════════
-//  Recipient routing (Pro adds role-based recipients)
+//  Recipient routing
 // ════════════════════════════════════════════════════════════════
 /**
- * Resolve the final recipient list for a digest: explicit emails plus, on Pro,
- * the account emails of all users in the selected roles.
+ * Resolve the final recipient list for a digest from its explicit email
+ * addresses.
+ *
+ * Add-ons can append more recipients (for example, everyone in a chosen WP role)
+ * via the 'dsagfe_recipients' filter. The list returned here is always
+ * de-duplicated and validated.
  *
  * @return string[] De-duplicated, validated email addresses.
  */
 function dsagfe_resolve_recipients( array $d ): array {
 	$emails = array_map( 'trim', explode( ',', (string) ( $d['to_email'] ?? '' ) ) );
 
-	if ( dsagfe_is_pro() && ! empty( $d['roles'] ) ) {
-		$users = get_users( [
-			'role__in' => $d['roles'],
-			'fields'   => [ 'user_email' ],
-		] );
-		foreach ( $users as $u ) {
-			$emails[] = $u->user_email;
-		}
-	}
+	/**
+	 * Filter the recipient email list for a digest before validation.
+	 *
+	 * @param string[] $emails Recipient email addresses gathered so far.
+	 * @param array    $d      The digest configuration.
+	 */
+	$emails = (array) apply_filters( 'dsagfe_recipients', $emails, $d );
 
 	$emails = array_values( array_unique( array_filter(
 		array_map( 'trim', $emails ),
@@ -136,10 +138,7 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring' ): voi
 		return;
 	}
 
-	$is_pro = dsagfe_is_pro();
-
-	// Enforce free-tier limits at runtime too (belt and suspenders).
-	$form_ids = $is_pro ? $d['form_ids'] : array_slice( $d['form_ids'], 0, 1 );
+	$form_ids = (array) $d['form_ids'];
 
 	$recipients = dsagfe_resolve_recipients( $d );
 	if ( empty( $recipients ) ) {
@@ -185,15 +184,17 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring' ): voi
 		}
 		$entries = is_array( $entries ) ? $entries : [];
 
-		// Conditional filtering (Pro).
-		if ( $is_pro && ! empty( $d['filters'][ (string) $fid ]['rules'] ) ) {
-			$logic   = ( 'any' === ( $d['filters'][ (string) $fid ]['logic'] ?? 'all' ) ) ? 'any' : 'all';
-			$rules   = $d['filters'][ (string) $fid ]['rules'];
-			$entries = array_values( array_filter(
-				$entries,
-				static fn( $e ) => dsagfe_entry_matches( $e, $rules, $logic )
-			) );
-		}
+		/**
+		 * Filter the entries collected for one form before they are rendered.
+		 *
+		 * Add-ons use this to apply conditional filtering rules. Core returns the
+		 * entries unchanged.
+		 *
+		 * @param array  $entries The entries fetched for this form.
+		 * @param array  $d       The digest configuration.
+		 * @param int    $fid     The Gravity Forms form ID.
+		 */
+		$entries = (array) apply_filters( 'dsagfe_run_entries', $entries, $d, $fid );
 
 		$field_map = dsagfe_filter_field_map(
 			dsagfe_build_field_map( $form ),
@@ -223,14 +224,23 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring' ): voi
 	// Compose HTML.
 	$html = dsagfe_build_digest_html( $sections, $d, $total_count, $start_date, $end_date, $mode );
 
-	// Attachments (Pro).
-	$attachments = [];
-	$tmp_files   = [];
-	$format      = $is_pro ? $d['attach_format'] : 'none';
-	if ( 'none' !== $format && $total_count > 0 ) {
-		$tmp_files   = dsagfe_build_attachments( $format, $sections );
-		$attachments = $tmp_files;
-	}
+	/**
+	 * Filter the list of file paths to attach to the digest email.
+	 *
+	 * Add-ons use this to attach CSV/XLSX exports of the period's entries and are
+	 * responsible for generating the files. Core attaches nothing. Returned paths
+	 * are deleted after the message is sent, so add-ons should return temporary
+	 * files.
+	 *
+	 * @param string[] $attachments Absolute file paths to attach.
+	 * @param array    $sections    Per-form section data for this run.
+	 * @param array    $d           The digest configuration.
+	 * @param int      $total_count Total entries across all sections.
+	 */
+	$attachments = ( $total_count > 0 )
+		? (array) apply_filters( 'dsagfe_attachments', [], $sections, $d, $total_count )
+		: [];
+	$tmp_files   = $attachments;
 
 	$sent = wp_mail(
 		$to,
@@ -253,14 +263,15 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring' ): voi
  * Count active entries that would currently be included, per form, using the
  * same rolling window as a real run (daily = 24h, weekly = 7 days).
  *
+ * Add-ons that filter entries can adjust these counts via the
+ * 'dsagfe_count_entries_for' filter on the returned array.
+ *
  * @param int[]  $form_ids  Selected form IDs.
  * @param string $frequency 'daily' | 'weekly'.
- * @param array  $filters   Pro filter map: form_id => [ 'logic' => .., 'rules' => [..] ].
- * @param bool   $is_pro    Whether Pro features apply.
  *
  * @return array{per_form: array<string,int>, total: int, days_back: int, window: string}
  */
-function dsagfe_count_entries_for( array $form_ids, string $frequency, array $filters, bool $is_pro, ?int $days_back_override = null ): array {
+function dsagfe_count_entries_for( array $form_ids, string $frequency, ?int $days_back_override = null ): array {
 	$end_date = gmdate( 'Y-m-d H:i:s' );
 
 	// A non-null override drives a one-time-style window: N days back, or
@@ -283,34 +294,17 @@ function dsagfe_count_entries_for( array $form_ids, string $frequency, array $fi
 	}
 	$search = [ 'status' => 'active', 'start_date' => $start_date, 'end_date' => $end_date ];
 
-	if ( ! $is_pro ) {
-		$form_ids = array_slice( $form_ids, 0, 1 );
-	}
-
 	$per_form = [];
 	$total    = 0;
 	foreach ( $form_ids as $fid ) {
-		$fid   = (int) $fid;
-		$rules = ( $is_pro && ! empty( $filters[ (string) $fid ]['rules'] ) ) ? $filters[ (string) $fid ]['rules'] : [];
+		$fid = (int) $fid;
 
-		if ( empty( $rules ) ) {
-			// get_entry_count() was added in GF 2.8; fall back for older installs.
-			if ( method_exists( 'GFAPI', 'get_entry_count' ) ) {
-				$count = (int) GFAPI::get_entry_count( $fid, $search );
-			} else {
-				$entries = GFAPI::get_entries( $fid, $search, null, [ 'offset' => 0, 'page_size' => 2000 ] );
-				$count   = is_array( $entries ) ? count( $entries ) : 0;
-			}
+		// get_entry_count() was added in GF 2.8; fall back for older installs.
+		if ( method_exists( 'GFAPI', 'get_entry_count' ) ) {
+			$count = (int) GFAPI::get_entry_count( $fid, $search );
 		} else {
-			$logic   = ( 'any' === ( $filters[ (string) $fid ]['logic'] ?? 'all' ) ) ? 'any' : 'all';
 			$entries = GFAPI::get_entries( $fid, $search, null, [ 'offset' => 0, 'page_size' => 2000 ] );
-			$entries = is_array( $entries ) ? $entries : [];
-			$count   = 0;
-			foreach ( $entries as $e ) {
-				if ( dsagfe_entry_matches( $e, $rules, $logic ) ) {
-					$count++;
-				}
-			}
+			$count   = is_array( $entries ) ? count( $entries ) : 0;
 		}
 
 		$per_form[ (string) $fid ] = $count;

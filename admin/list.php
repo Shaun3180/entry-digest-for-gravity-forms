@@ -6,19 +6,12 @@ defined( 'ABSPATH' ) || exit;
  */
 function dsagfe_render_list( string $notice ): void {
 	$digests   = dsagfe_get_digests();
-	$is_pro    = dsagfe_is_pro();
-	$active    = array_keys( dsagfe_active_digests() );
 	$gf_active = class_exists( 'GFAPI' );
 	$base_url  = dsagfe_page_url();
 	?>
 	<div class="wrap">
 		<h1 class="wp-heading-inline">Entry Digest for Gravity Forms</h1>
-		<?php
-		$can_add = $is_pro || count( $digests ) < DSAGFE_FREE_DIGEST_LIMIT;
-		if ( $can_add ) {
-			echo ' <a href="' . esc_url( $base_url . '&action=new' ) . '" class="page-title-action">' . esc_html__( 'Add Digest', 'entry-digest-for-gravity-forms' ) . '</a>';
-		}
-		?>
+		<?php echo ' <a href="' . esc_url( $base_url . '&action=new' ) . '" class="page-title-action">' . esc_html__( 'Add Digest', 'entry-digest-for-gravity-forms' ) . '</a>'; ?>
 		<hr class="wp-header-end">
 
 		<?php echo $notice; // phpcs:ignore WordPress.Security.EscapeOutput ?>
@@ -27,15 +20,13 @@ function dsagfe_render_list( string $notice ): void {
 			<div class="notice notice-error"><p><?php esc_html_e( 'Gravity Forms is not active. Digests will not send until it is.', 'entry-digest-for-gravity-forms' ); ?></p></div>
 		<?php endif; ?>
 
-		<?php if ( ! $is_pro ) : ?>
-			<div class="notice notice-info" style="border-left-color:#7c3aed;">
-				<p style="margin:.6em 0;">
-					<strong><?php esc_html_e( "You're on the free plan.", 'entry-digest-for-gravity-forms' ); ?></strong>
-					<?php esc_html_e( 'Pro unlocks unlimited digests, multi-form aggregation, role & recipient routing, conditional filtering, and CSV/Excel attachments.', 'entry-digest-for-gravity-forms' ); ?>
-					<a href="<?php echo esc_url( dsagfe_upgrade_url() ); ?>"><?php esc_html_e( 'Start a free Pro trial', 'entry-digest-for-gravity-forms' ); ?> &rarr;</a>
-				</p>
-			</div>
-		<?php endif; ?>
+		<?php
+		/**
+		 * Fires just below the list-screen header, before the digest table. Add-ons
+		 * can use this to render notices (for example, a Pro upsell).
+		 */
+		do_action( 'dsagfe_list_after_header' );
+		?>
 
 		<?php if ( empty( $digests ) ) : ?>
 			<div style="max-width:560px;margin:32px auto;padding:40px 32px;text-align:center;background:#fff;border:1px solid #c3c4c7;border-radius:4px;">
@@ -61,7 +52,6 @@ function dsagfe_render_list( string $notice ): void {
 				<tbody>
 					<?php foreach ( $digests as $id => $d ) : ?>
 						<?php
-						$is_active   = in_array( $id, $active, true );
 						$form_names  = [];
 						if ( $gf_active ) {
 							foreach ( $d['form_ids'] as $fid ) {
@@ -100,17 +90,14 @@ function dsagfe_render_list( string $notice ): void {
 						}
 						$sched = $parts ? implode( '<br>', $parts ) : '—';
 						?>
-						<tr<?php echo $is_active ? '' : ' style="opacity:.5;"'; ?>>
+						<tr>
 							<td>
 								<strong><?php echo esc_html( $d['label'] ?: __( 'Untitled digest', 'entry-digest-for-gravity-forms' ) ); ?></strong>
-								<?php if ( ! $is_active ) : ?>
-									<br><span style="color:#b32d2e;font-size:11px;"><?php esc_html_e( 'Inactive (free plan limit — upgrade to enable)', 'entry-digest-for-gravity-forms' ); ?></span>
-								<?php endif; ?>
 							</td>
 							<td><?php echo esc_html( implode( ', ', $form_names ) ); ?></td>
 							<td><?php echo esc_html( $rcpts ? implode( ', ', $rcpts ) : __( '— none —', 'entry-digest-for-gravity-forms' ) ); ?></td>
 							<td><?php echo $sched; // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
-							<td><?php echo esc_html( $is_active ? $next_fmt : '—' ); ?></td>
+							<td><?php echo esc_html( $next_fmt ); ?></td>
 							<td>
 								<a href="<?php echo esc_url( $base_url . '&action=edit&digest=' . rawurlencode( $id ) ); ?>" class="button button-small"><?php esc_html_e( 'Edit', 'entry-digest-for-gravity-forms' ); ?></a>
 								<form method="post" style="display:inline;">
