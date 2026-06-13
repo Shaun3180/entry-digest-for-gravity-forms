@@ -48,9 +48,10 @@ Each digest covers one form. (Need to combine several forms into a single email?
 A separate, optional Pro add-on — distributed from [addasitebuilders.com](https://addasitebuilders.com/plugins), not from WordPress.org — adds aggregation, routing, and exports for teams and agencies:
 
 * Multi-form aggregation — combine entries from several forms into a single digest email.
-* Role-based recipients (deliver to every user in a chosen WordPress role).
 * Conditional filtering — include only entries that match your rules.
 * CSV and Excel (.xlsx) attachments of the full period's entries.
+* Role-based recipients (deliver to every user in a chosen WordPress role).
+* Custom email branding — your logo, accent color, and a white-label footer.
 
 This plugin is complete and fully functional without it. The Pro add-on simply hooks in if installed; nothing here is disabled while it is absent.
 

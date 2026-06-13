@@ -27,8 +27,11 @@ The free plugin (v2.0.0+) exposes these extension points, all used here:
 | `dsagfe_editor_after_recipients` | action | Render the "Send to roles" editor row |
 | `dsagfe_editor_after_schedule` | action | Render the attachment-format editor row |
 | `dsagfe_editor_form_block` | action | Render per-form conditional-filter UI |
-| `dsagfe_save_digest` | filter | Persist roles, filters, and attachment format |
+| `dsagfe_save_digest` | filter | Persist roles, filters, attachment format, branding |
 | `dsagfe_preview_count` | filter | Make the live count preview respect filters |
+| `dsagfe_email_accent` | filter | Brand the email accent color |
+| `dsagfe_email_logo_html` | filter | Add a logo to the email header |
+| `dsagfe_email_footer_credit` | filter | White-label the email footer |
 
 ## Files
 
@@ -40,7 +43,8 @@ entry-digest-for-gravity-forms-pro/
     ├── filters.php       Conditional-filter engine (moved out of free plugin)
     ├── export.php        CSV/XLSX writers (moved out of free plugin)
     ├── recipients.php    Role-based recipients
-    ├── run.php           Filtering + attachments during a digest run
+    ├── run.php           Multi-form, filtering + attachments during a digest run
+    ├── branding.php      Custom email branding (logo, accent color, footer)
     └── editor-ui.php     Editor controls, save handling, filtered preview count
 ```
 

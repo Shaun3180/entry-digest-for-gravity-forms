@@ -52,7 +52,18 @@ function dsagfe_build_digest_html( array $sections, array $d, int $total_count, 
 		$count_label .= ' ' . sprintf( _n( 'across %d form', 'across %d forms', $n_forms, 'entry-digest-for-gravity-forms' ), $n_forms );
 	}
 
-	$accent = '#2563eb';
+	/**
+	 * Filter the digest email's accent color (header background, links). Add-ons
+	 * use this for custom branding. Must be a 6-digit hex color; invalid values
+	 * fall back to the default.
+	 *
+	 * @param string $accent Default accent color.
+	 * @param array  $d      The digest configuration.
+	 */
+	$accent = (string) apply_filters( 'dsagfe_email_accent', '#2563eb', $d );
+	if ( ! preg_match( '/^#[0-9a-fA-F]{6}$/', $accent ) ) {
+		$accent = '#2563eb';
+	}
 	$muted  = '#6b7280';
 	$border = '#e5e7eb';
 
@@ -63,6 +74,20 @@ function dsagfe_build_digest_html( array $sections, array $d, int $total_count, 
 
 			<!-- Header -->
 			<div style="background:<?php echo esc_attr( $accent ); ?>;padding:20px 24px;">
+				<?php
+				/**
+				 * Filter an optional logo/header HTML block shown above the digest
+				 * title in the email header. Add-ons return an <img> tag (or other
+				 * safe HTML) for branding. Core shows nothing.
+				 *
+				 * @param string $logo_html HTML to render. Default empty.
+				 * @param array  $d         The digest configuration.
+				 */
+				$logo_html = (string) apply_filters( 'dsagfe_email_logo_html', '', $d );
+				if ( '' !== $logo_html ) {
+					echo '<div style="margin-bottom:10px;">' . wp_kses_post( $logo_html ) . '</div>';
+				}
+				?>
 				<div style="color:#ffffff;font-size:18px;font-weight:700;">
 					<?php echo esc_html( $title ); ?>
 				</div>
@@ -119,7 +144,19 @@ function dsagfe_build_digest_html( array $sections, array $d, int $total_count, 
 
 			<!-- Footer -->
 			<div style="padding:18px 24px 24px 24px;margin-top:8px;border-top:1px solid <?php echo esc_attr( $border ); ?>;font-size:12px;color:<?php echo esc_attr( $muted ); ?>;">
-				<?php esc_html_e( 'Sent automatically by Entry Digest for Gravity Forms.', 'entry-digest-for-gravity-forms' ); ?>
+				<?php
+				/**
+				 * Filter the footer credit line. Add-ons can replace it with custom
+				 * text (or an empty string) to white-label the email.
+				 *
+				 * @param string $credit Default credit text.
+				 * @param array  $d      The digest configuration.
+				 */
+				$footer_credit = (string) apply_filters( 'dsagfe_email_footer_credit', __( 'Sent automatically by Entry Digest for Gravity Forms.', 'entry-digest-for-gravity-forms' ), $d );
+				if ( '' !== $footer_credit ) {
+					echo esc_html( $footer_credit ) . ' ';
+				}
+				?>
 				<?php
 				if ( 'daily' === $cadence ) {
 					/* translators: %s: time of day, e.g. 08:00. */
