@@ -14,10 +14,22 @@ defined( 'ABSPATH' ) || exit;
 // ════════════════════════════════════════════════════════════════
 function dsagfe_is_pro(): bool {
 	// The Freemius premium build running with a valid license or an active
-	// trial is the single source of truth. There is intentionally no filter or
-	// constant override here, so Pro features can never be unlocked by site
-	// configuration (such as WP_DEBUG) — only by a genuine license.
-	return function_exists( 'edfgf_fs' ) && edfgf_fs()->can_use_premium_code();
+	// trial is the single source of truth in production.
+	$is_pro = function_exists( 'edfgf_fs' ) && edfgf_fs()->can_use_premium_code();
+
+	// Developer-only overrides for local testing. Honored ONLY when WP_DEBUG is
+	// enabled, so a live (production-config) site can never be unlocked via a
+	// filter — only by a genuine license.
+	//
+	// - 'dsagfe_is_pro'     : per-plugin override.
+	// - 'gf_dev_force_pro'  : shared override honored by all of our Freemius
+	//                         plugins, so one dev helper can unlock them all.
+	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		$is_pro = (bool) apply_filters( 'dsagfe_is_pro', $is_pro );
+		$is_pro = (bool) apply_filters( 'gf_dev_force_pro', $is_pro );
+	}
+
+	return $is_pro;
 }
 
 /**

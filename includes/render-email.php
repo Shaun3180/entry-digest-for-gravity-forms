@@ -144,6 +144,7 @@ function dsagfe_render_section_table( array $sec, array $d, bool $multi_form, st
 	$entries   = $sec['entries'];
 	$field_map = $sec['field_map'];
 	$count     = $sec['count'];
+	$form_id   = (int) ( $sec['form']['id'] ?? 0 );
 
 	ob_start();
 	?>
@@ -181,10 +182,19 @@ function dsagfe_render_section_table( array $sec, array $d, bool $multi_form, st
 								break;
 							}
 							$shown++;
+							$entry_id   = (int) ( $entry['id'] ?? 0 );
+							$date_label = esc_html( dsagfe_local_datetime( $entry['date_created'] ?? '', 'M j, g:i A' ) );
+							$entry_url  = ( $form_id && $entry_id )
+								? admin_url( 'admin.php?page=gf_entries&view=entry&id=' . $form_id . '&lid=' . $entry_id )
+								: '';
 							?>
 							<tr>
 								<td style="padding:8px 10px;border:1px solid <?php echo esc_attr( $border ); ?>;white-space:nowrap;color:<?php echo esc_attr( $muted ); ?>;">
-									<?php echo esc_html( dsagfe_local_datetime( $entry['date_created'] ?? '', 'M j, g:i A' ) ); ?>
+									<?php if ( $entry_url ) : ?>
+										<a href="<?php echo esc_url( $entry_url ); ?>" style="color:<?php echo esc_attr( $accent ); ?>;text-decoration:underline;white-space:nowrap;"><?php echo $date_label; // phpcs:ignore WordPress.Security.EscapeOutput — already escaped above ?></a>
+									<?php else : ?>
+										<?php echo $date_label; // phpcs:ignore WordPress.Security.EscapeOutput — already escaped above ?>
+									<?php endif; ?>
 								</td>
 								<?php foreach ( array_keys( $field_map ) as $fid ) : ?>
 									<?php
