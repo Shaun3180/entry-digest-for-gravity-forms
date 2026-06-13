@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 4.1.0
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,7 +102,7 @@ As many as you like — there is no limit on the number of digests. Each digest 
 
 == Changelog ==
 
-= 4.1.0 =
+= 2.0.0 =
 * Unlimited single-form digests are now fully free — no feature is locked, time-limited, or gated.
 * Advanced features (multi-form aggregation, role recipients, conditional filtering, CSV/Excel attachments) moved to an optional Pro add-on distributed separately at addasitebuilders.com; the add-on hooks in only if installed.
 * Editor JavaScript is now properly enqueued (no inline scripts).
@@ -128,7 +128,7 @@ As many as you like — there is no limit on the number of digests. Each digest 
 
 == Upgrade Notice ==
 
-= 4.1.0 =
+= 2.0.0 =
 Unlimited single-form digests are now free for everyone. Existing digests keep working unchanged. Safe to update.
 
 = 1.2.1 =
