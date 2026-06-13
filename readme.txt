@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.2.1
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,7 @@ Stop drowning in per-entry notification emails. Get one clean, scheduled digest 
 
 **Entry Digest for Gravity Forms** replaces the flood of one-email-per-submission notifications with a single, readable digest delivered on your schedule. Each digest opens with a summary block (how many entries arrived and the date range) followed by an inline table of the actual submissions, so you can scan a day's or week's activity in one email instead of dozens.
 
-Point it at a form, choose who receives it and when, pick which fields to show, and you're done. Digests are sent automatically via WP-Cron using your site's timezone.
+Point it at one or more forms, choose who receives it and when, pick which fields to show, and you're done. Digests are sent automatically via WP-Cron using your site's timezone.
 
 = Why use it =
 
@@ -27,25 +27,30 @@ Gravity Forms' built-in notifications fire on every single submission. For a bus
 * A **"Send Now"** button to preview a digest on demand.
 * **Graceful quiet periods** — when no entries arrived you can either receive a tidy "no new entries" note (the default, so you're never left wondering) or choose to stay silent, per digest.
 
-= Free features =
+= Features =
 
-* One scheduled digest covering one form.
+Everything here is free and fully functional — no feature is locked, time-limited, or gated behind a key:
+
+* Unlimited digests — create as many as you need.
+* Multi-form aggregation — combine entries from several forms into a single digest email.
 * Daily or weekly delivery on a chosen day/time, and/or a one-time send on a future date you pick.
-* Configurable quiet-period behavior: send a "no new entries" note or stay silent.
+* Configurable lookback window for one-time sends.
+* Configurable quiet-period behavior: send a "no new entries" note or stay silent, per digest.
 * Per-field selection for the entry table.
+* Live entry-count preview as you build a digest.
 * Summary block with entry count and date range.
+* "Send Now" button to preview a digest on demand.
 * Clean, branded HTML email that renders well across mail clients.
 
-= Pro features =
+= Optional Pro add-on =
 
-A separate Pro upgrade (sold off WordPress.org) adds scale, routing, and convenience for teams and agencies:
+A separate, optional Pro add-on — distributed from [addasitebuilders.com](https://addasitebuilders.com/plugins), not from WordPress.org — adds advanced routing and exports for teams and agencies:
 
-* Unlimited digests and multi-form aggregation into a single email.
-* Per-recipient and per-role routing (e.g. send the admissions digest to one person, the IT digest to another).
+* Role-based recipients (deliver to every user in a chosen WordPress role).
 * Conditional filtering — include only entries that match your rules.
 * CSV and Excel (.xlsx) attachments of the full period's entries.
 
-The free plugin is fully functional on its own; Pro is optional.
+This plugin is complete and fully functional without it. The Pro add-on simply hooks in if installed; nothing here is disabled while it is absent.
 
 = Privacy =
 
@@ -81,9 +86,9 @@ Yes. Each digest has a **Send Now** button that builds and emails it immediately
 
 Digests use your site's `wp_mail()` setup. If other WordPress emails aren't being delivered, a transactional email/SMTP plugin usually resolves it. The plugin logs delivery problems to your PHP error log.
 
-= How many forms can the free version include? =
+= How many digests and forms can I create? =
 
-The free version covers one form in one digest. Multi-form aggregation and unlimited digests are part of Pro.
+As many as you like. Unlimited digests and multi-form aggregation are included for free. Role-based recipients, conditional filtering, and CSV/Excel attachments are available through the optional Pro add-on sold separately at addasitebuilders.com.
 
 == Screenshots ==
 
@@ -94,6 +99,12 @@ The free version covers one form in one digest. Multi-form aggregation and unlim
 5. Per-form field selection for the entry table.
 
 == Changelog ==
+
+= 2.0.0 =
+* Unlimited digests and multi-form aggregation are now included for free — no feature is locked or gated.
+* Advanced features (role recipients, conditional filtering, CSV/Excel attachments) moved to an optional Pro add-on distributed separately at addasitebuilders.com; the add-on hooks in only if installed.
+* Editor JavaScript is now properly enqueued (no inline scripts).
+* Internal cleanup: removed bundled monetization SDK.
 
 = 1.2.1 =
 * Now translation-ready: every user-facing string is internationalized (text domain `entry-digest-for-gravity-forms`).
@@ -114,6 +125,9 @@ The free version covers one form in one digest. Multi-form aggregation and unlim
 * Initial release: single scheduled digest with summary block and entry table, daily/weekly delivery.
 
 == Upgrade Notice ==
+
+= 2.0.0 =
+Unlimited digests and multi-form aggregation are now free for everyone. Existing digests keep working unchanged. Safe to update.
 
 = 1.2.1 =
 Adds full translation readiness and bundled translations for eight languages. No functional changes to existing digests. Safe to update.

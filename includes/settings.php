@@ -27,9 +27,9 @@ function dsagfe_digest_defaults(): array {
 	return [
 		'id'            => '',
 		'label'         => __( 'Entry digest', 'entry-digest-for-gravity-forms' ),
-		'form_ids'      => [ 1 ],          // Free: exactly one. Pro: many (aggregated).
+		'form_ids'      => [ 1 ],          // One or more forms aggregated into this digest.
 		'to_email'      => '',
-		'roles'         => [],             // Pro: WP roles whose members also receive the digest.
+		'roles'         => [],             // Add-on: WP roles whose members also receive the digest.
 		'email_subject' => __( 'Your Gravity Forms entry digest', 'entry-digest-for-gravity-forms' ),
 		'frequency'     => 'weekly',       // 'weekly' | 'daily' | 'none' (none = no recurring digest; one-time only)
 		'send_day'      => 'monday',       // used only when frequency = weekly
@@ -38,8 +38,8 @@ function dsagfe_digest_defaults(): array {
 		'onetime_lookback_days' => 0,      // entries window for the one-time send; 0 = everything up to the send moment
 		'quiet_behavior' => 'send',        // 'send' = always email a "no new entries" note; 'skip' = stay silent when 0 entries
 		'fields'        => [],             // map: form_id => [ field/input keys ]; empty = all for that form
-		'filters'       => [],             // Pro: map: form_id => [ 'logic' => all|any, 'rules' => [ {field,op,value} ] ]
-		'attach_format' => 'none',         // Pro: 'none' | 'xlsx' | 'csv'
+		'filters'       => [],             // Add-on: map: form_id => [ 'logic' => all|any, 'rules' => [ {field,op,value} ] ]
+		'attach_format' => 'none',         // Add-on: 'none' | 'xlsx' | 'csv'
 	];
 }
 
@@ -152,15 +152,11 @@ function dsagfe_get_digests(): array {
 }
 
 /**
- * The digests that are actually scheduled / sent. Free tier is capped to the
- * first DSAGFE_FREE_DIGEST_LIMIT; Pro returns them all.
+ * The digests that are actually scheduled / sent. All configured digests are
+ * active.
  */
 function dsagfe_active_digests(): array {
-	$digests = dsagfe_get_digests();
-	if ( dsagfe_is_pro() ) {
-		return $digests;
-	}
-	return array_slice( $digests, 0, DSAGFE_FREE_DIGEST_LIMIT, true );
+	return dsagfe_get_digests();
 }
 
 /**

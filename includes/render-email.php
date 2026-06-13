@@ -216,7 +216,17 @@ function dsagfe_render_section_table( array $sec, array $d, bool $multi_form, st
 			<?php if ( $count > DSAGFE_MAX_TABLE_ROWS ) : ?>
 				<p style="font-size:12px;color:<?php echo esc_attr( $muted ); ?>;margin:12px 0 0 0;">
 					<?php
-					$suffix = ( 'none' !== $d['attach_format'] && dsagfe_is_pro() )
+					/**
+					 * Filter whether this digest email includes a file attachment,
+					 * which controls the "complete set is in the attachment" note.
+					 * Add-ons that attach CSV/XLSX exports return true.
+					 *
+					 * @param bool  $has_attachment Whether an attachment is included.
+					 * @param array $d              The digest configuration.
+					 * @param array $sec            The current form section.
+					 */
+					$has_attachment = (bool) apply_filters( 'dsagfe_email_has_attachment', false, $d, $sec );
+					$suffix = $has_attachment
 						? __( ' — the complete set is in the attachment.', 'entry-digest-for-gravity-forms' )
 						: '.';
 					/* translators: 1: number of rows shown; 2: total number of entries; 3: trailing clause (a period, or a note about the attachment). */

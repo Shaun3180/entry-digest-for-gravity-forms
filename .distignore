@@ -1,0 +1,33 @@
+# Files and folders that must NOT ship inside the distributed plugin zip.
+# Used by build tools such as `wp dist-archive`. Everything listed here stays in
+# the repo but is excluded from the package uploaded to WordPress.org.
+
+# Version control / project metadata
+/.git
+/.github
+/.gitignore
+/.distignore
+
+# OS cruft
+.DS_Store
+**/.DS_Store
+
+# WordPress.org directory assets — these belong in the SVN /assets folder,
+# NOT in the plugin zip (banners, icons, screenshots for the listing page).
+/assets
+/icons
+
+# Development docs and notes (not part of the plugin)
+/SUBMISSION-STEPS.md
+/landing-page-copy.md
+/launch-plan.md
+*.md
+
+# The separate Pro add-on lives here for convenience but is its own plugin,
+# distributed off WordPress.org. Never bundle it into the free plugin.
+/_pro-addon
+
+# Dependencies / build artifacts
+/node_modules
+/vendor
+*.zip
