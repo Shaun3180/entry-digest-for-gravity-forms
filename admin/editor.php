@@ -43,7 +43,7 @@ function dsagfe_render_editor( string $action, string $notice ): void {
         <h1><?php echo esc_html( 'new' === $action ? __( 'Add Digest', 'entry-digest-for-gravity-forms' ) : __( 'Edit Digest', 'entry-digest-for-gravity-forms' ) ); ?></h1>
 		<p><a href="<?php echo esc_url( $base_url ); ?>">&larr; <?php esc_html_e( 'Back to all digests', 'entry-digest-for-gravity-forms' ); ?></a></p>
 
-        <?php echo esc_html( $notice ); ?>
+        <?php echo $notice; // phpcs:ignore WordPress.Security.EscapeOutput -- trusted markup built by dsagfe_notice(). ?>
 
 		<?php if ( ! $gf ) : ?>
 			<div class="notice notice-error"><p><?php esc_html_e( 'Gravity Forms is not active — the form and field lists below are unavailable.', 'entry-digest-for-gravity-forms' ); ?></p></div>
@@ -307,6 +307,30 @@ function dsagfe_render_editor( string $action, string $notice ): void {
 
 			<?php submit_button( 'new' === $action ? __( 'Create Digest', 'entry-digest-for-gravity-forms' ) : __( 'Save Digest', 'entry-digest-for-gravity-forms' ), 'primary', 'dsagfe_save_digest' ); ?>
 		</form>
+
+		<!-- ── Section: Test send ────────────────────────────────────── -->
+		<?php // This is its own form (outside the editor form) so it submits independently of Save. ?>
+		<div style="<?php echo esc_attr( $card_style ); ?>">
+			<h2 style="<?php echo esc_attr( $head_style ); ?>"><?php esc_html_e( 'Test send', 'entry-digest-for-gravity-forms' ); ?></h2>
+			<?php if ( $d['id'] ) : ?>
+				<table class="form-table" role="presentation"><tbody>
+					<tr>
+						<th scope="row"><label for="dsagfe_test_email"><?php esc_html_e( 'Send a test to', 'entry-digest-for-gravity-forms' ); ?></label></th>
+						<td>
+							<form method="post" action="<?php echo esc_url( $base_url . '&action=edit&digest=' . rawurlencode( $d['id'] ) ); ?>" style="margin:0;">
+								<?php wp_nonce_field( 'dsagfe_send_test' ); ?>
+								<input type="hidden" name="digest_id" value="<?php echo esc_attr( $d['id'] ); ?>">
+								<input type="email" id="dsagfe_test_email" name="test_email" value="<?php echo esc_attr( wp_get_current_user()->user_email ); ?>" class="regular-text" placeholder="you@example.com">
+								<button type="submit" name="dsagfe_send_test" class="button"><?php esc_html_e( 'Send test', 'entry-digest-for-gravity-forms' ); ?></button>
+								<p class="description"><?php esc_html_e( 'Emails this digest — using its current saved settings — to just this address. Your real recipient list is never contacted, and the schedule is unchanged. Save any edits above first. A test always sends, even if there are no new entries.', 'entry-digest-for-gravity-forms' ); ?></p>
+							</form>
+						</td>
+					</tr>
+				</tbody></table>
+			<?php else : ?>
+				<p class="description" style="margin:12px 0;"><?php esc_html_e( 'Save the digest first, then a test-send field appears here so you can preview it to yourself.', 'entry-digest-for-gravity-forms' ); ?></p>
+			<?php endif; ?>
+		</div>
 	</div>
 	<?php
 	// The editor's JavaScript (form-block toggling, schedule-row visibility, and
