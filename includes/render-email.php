@@ -276,3 +276,107 @@ function dsagfe_render_section_table( array $sec, array $d, bool $multi_form, st
 	<?php
 	return (string) ob_get_clean();
 }
+
+// ════════════════════════════════════════════════════════════════
+//  Plain-text digest builder — multipart/alternative fallback
+// ════════════════════════════════════════════════════════════════
+/**
+ * Build a readable plain-text version of a digest run, used as the
+ * multipart/alternative fallback alongside the HTML body. A text part improves
+ * deliverability (spam filters favor multipart messages) and accessibility
+ * (text-only clients and screen readers). Mirrors the same data and row cap as
+ * the HTML builder; entries are rendered as label/value blocks, which read more
+ * cleanly in plain text than fixed-width columns.
+ *
+ * @param array  $sections    [ [ form, entries, field_map, count ], ... ]
+ * @param array  $d           Digest settings.
+ * @param int    $total_count Total entries across all sections.
+ * @param string $start_date  UTC 'Y-m-d H:i:s'.
+ * @param string $end_date    UTC 'Y-m-d H:i:s'.
+ * @param string $mode        'recurring' or 'once'.
+ */
+function dsagfe_build_digest_text( array $sections, array $d, int $total_count, string $start_date, string $end_date, string $mode = 'recurring' ): string {
+	$is_once    = ( 'once' === $mode );
+	$cadence    = $is_once ? 'one-time' : ( ( 'daily' === ( $d['frequency'] ?? 'weekly' ) ) ? 'daily' : 'weekly' );
+	$open_ended = $is_once && ( strtotime( $start_date ) <= strtotime( '2000-01-02 00:00:00' ) );
+	$period     = $open_ended
+		/* translators: %s: an end date/time. */
+		? sprintf( __( 'All entries through %s', 'entry-digest-for-gravity-forms' ), dsagfe_local_datetime( $end_date ) )
+		: dsagfe_local_datetime( $start_date ) . ' - ' . dsagfe_local_datetime( $end_date );
+
+	$multi_form = count( $sections ) > 1;
+	$title      = $multi_form
+		? ( ! empty( $d['label'] ) ? $d['label'] : __( 'Entry digest', 'entry-digest-for-gravity-forms' ) )
+		: ( $sections[0]['form']['title'] ?? __( 'Entry digest', 'entry-digest-for-gravity-forms' ) );
+
+	if ( $is_once ) {
+		$count_label = _n( 'new entry', 'new entries', $total_count, 'entry-digest-for-gravity-forms' );
+	} elseif ( 'daily' === $cadence ) {
+		$count_label = _n( 'new entry today', 'new entries today', $total_count, 'entry-digest-for-gravity-forms' );
+	} else {
+		$count_label = _n( 'new entry this week', 'new entries this week', $total_count, 'entry-digest-for-gravity-forms' );
+	}
+
+	$lines   = [];
+	$lines[] = $title;
+	$lines[] = str_repeat( '=', max( 3, min( 60, mb_strlen( $title ) ) ) );
+	$lines[] = '';
+	$lines[] = $total_count . ' ' . $count_label;
+	$lines[] = __( 'Period:', 'entry-digest-for-gravity-forms' ) . ' ' . wp_strip_all_tags( $period );
+	$lines[] = '';
+
+	if ( 0 === $total_count ) {
+		$lines[] = __( 'No new entries were submitted during this period.', 'entry-digest-for-gravity-forms' );
+	} else {
+		foreach ( $sections as $sec ) {
+			$entries   = $sec['entries'];
+			$field_map = $sec['field_map'];
+
+			if ( $multi_form ) {
+				$lines[] = '## ' . $sec['form']['title'] . ' (' . (int) $sec['count'] . ')';
+				$lines[] = '';
+			}
+
+			if ( empty( $entries ) ) {
+				$lines[] = __( 'No new entries for this form.', 'entry-digest-for-gravity-forms' );
+				$lines[] = '';
+				continue;
+			}
+
+			$shown = 0;
+			foreach ( $entries as $entry ) {
+				if ( $shown >= DSAGFE_MAX_TABLE_ROWS ) {
+					break;
+				}
+				$shown++;
+
+				$when    = dsagfe_local_datetime( $entry['date_created'] ?? '', 'M j, Y g:i A' );
+				$lines[] = '- ' . __( 'Submitted:', 'entry-digest-for-gravity-forms' ) . ' ' . $when;
+
+				foreach ( $field_map as $fid => $label ) {
+					$val = wp_strip_all_tags( (string) ( $entry[ $fid ] ?? '' ) );
+					$val = trim( (string) preg_replace( '/\s+/', ' ', $val ) );
+					if ( mb_strlen( $val ) > DSAGFE_MAX_CELL_CHARS ) {
+						$val = mb_substr( $val, 0, DSAGFE_MAX_CELL_CHARS ) . '…';
+					}
+					$lines[] = '    ' . $label . ': ' . $val;
+				}
+				$lines[] = '';
+			}
+
+			if ( (int) $sec['count'] > DSAGFE_MAX_TABLE_ROWS ) {
+				/* translators: 1: number of rows shown; 2: total number of entries. */
+				$lines[] = sprintf( __( 'Showing the first %1$d of %2$d entries.', 'entry-digest-for-gravity-forms' ), (int) DSAGFE_MAX_TABLE_ROWS, (int) $sec['count'] );
+				$lines[] = '';
+			}
+		}
+	}
+
+	$footer_credit = (string) apply_filters( 'dsagfe_email_footer_credit', __( 'Sent automatically by Entry Digest for Gravity Forms.', 'entry-digest-for-gravity-forms' ), $d );
+	if ( '' !== $footer_credit ) {
+		$lines[] = '--';
+		$lines[] = wp_strip_all_tags( $footer_credit );
+	}
+
+	return implode( "\n", $lines );
+}
