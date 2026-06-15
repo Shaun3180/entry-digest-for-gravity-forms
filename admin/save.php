@@ -19,6 +19,10 @@ function dsagfe_handle_save(): string {
 	$def = dsagfe_digest_defaults();
 	$d   = [ 'id' => $id ];
 
+	// Pause state isn't an editor field — it's toggled from the list — so carry the
+	// existing value through a save instead of letting it reset to the default.
+	$d['paused'] = ! $is_new && ! empty( $digests[ $id ]['paused'] );
+
 	$d['label']         = sanitize_text_field( $raw['label'] ?? $def['label'] ) ?: $def['label'];
 	$d['email_subject'] = sanitize_text_field( $raw['email_subject'] ?? $def['email_subject'] ) ?: $def['email_subject'];
 
