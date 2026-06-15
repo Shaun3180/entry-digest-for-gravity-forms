@@ -11,15 +11,17 @@
 // Exit if accessed directly or not invoked by the WordPress uninstall process.
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
-const DSAGFE_OPTION_KEY = 'dsagfe_settings';
-const DSAGFE_CRON_HOOK  = 'dsagfe_run_export';
+const DSAGFE_OPTION_KEY     = 'dsagfe_settings';
+const DSAGFE_LOG_OPTION_KEY = 'dsagfe_send_log';
+const DSAGFE_CRON_HOOK      = 'dsagfe_run_export';
 
 /**
- * Remove this plugin's option and clear all of its scheduled cron events for the
+ * Remove this plugin's options and clear all of its scheduled cron events for the
  * current site.
  */
 function dsagfe_uninstall_cleanup() {
 	delete_option( DSAGFE_OPTION_KEY );
+	delete_option( DSAGFE_LOG_OPTION_KEY );
 
 	// Clear every scheduled instance of our cron hook, regardless of args.
 	$crons = function_exists( '_get_cron_array' ) ? _get_cron_array() : array();
