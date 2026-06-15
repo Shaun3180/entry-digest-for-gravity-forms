@@ -98,6 +98,20 @@ function dsagfe_admin_router(): void {
 				'<strong>' . esc_html( $email ) . '</strong>'
 			) );
 		}
+	} elseif ( isset( $_POST['dsagfe_toggle_pause'] ) && check_admin_referer( 'dsagfe_toggle_pause' ) ) {
+		// Flip a digest's paused state. Saving re-syncs cron, so a paused digest
+		// loses its scheduled events and a resumed one gets them back.
+		$id      = sanitize_text_field( wp_unslash( $_POST['digest_id'] ?? '' ) );
+		$digests = dsagfe_get_digests();
+		if ( isset( $digests[ $id ] ) ) {
+			$now_paused             = empty( $digests[ $id ]['paused'] );
+			$digests[ $id ]['paused'] = $now_paused;
+			dsagfe_save_digests( $digests );
+			$notice = dsagfe_notice( $now_paused
+				? __( 'Digest paused — scheduled sends are stopped until you resume it.', 'entry-digest-for-gravity-forms' )
+				: __( 'Digest resumed — its schedule is active again.', 'entry-digest-for-gravity-forms' )
+			);
+		}
 	} elseif ( isset( $_POST['dsagfe_clear_log'] ) && check_admin_referer( 'dsagfe_clear_log' ) ) {
 		dsagfe_clear_log();
 		$notice = dsagfe_notice( __( 'Send log cleared.', 'entry-digest-for-gravity-forms' ) );
