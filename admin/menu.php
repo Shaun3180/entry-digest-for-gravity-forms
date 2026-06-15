@@ -71,7 +71,7 @@ function dsagfe_admin_router(): void {
 		// stored date is left intact (manual sends never clear the schedule).
 		$d_now = dsagfe_get_digest( $id );
 		$mode  = ( $d_now && 'none' === ( $d_now['frequency'] ?? 'weekly' ) ) ? 'once' : 'recurring';
-		dsagfe_run_digest( $id, $mode );
+		dsagfe_run_digest( $id, $mode, [ 'context' => 'manual' ] );
 		$d      = dsagfe_get_digest( $id );
 		$rcpts  = $d ? dsagfe_resolve_recipients( $d ) : [];
 		$notice = dsagfe_notice( sprintf(
@@ -79,6 +79,28 @@ function dsagfe_admin_router(): void {
 			__( '&#10003; Digest triggered. Check %s.', 'entry-digest-for-gravity-forms' ),
 			'<strong>' . esc_html( implode( ', ', $rcpts ) ) . '</strong>'
 		) );
+	} elseif ( isset( $_POST['dsagfe_send_test'] ) && check_admin_referer( 'dsagfe_send_test' ) ) {
+		// Test send: deliver the saved digest to one ad-hoc address only. The real
+		// recipient list is never contacted, and no schedule is changed.
+		$id    = sanitize_text_field( wp_unslash( $_POST['digest_id'] ?? '' ) );
+		$email = sanitize_email( wp_unslash( $_POST['test_email'] ?? '' ) );
+		$d_t   = dsagfe_get_digest( $id );
+		if ( ! $d_t ) {
+			$notice = dsagfe_notice( __( 'Digest not found.', 'entry-digest-for-gravity-forms' ), 'error' );
+		} elseif ( ! is_email( $email ) ) {
+			$notice = dsagfe_notice( __( 'Enter a valid email address for the test send.', 'entry-digest-for-gravity-forms' ), 'error' );
+		} else {
+			$mode = ( 'none' === ( $d_t['frequency'] ?? 'weekly' ) ) ? 'once' : 'recurring';
+			dsagfe_run_digest( $id, $mode, [ 'override_to' => [ $email ], 'context' => 'test' ] );
+			$notice = dsagfe_notice( sprintf(
+				/* translators: %s: the email address the test was sent to. */
+				__( '&#10003; Test digest sent to %s. Your real recipient list was not contacted.', 'entry-digest-for-gravity-forms' ),
+				'<strong>' . esc_html( $email ) . '</strong>'
+			) );
+		}
+	} elseif ( isset( $_POST['dsagfe_clear_log'] ) && check_admin_referer( 'dsagfe_clear_log' ) ) {
+		dsagfe_clear_log();
+		$notice = dsagfe_notice( __( 'Send log cleared.', 'entry-digest-for-gravity-forms' ) );
 	}
 
 	$action = isset( $_GET['action'] ) ? sanitize_key( $_GET['action'] ) : 'list';
