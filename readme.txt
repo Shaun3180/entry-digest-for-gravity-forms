@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.1.0
+Stable tag: 2.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,6 +27,7 @@ Gravity Forms' built-in notifications fire on every single submission. For a bus
 * A **"Send Now"** button to preview a digest on demand.
 * A **test send** that previews a digest to any address you choose without contacting the real recipient list.
 * A **send log** showing recent digest runs — when they fired, how many entries, and delivery status — for easy debugging and peace of mind.
+* **Pause/Resume** any digest with one click — stop its scheduled sends without deleting it or losing its settings.
 * **Graceful quiet periods** — when no entries arrived you can either receive a tidy "no new entries" note (the default, so you're never left wondering) or choose to stay silent, per digest.
 
 = Features =
@@ -43,6 +44,7 @@ Everything here is free and fully functional — no feature is locked, time-limi
 * "Send Now" button to preview a digest on demand.
 * Test send to any address — preview a digest to yourself without emailing the real recipients.
 * Send log of recent runs with entry counts and delivery status.
+* Pause/Resume toggle per digest — suspend scheduled sends without deleting the digest.
 * Clean, branded HTML email that renders well across mail clients.
 
 Each digest covers one form. (Need to combine several forms into a single email? See the optional Pro add-on below.)
@@ -89,6 +91,10 @@ By default the digest still sends a tidy "no new entries" note so recipients kno
 
 Yes. Each digest has a **Send Now** button that builds and emails it immediately.
 
+= Can I temporarily stop a digest without deleting it? =
+
+Yes. Each digest on the list has a **Pause** button. Pausing keeps all of its settings but removes it from the schedule, so no automatic sends go out until you press **Resume**. Paused digests are clearly marked, and "Send Now" and test sends still work on them if you want to send manually while paused.
+
 = Can I send a test to myself without emailing everyone? =
 
 Yes. Open a saved digest in the editor and use the **Test send** field (it defaults to your own admin email). It builds the digest from that digest's current saved settings and sends it only to the address you enter — your real recipient list is never contacted and the schedule is unchanged. A test always sends, even during a quiet period, so you can see exactly what recipients would get.
@@ -114,6 +120,9 @@ As many as you like — there is no limit on the number of digests. Each digest 
 5. Per-form field selection for the entry table.
 
 == Changelog ==
+
+= 2.2.0 =
+* New: **Pause/Resume** toggle on the digest list. Pausing keeps a digest's settings but removes it from the schedule (no automatic sends) until you resume it; paused digests are clearly marked and can still be sent manually via "Send Now" or a test send.
 
 = 2.1.0 =
 * New: **Test send** — preview any saved digest to an address of your choice (defaults to your admin email) without contacting the real recipient list or changing the schedule. Always sends, even during a quiet period.
@@ -144,6 +153,9 @@ As many as you like — there is no limit on the number of digests. Each digest 
 * Initial release: single scheduled digest with summary block and entry table, daily/weekly delivery.
 
 == Upgrade Notice ==
+
+= 2.2.0 =
+Adds a one-click Pause/Resume toggle for each digest. Existing digests are unaffected and start unpaused. Safe to update.
 
 = 2.1.0 =
 Adds a test-send field and a recent-sends log. Existing digests are unaffected. Safe to update.
