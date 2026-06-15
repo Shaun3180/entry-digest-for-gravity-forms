@@ -29,6 +29,18 @@ define( 'EDFGFP_VERSION', '1.0.0' );
 define( 'EDFGFP_DIR', plugin_dir_path( __FILE__ ) );
 define( 'EDFGFP_URL', plugin_dir_url( __FILE__ ) );
 
+// Initialize Freemius at plugin-load time (not inside a hook) so it can
+// register its own early actions/filters correctly.
+require_once EDFGFP_DIR . 'includes/freemius-init.php';
+
+// Register uninstall cleanup unconditionally — must not be gated behind the
+// license check, otherwise cleanup is skipped when the license has expired.
+function edfgfp_pro_cleanup(): void {
+	// Add any pro-specific option keys here.
+	delete_option( 'edfgfp_settings' );
+}
+edfgfp_fs()->add_action( 'after_uninstall', 'edfgfp_pro_cleanup' );
+
 /**
  * Boot the add-on once all plugins are loaded, but only if the free plugin is
  * active (we depend on its functions and hooks). If it isn't, show an admin
@@ -45,12 +57,8 @@ function edfgfp_bootstrap(): void {
 		return;
 	}
 
-	// Licensing gate. Pro features are delivered only to licensed sites. This is
-	// allowed here because this add-on is NOT hosted on WordPress.org. Wire your
-	// licensing provider (Freemius, EDD, Lemon Squeezy, etc.) in licensing.php.
-	require_once EDFGFP_DIR . 'includes/licensing.php';
-	if ( ! edfgfp_is_licensed() ) {
-		// Optionally surface an activation prompt; features stay off until valid.
+	// License gate — pro features only load on sites with a valid Freemius licence.
+	if ( ! edfgfp_fs()->can_use_premium_code() ) {
 		return;
 	}
 
