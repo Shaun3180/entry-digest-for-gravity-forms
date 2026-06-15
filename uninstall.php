@@ -38,14 +38,22 @@ function dsagfe_uninstall_cleanup() {
 	wp_clear_scheduled_hook( DSAGFE_CRON_HOOK );
 }
 
-// Handle multisite: clean each site in the network; otherwise just the one site.
-if ( is_multisite() ) {
-	$site_ids = get_sites( array( 'fields' => 'ids', 'number' => 0 ) );
-	foreach ( $site_ids as $site_id ) {
-		switch_to_blog( $site_id );
+/**
+ * Run cleanup across the install. On multisite, clean every site in the network;
+ * otherwise just the current site. Wrapped in a function so its loop variables
+ * stay out of the global scope.
+ */
+function dsagfe_run_uninstall() {
+	if ( is_multisite() ) {
+		$dsagfe_site_ids = get_sites( array( 'fields' => 'ids', 'number' => 0 ) );
+		foreach ( $dsagfe_site_ids as $dsagfe_site_id ) {
+			switch_to_blog( $dsagfe_site_id );
+			dsagfe_uninstall_cleanup();
+			restore_current_blog();
+		}
+	} else {
 		dsagfe_uninstall_cleanup();
-		restore_current_blog();
 	}
-} else {
-	dsagfe_uninstall_cleanup();
 }
+
+dsagfe_run_uninstall();

@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.2.0
+Stable tag: 2.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,7 @@ Everything here is free and fully functional — no feature is locked, time-limi
 * Test send to any address — preview a digest to yourself without emailing the real recipients.
 * Send log of recent runs with entry counts and delivery status.
 * Pause/Resume toggle per digest — suspend scheduled sends without deleting the digest.
+* Scheduler health check — a clear admin notice if a scheduled digest is overdue, so you find out when WP-Cron isn't firing instead of wondering why an email never arrived.
 * Clean, branded HTML email that renders well across mail clients.
 
 Each digest covers one form. (Need to combine several forms into a single email? See the optional Pro add-on below.)
@@ -107,6 +108,8 @@ The digest list screen shows a **Recent sends** table: each scheduled, one-time,
 
 Digests use your site's `wp_mail()` setup. If other WordPress emails aren't being delivered, a transactional email/SMTP plugin usually resolves it. The plugin logs delivery problems to your PHP error log, and the **Recent sends** table on the digest list shows the status of each recent run.
 
+If the scheduler itself isn't firing — common on very low-traffic sites, or when WP-Cron is disabled without a real server cron to replace it — the digest list shows a warning when a scheduled send is overdue, with guidance on how to fix it.
+
 = How many digests can I create? =
 
 As many as you like — there is no limit on the number of digests. Each digest covers one form. Combining several forms into a single digest (multi-form aggregation), role-based recipients, conditional filtering, and CSV/Excel attachments are available through the optional Pro add-on sold separately at addasitebuilders.com.
@@ -120,6 +123,9 @@ As many as you like — there is no limit on the number of digests. Each digest 
 5. Per-form field selection for the entry table.
 
 == Changelog ==
+
+= 2.3.0 =
+* New: **Scheduler health check** — the digest list shows a warning when a scheduled send is overdue, which usually means WP-Cron isn't firing (a low-traffic site, or WP-Cron disabled without a working server cron). The message adapts to your setup and links to guidance. No warning is shown for a healthy scheduler.
 
 = 2.2.0 =
 * New: **Pause/Resume** toggle on the digest list. Pausing keeps a digest's settings but removes it from the schedule (no automatic sends) until you resume it; paused digests are clearly marked and can still be sent manually via "Send Now" or a test send.
@@ -153,6 +159,9 @@ As many as you like — there is no limit on the number of digests. Each digest 
 * Initial release: single scheduled digest with summary block and entry table, daily/weekly delivery.
 
 == Upgrade Notice ==
+
+= 2.3.0 =
+Adds an admin warning when a scheduled digest is overdue, so you catch WP-Cron problems early. Existing digests are unaffected. Safe to update.
 
 = 2.2.0 =
 Adds a one-click Pause/Resume toggle for each digest. Existing digests are unaffected and start unpaused. Safe to update.
