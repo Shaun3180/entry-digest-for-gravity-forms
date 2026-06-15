@@ -20,6 +20,8 @@ function dsagfe_render_list( string $notice ): void {
 			<div class="notice notice-error"><p><?php esc_html_e( 'Gravity Forms is not active. Digests will not send until it is.', 'entry-digest-for-gravity-forms' ); ?></p></div>
 		<?php endif; ?>
 
+		<?php echo dsagfe_cron_health_notice_html(); // phpcs:ignore WordPress.Security.EscapeOutput -- markup is fully escaped at build time. ?>
+
 		<?php
 		/**
 		 * Fires just below the list-screen header, before the digest table. Add-ons
