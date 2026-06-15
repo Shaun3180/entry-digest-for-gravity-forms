@@ -127,8 +127,15 @@ function dsagfe_run_all_active(): void {
  * @param string $digest_id Digest id.
  * @param string $mode      'recurring' (rolling daily/weekly window) or 'once'
  *                          (the digest's configured one-time lookback window).
+ * @param array  $args      Optional. {
+ *     @type string[] $override_to Recipient address(es) to use instead of the
+ *                                 digest's configured list — a test/preview send
+ *                                 that never contacts the real recipients.
+ *     @type string   $context     Log context: 'scheduled' | 'one-time' |
+ *                                 'manual' | 'test'. Defaults based on $mode.
+ * }
  */
-function dsagfe_run_digest( string $digest_id, string $mode = 'recurring' ): void {
+function dsagfe_run_digest( string $digest_id, string $mode = 'recurring', array $args = [] ): void {
 	if ( ! class_exists( 'GFAPI' ) ) {
 		return;
 	}
@@ -138,17 +145,42 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring' ): voi
 		return;
 	}
 
+	// A test send overrides the recipient list and always delivers (so the tester
+	// sees the result even during a quiet period).
+	$is_test = ! empty( $args['override_to'] );
+	$context = (string) ( $args['context'] ?? ( 'once' === $mode ? 'one-time' : 'scheduled' ) );
+	$label   = (string) ( $d['label'] ?? '' );
+
 	$form_ids = (array) $d['form_ids'];
 	if ( ! dsagfe_multiform_enabled() ) {
 		$form_ids = array_slice( $form_ids, 0, 1 );
 	}
 
-	$recipients = dsagfe_resolve_recipients( $d );
+	if ( $is_test ) {
+		$recipients = array_values( array_unique( array_filter(
+			array_map( 'trim', (array) $args['override_to'] ),
+			static fn( $e ) => is_email( $e )
+		) ) );
+	} else {
+		$recipients = dsagfe_resolve_recipients( $d );
+	}
 	if ( empty( $recipients ) ) {
+		dsagfe_log_record( [
+			'digest_id'  => $digest_id,
+			'label'      => $label,
+			'count'      => 0,
+			'recipients' => '',
+			'status'     => 'no_recipients',
+			'context'    => $context,
+		] );
 		return;
 	}
 	$to      = implode( ', ', $recipients );
 	$subject = ! empty( $d['email_subject'] ) ? $d['email_subject'] : __( 'Your Gravity Forms entry digest', 'entry-digest-for-gravity-forms' );
+	if ( $is_test ) {
+		/* translators: %s: the digest's email subject. Prefixed onto a test send. */
+		$subject = sprintf( __( '[Test] %s', 'entry-digest-for-gravity-forms' ), $subject );
+	}
 
 	// Reporting window. Recurring runs use the rolling daily (1 day) / weekly
 	// (7 days) window. A one-time send uses its configured lookback; a lookback
@@ -214,13 +246,30 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring' ): voi
 	}
 
 	if ( empty( $sections ) ) {
+		dsagfe_log_record( [
+			'digest_id'  => $digest_id,
+			'label'      => $label,
+			'count'      => 0,
+			'recipients' => $to,
+			'status'     => 'failed',
+			'context'    => $context,
+		] );
 		return;
 	}
 
 	// Graceful when quiet: by default a 0-entry period still sends a tidy
 	// "no new entries" note (never radio silence). Sites that prefer silence
-	// can opt out per digest by setting quiet_behavior to 'skip'.
-	if ( 0 === $total_count && 'skip' === ( $d['quiet_behavior'] ?? 'send' ) ) {
+	// can opt out per digest by setting quiet_behavior to 'skip'. A test send
+	// always delivers so the tester can see exactly what recipients would get.
+	if ( 0 === $total_count && 'skip' === ( $d['quiet_behavior'] ?? 'send' ) && ! $is_test ) {
+		dsagfe_log_record( [
+			'digest_id'  => $digest_id,
+			'label'      => $label,
+			'count'      => 0,
+			'recipients' => $to,
+			'status'     => 'skipped',
+			'context'    => $context,
+		] );
 		return;
 	}
 
@@ -258,6 +307,15 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring' ): voi
 			wp_delete_file( $f );
 		}
 	}
+
+	dsagfe_log_record( [
+		'digest_id'  => $digest_id,
+		'label'      => $label,
+		'count'      => $total_count,
+		'recipients' => $to,
+		'status'     => $sent ? 'sent' : 'failed',
+		'context'    => $context,
+	] );
 }
 // ════════════════════════════════════════════════════════════════
 //  Live entry-count preview (admin editor)
