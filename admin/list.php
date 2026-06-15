@@ -127,6 +127,53 @@ function dsagfe_render_list( string $notice ): void {
 			?>
 			<?php esc_html_e( 'Weekly digests cover the past 7 days; daily digests cover the past 24 hours.', 'entry-digest-for-gravity-forms' ); ?>
 		</p>
+
+		<?php
+		// ── Recent sends (send log) ──────────────────────────────────
+		$log = dsagfe_get_log();
+		if ( ! empty( $log ) ) :
+			?>
+			<h2 style="margin-top:30px;"><?php esc_html_e( 'Recent sends', 'entry-digest-for-gravity-forms' ); ?></h2>
+			<table class="wp-list-table widefat fixed striped">
+				<thead>
+					<tr>
+						<th style="width:170px;"><?php esc_html_e( 'When', 'entry-digest-for-gravity-forms' ); ?></th>
+						<th><?php esc_html_e( 'Digest', 'entry-digest-for-gravity-forms' ); ?></th>
+						<th style="width:80px;"><?php esc_html_e( 'Entries', 'entry-digest-for-gravity-forms' ); ?></th>
+						<th><?php esc_html_e( 'Recipients', 'entry-digest-for-gravity-forms' ); ?></th>
+						<th style="width:90px;"><?php esc_html_e( 'Type', 'entry-digest-for-gravity-forms' ); ?></th>
+						<th style="width:140px;"><?php esc_html_e( 'Status', 'entry-digest-for-gravity-forms' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $log as $row ) : ?>
+						<?php
+						$when = ( new DateTime( '@' . (int) $row['time'] ) )
+							->setTimezone( wp_timezone() )
+							->format( 'M j, Y g:i A' );
+						list( $st_label, $st_color ) = dsagfe_log_status_meta( (string) $row['status'] );
+						?>
+						<tr>
+							<td><?php echo esc_html( $when ); ?></td>
+							<td><?php echo esc_html( $row['label'] ?: __( 'Untitled digest', 'entry-digest-for-gravity-forms' ) ); ?></td>
+							<td><?php echo esc_html( number_format_i18n( (int) $row['count'] ) ); ?></td>
+							<td><?php echo esc_html( $row['recipients'] ?: '—' ); ?></td>
+							<td><?php echo esc_html( dsagfe_log_context_label( (string) $row['context'] ) ); ?></td>
+							<td><strong style="color:<?php echo esc_attr( $st_color ); ?>;"><?php echo esc_html( $st_label ); ?></strong></td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+			<div style="margin-top:8px;">
+				<form method="post" style="display:inline;" onsubmit="return confirm('<?php echo esc_js( __( 'Clear the send log?', 'entry-digest-for-gravity-forms' ) ); ?>');">
+					<?php wp_nonce_field( 'dsagfe_clear_log' ); ?>
+					<button type="submit" name="dsagfe_clear_log" class="button button-small"><?php esc_html_e( 'Clear log', 'entry-digest-for-gravity-forms' ); ?></button>
+				</form>
+			</div>
+			<p class="description" style="font-size:12px;color:#666;">
+				<?php esc_html_e( '“Sent” means the email was handed to your site’s mailer, not a guarantee it reached the inbox. Showing the most recent sends.', 'entry-digest-for-gravity-forms' ); ?>
+			</p>
+		<?php endif; ?>
 	</div>
 	<?php
 }
