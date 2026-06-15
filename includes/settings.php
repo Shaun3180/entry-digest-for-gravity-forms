@@ -54,6 +54,7 @@ function dsagfe_digest_defaults(): array {
 		'roles'         => [],             // Add-on: WP roles whose members also receive the digest.
 		'email_subject' => __( 'Your Gravity Forms entry digest', 'entry-digest-for-gravity-forms' ),
 		'frequency'     => 'weekly',       // 'weekly' | 'daily' | 'none' (none = no recurring digest; one-time only)
+		'paused'        => false,          // true = keep config but stop all scheduled sends (manual Send Now / test still work)
 		'send_day'      => 'monday',       // used only when frequency = weekly
 		'send_time'     => '08:00',        // time-of-day for recurring sends (site timezone)
 		'onetime_at'    => '',             // optional one-time send: 'Y-m-d H:i' in site timezone, or '' for none
@@ -95,6 +96,7 @@ function dsagfe_normalize_digest( array $d, string $id = '' ): array {
 	$out['to_email']      = (string) $out['to_email'];
 	$out['email_subject'] = (string) $out['email_subject'];
 	$out['frequency']     = in_array( $out['frequency'], [ 'daily', 'weekly', 'none' ], true ) ? $out['frequency'] : 'weekly';
+	$out['paused']        = ! empty( $out['paused'] );
 	$out['send_day']      = (string) $out['send_day'];
 	$out['send_time']     = (string) $out['send_time'];
 
@@ -176,11 +178,12 @@ function dsagfe_get_digests(): array {
 }
 
 /**
- * The digests that are actually scheduled / sent. All configured digests are
- * active.
+ * The digests that are actually scheduled / sent — every configured digest that
+ * is not paused. Paused digests keep their configuration but are excluded from
+ * cron scheduling (manual "Send Now" and test sends still work on them).
  */
 function dsagfe_active_digests(): array {
-	return dsagfe_get_digests();
+	return array_filter( dsagfe_get_digests(), static fn( $d ) => empty( $d['paused'] ) );
 }
 
 /**
