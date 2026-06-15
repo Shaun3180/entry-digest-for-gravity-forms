@@ -63,16 +63,22 @@ function dsagfe_render_list( string $notice ): void {
 							/* translators: %d: Gravity Forms form ID. */
 							$form_names = array_map( static fn( $f ) => sprintf( __( 'Form %d', 'entry-digest-for-gravity-forms' ), (int) $f ), $d['form_ids'] );
 						}
-						$rcpts    = dsagfe_resolve_recipients( $d );
+						$rcpts     = dsagfe_resolve_recipients( $d );
+						$is_paused = ! empty( $d['paused'] );
 
-						// Next run = earliest of the recurring and one-time events.
+						// Next run = earliest of the recurring and one-time events. A paused
+						// digest has no scheduled events, so it simply shows "Paused".
 						$next_rec  = wp_next_scheduled( DSAGFE_CRON_HOOK, [ (string) $id ] );
 						$next_once = wp_next_scheduled( DSAGFE_CRON_HOOK, [ (string) $id, 'once' ] );
 						$candidates = array_filter( [ $next_rec, $next_once ] );
 						$next       = $candidates ? min( $candidates ) : 0;
-						$next_fmt   = $next
-							? ( new DateTime( '@' . $next ) )->setTimezone( wp_timezone() )->format( 'M j, Y g:i A' )
-							: '—';
+						if ( $is_paused ) {
+							$next_fmt = __( 'Paused', 'entry-digest-for-gravity-forms' );
+						} else {
+							$next_fmt = $next
+								? ( new DateTime( '@' . $next ) )->setTimezone( wp_timezone() )->format( 'M j, Y g:i A' )
+								: '—';
+						}
 
 						// Schedule label: recurring part (if any) plus one-time part (if set).
 						$parts = [];
@@ -90,9 +96,12 @@ function dsagfe_render_list( string $notice ): void {
 						}
 						$sched = $parts ? implode( '<br>', $parts ) : '—';
 						?>
-						<tr>
+						<tr<?php echo $is_paused ? ' style="opacity:0.6;"' : ''; ?>>
 							<td>
 								<strong><?php echo esc_html( $d['label'] ?: __( 'Untitled digest', 'entry-digest-for-gravity-forms' ) ); ?></strong>
+								<?php if ( $is_paused ) : ?>
+									<span style="display:inline-block;margin-left:6px;padding:1px 7px;border-radius:9px;background:#dba617;color:#fff;font-size:11px;font-weight:600;vertical-align:middle;"><?php esc_html_e( 'Paused', 'entry-digest-for-gravity-forms' ); ?></span>
+								<?php endif; ?>
 							</td>
 							<td><?php echo esc_html( implode( ', ', $form_names ) ); ?></td>
 							<td><?php echo esc_html( $rcpts ? implode( ', ', $rcpts ) : __( '— none —', 'entry-digest-for-gravity-forms' ) ); ?></td>
@@ -104,6 +113,11 @@ function dsagfe_render_list( string $notice ): void {
 									<?php wp_nonce_field( 'dsagfe_send_now' ); ?>
 									<input type="hidden" name="digest_id" value="<?php echo esc_attr( $id ); ?>">
 									<button type="submit" name="dsagfe_send_now" class="button button-small"><?php esc_html_e( 'Send Now', 'entry-digest-for-gravity-forms' ); ?></button>
+								</form>
+								<form method="post" style="display:inline;">
+									<?php wp_nonce_field( 'dsagfe_toggle_pause' ); ?>
+									<input type="hidden" name="digest_id" value="<?php echo esc_attr( $id ); ?>">
+									<button type="submit" name="dsagfe_toggle_pause" class="button button-small"><?php echo esc_html( $is_paused ? __( 'Resume', 'entry-digest-for-gravity-forms' ) : __( 'Pause', 'entry-digest-for-gravity-forms' ) ); ?></button>
 								</form>
 								<form method="post" style="display:inline;" onsubmit="return confirm('<?php echo esc_js( __( 'Delete this digest?', 'entry-digest-for-gravity-forms' ) ); ?>');">
 									<?php wp_nonce_field( 'dsagfe_delete_digest' ); ?>
