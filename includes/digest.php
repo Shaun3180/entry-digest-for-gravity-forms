@@ -294,6 +294,18 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring', array
 		: [];
 	$tmp_files   = $attachments;
 
+	// Plain-text fallback: build a text version and attach it as the PHPMailer
+	// AltBody so the message goes out as multipart/alternative (HTML + text).
+	// This improves deliverability and accessibility. The hook is added only for
+	// this send and removed immediately after, so it never affects other mail.
+	$text_body = dsagfe_build_digest_text( $sections, $d, $total_count, $start_date, $end_date, $mode );
+	$set_alt   = static function ( $phpmailer ) use ( $text_body ) {
+		if ( '' !== $text_body ) {
+			$phpmailer->AltBody = $text_body;
+		}
+	};
+	add_action( 'phpmailer_init', $set_alt );
+
 	$sent = wp_mail(
 		$to,
 		$subject,
@@ -301,6 +313,8 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring', array
 		[ 'Content-Type: text/html; charset=UTF-8' ],
 		$attachments
 	);
+
+	remove_action( 'phpmailer_init', $set_alt );
 
 	foreach ( $tmp_files as $f ) {
 		if ( $f && file_exists( $f ) ) {

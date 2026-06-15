@@ -61,3 +61,19 @@ add_filter( 'dsagfe_email_has_attachment', 'edfgfp_email_has_attachment', 10, 2 
 function edfgfp_email_has_attachment( bool $has_attachment, array $d ): bool {
 	return 'none' !== ( $d['attach_format'] ?? 'none' );
 }
+
+/**
+ * Pro: extend send-log retention. The free plugin keeps the last few sends; Pro
+ * retains a configurable, much larger history. The count is stored in the
+ * 'edfgfp_log_max' option (set via the control in log-settings.php) and defaults
+ * to 1000 — effectively a complete history for any normal site. A stored value
+ * of 0 falls back to the free plugin's default.
+ *
+ * @param int $max The free plugin's retention default.
+ * @return int
+ */
+add_filter( 'dsagfe_log_max', 'edfgfp_log_max' );
+function edfgfp_log_max( $max ): int {
+	$pro_max = (int) get_option( 'edfgfp_log_max', 1000 );
+	return $pro_max > 0 ? $pro_max : (int) $max;
+}

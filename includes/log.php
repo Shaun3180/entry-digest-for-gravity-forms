@@ -12,10 +12,16 @@ defined( 'ABSPATH' ) || exit;
  */
 
 define( 'DSAGFE_LOG_OPTION_KEY',  'dsagfe_send_log' );
-define( 'DSAGFE_LOG_DEFAULT_MAX', 50 );
+define( 'DSAGFE_LOG_DEFAULT_MAX', 10 );
 
 /**
  * Number of log records to retain (filterable).
+ *
+ * The free plugin keeps the most recent few sends — enough to confirm digests
+ * are running and to debug a recent problem. The retention count is exposed via
+ * the 'dsagfe_log_max' filter, so it is a default, not a hard limit: any site
+ * owner (or the optional Pro add-on, which offers a configurable history) can
+ * raise it.
  */
 function dsagfe_log_max(): int {
 	$max = (int) apply_filters( 'dsagfe_log_max', DSAGFE_LOG_DEFAULT_MAX );

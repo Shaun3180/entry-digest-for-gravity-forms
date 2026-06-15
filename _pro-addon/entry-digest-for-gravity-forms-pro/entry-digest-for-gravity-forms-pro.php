@@ -72,5 +72,6 @@ function edfgfp_bootstrap(): void {
 	require_once EDFGFP_DIR . 'includes/branding.php';
 	if ( is_admin() ) {
 		require_once EDFGFP_DIR . 'includes/editor-ui.php';
+		require_once EDFGFP_DIR . 'includes/log-settings.php';
 	}
 }

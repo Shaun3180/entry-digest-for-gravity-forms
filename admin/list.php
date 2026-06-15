@@ -190,6 +190,16 @@ function dsagfe_render_list( string $notice ): void {
 				<?php esc_html_e( '“Sent” means the email was handed to your site’s mailer, not a guarantee it reached the inbox. Showing the most recent sends.', 'entry-digest-for-gravity-forms' ); ?>
 			</p>
 		<?php endif; ?>
+
+		<?php
+		/**
+		 * Fires after the "Recent sends" log section on the digest list screen,
+		 * whether or not the log currently has entries. Add-ons can use this to
+		 * render log-related settings — for example, a configurable retention
+		 * control. Core renders nothing here.
+		 */
+		do_action( 'dsagfe_after_log_table' );
+		?>
 	</div>
 	<?php
 }

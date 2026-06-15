@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.3.0
+Stable tag: 2.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -43,10 +43,11 @@ Everything here is free and fully functional — no feature is locked, time-limi
 * Summary block with entry count and date range.
 * "Send Now" button to preview a digest on demand.
 * Test send to any address — preview a digest to yourself without emailing the real recipients.
-* Send log of recent runs with entry counts and delivery status.
+* Send log of the most recent runs (the last 5) with entry counts and delivery status.
 * Pause/Resume toggle per digest — suspend scheduled sends without deleting the digest.
 * Scheduler health check — a clear admin notice if a scheduled digest is overdue, so you find out when WP-Cron isn't firing instead of wondering why an email never arrived.
-* Clean, branded HTML email that renders well across mail clients.
+* Clean, branded HTML email that renders well across mail clients, with a plain-text alternative included automatically.
+* Plain-text fallback — every digest is sent as multipart (HTML plus a plain-text version), which improves deliverability and works in text-only mail clients and with screen readers.
 
 Each digest covers one form. (Need to combine several forms into a single email? See the optional Pro add-on below.)
 
@@ -59,6 +60,7 @@ A separate, optional Pro add-on — distributed from [addasitebuilders.com](http
 * CSV and Excel (.xlsx) attachments of the full period's entries.
 * Role-based recipients (deliver to every user in a chosen WordPress role).
 * Custom email branding — your logo, accent color, and a white-label footer.
+* Extended send-log history — retain a configurable number of past sends instead of just the most recent few.
 
 This plugin is complete and fully functional without it. The Pro add-on simply hooks in if installed; nothing here is disabled while it is absent.
 
@@ -124,6 +126,10 @@ As many as you like — there is no limit on the number of digests. Each digest 
 
 == Changelog ==
 
+= 2.4.0 =
+* New: **Plain-text fallback** — digests are now sent as multipart email (HTML plus an automatically generated plain-text version), improving deliverability and accessibility for text-only clients and screen readers.
+* Change: the **send log** now retains the most recent 5 sends by default (filterable via `dsagfe_log_max`). The optional Pro add-on adds a configurable, extended history.
+
 = 2.3.0 =
 * New: **Scheduler health check** — the digest list shows a warning when a scheduled send is overdue, which usually means WP-Cron isn't firing (a low-traffic site, or WP-Cron disabled without a working server cron). The message adapts to your setup and links to guidance. No warning is shown for a healthy scheduler.
 
@@ -159,6 +165,9 @@ As many as you like — there is no limit on the number of digests. Each digest 
 * Initial release: single scheduled digest with summary block and entry table, daily/weekly delivery.
 
 == Upgrade Notice ==
+
+= 2.4.0 =
+Digests now include a plain-text version for better deliverability. The send log keeps the most recent 5 entries by default. Existing digests are unaffected. Safe to update.
 
 = 2.3.0 =
 Adds an admin warning when a scheduled digest is overdue, so you catch WP-Cron problems early. Existing digests are unaffected. Safe to update.
