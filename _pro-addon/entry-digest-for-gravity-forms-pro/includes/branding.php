@@ -8,8 +8,8 @@ defined( 'ABSPATH' ) || exit;
  * the free plugin's editor hook, and applied through its email-render filters.
  */
 
-// ── Editor row (after the schedule/attachment rows) ──────────────────────────
-add_action( 'dsagfe_editor_after_schedule', 'edfgfp_editor_branding_row' );
+// ── Editor row (Email section, after the subject) ────────────────────────────
+add_action( 'dsagfe_editor_email_options', 'edfgfp_editor_branding_row' );
 function edfgfp_editor_branding_row( array $d ): void {
 	$logo   = (string) ( $d['brand_logo'] ?? '' );
 	$accent = (string) ( $d['brand_accent'] ?? '' );

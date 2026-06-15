@@ -59,6 +59,7 @@ function dsagfe_digest_defaults(): array {
 		'onetime_at'    => '',             // optional one-time send: 'Y-m-d H:i' in site timezone, or '' for none
 		'onetime_lookback_days' => 0,      // entries window for the one-time send; 0 = everything up to the send moment
 		'quiet_behavior' => 'send',        // 'send' = always email a "no new entries" note; 'skip' = stay silent when 0 entries
+		'link_entries'  => true,           // link each table row to its entry in the WP admin (off for external recipients)
 		'fields'        => [],             // map: form_id => [ field/input keys ]; empty = all for that form
 		'filters'       => [],             // Add-on: map: form_id => [ 'logic' => all|any, 'rules' => [ {field,op,value} ] ]
 		'attach_format' => 'none',         // Add-on: 'none' | 'xlsx' | 'csv'
@@ -102,6 +103,7 @@ function dsagfe_normalize_digest( array $d, string $id = '' ): array {
 	$out['onetime_at'] = preg_match( '/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/', $onetime ) ? $onetime : '';
 	$out['onetime_lookback_days'] = max( 0, (int) $out['onetime_lookback_days'] );
 	$out['quiet_behavior'] = in_array( $out['quiet_behavior'], [ 'send', 'skip' ], true ) ? $out['quiet_behavior'] : 'send';
+	$out['link_entries']  = ! empty( $out['link_entries'] );
 	$out['attach_format'] = in_array( $out['attach_format'], [ 'none', 'xlsx', 'csv' ], true ) ? $out['attach_format'] : 'none';
 
 	$out['form_ids'] = array_values( array_unique( array_map( 'intval', (array) $out['form_ids'] ) ) );

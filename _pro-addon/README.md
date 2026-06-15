@@ -25,7 +25,7 @@ The free plugin (v2.0.0+) exposes these extension points, all used here:
 | `dsagfe_attachments` | filter | Build CSV/XLSX attachment files |
 | `dsagfe_email_has_attachment` | filter | Show the "see attachment" note in the email |
 | `dsagfe_editor_after_recipients` | action | Render the "Send to roles" editor row |
-| `dsagfe_editor_after_schedule` | action | Render the attachment-format editor row |
+| `dsagfe_editor_email_options` | action | Render the attachment-format and branding editor rows |
 | `dsagfe_editor_form_block` | action | Render per-form conditional-filter UI |
 | `dsagfe_save_digest` | filter | Persist roles, filters, attachment format, branding |
 | `dsagfe_preview_count` | filter | Make the live count preview respect filters |

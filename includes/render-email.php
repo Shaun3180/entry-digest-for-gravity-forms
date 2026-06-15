@@ -221,7 +221,7 @@ function dsagfe_render_section_table( array $sec, array $d, bool $multi_form, st
 							$shown++;
 							$entry_id   = (int) ( $entry['id'] ?? 0 );
 							$date_label = esc_html( dsagfe_local_datetime( $entry['date_created'] ?? '', 'M j, g:i A' ) );
-							$entry_url  = ( $form_id && $entry_id )
+							$entry_url  = ( ! empty( $d['link_entries'] ) && $form_id && $entry_id )
 								? admin_url( 'admin.php?page=gf_entries&view=entry&id=' . $form_id . '&lid=' . $entry_id )
 								: '';
 							?>

@@ -70,6 +70,9 @@ function dsagfe_handle_save(): string {
 	// Quiet-period behavior.
 	$d['quiet_behavior'] = in_array( $raw['quiet_behavior'] ?? '', [ 'send', 'skip' ], true ) ? $raw['quiet_behavior'] : $def['quiet_behavior'];
 
+	// Whether to link each entry row to the WP admin (checkbox: absent = off).
+	$d['link_entries'] = ! empty( $raw['link_entries'] );
+
 	// Per-form fields.
 	$fields_in = (array) ( $raw['fields'] ?? [] );
 	$fields    = [];

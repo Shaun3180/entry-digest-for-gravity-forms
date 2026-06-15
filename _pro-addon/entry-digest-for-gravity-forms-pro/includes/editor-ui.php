@@ -32,8 +32,8 @@ function edfgfp_editor_roles_row( array $d ): void {
 	<?php
 }
 
-// ── Attachment selector (after the quiet-period row) ─────────────────────────
-add_action( 'dsagfe_editor_after_schedule', 'edfgfp_editor_attachment_row' );
+// ── Attachment selector (Email section, after the subject) ───────────────────
+add_action( 'dsagfe_editor_email_options', 'edfgfp_editor_attachment_row' );
 function edfgfp_editor_attachment_row( array $d ): void {
 	$fmt = $d['attach_format'] ?? 'none';
 	?>
