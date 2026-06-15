@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.0.0
+Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,8 @@ Gravity Forms' built-in notifications fire on every single submission. For a bus
 * **Daily or weekly** scheduling, sent at the time and on the day you pick, in your site's timezone.
 * **One-time sends** — schedule a digest for a specific future date and time, on its own or alongside a recurring schedule, with a custom lookback window.
 * A **"Send Now"** button to preview a digest on demand.
+* A **test send** that previews a digest to any address you choose without contacting the real recipient list.
+* A **send log** showing recent digest runs — when they fired, how many entries, and delivery status — for easy debugging and peace of mind.
 * **Graceful quiet periods** — when no entries arrived you can either receive a tidy "no new entries" note (the default, so you're never left wondering) or choose to stay silent, per digest.
 
 = Features =
@@ -39,6 +41,8 @@ Everything here is free and fully functional — no feature is locked, time-limi
 * Live entry-count preview as you build a digest.
 * Summary block with entry count and date range.
 * "Send Now" button to preview a digest on demand.
+* Test send to any address — preview a digest to yourself without emailing the real recipients.
+* Send log of recent runs with entry counts and delivery status.
 * Clean, branded HTML email that renders well across mail clients.
 
 Each digest covers one form. (Need to combine several forms into a single email? See the optional Pro add-on below.)
@@ -85,9 +89,17 @@ By default the digest still sends a tidy "no new entries" note so recipients kno
 
 Yes. Each digest has a **Send Now** button that builds and emails it immediately.
 
+= Can I send a test to myself without emailing everyone? =
+
+Yes. Open a saved digest in the editor and use the **Test send** field (it defaults to your own admin email). It builds the digest from that digest's current saved settings and sends it only to the address you enter — your real recipient list is never contacted and the schedule is unchanged. A test always sends, even during a quiet period, so you can see exactly what recipients would get.
+
+= How do I tell whether my digests are actually running? =
+
+The digest list screen shows a **Recent sends** table: each scheduled, one-time, "Send Now," or test send is logged with its time, entry count, recipients, type, and delivery status. "Sent" means the email was handed to your site's mailer (not a guarantee of inbox delivery); "Failed" or "No recipients" flag problems to look into. You can clear the log at any time.
+
 = Why didn't my digest arrive? =
 
-Digests use your site's `wp_mail()` setup. If other WordPress emails aren't being delivered, a transactional email/SMTP plugin usually resolves it. The plugin logs delivery problems to your PHP error log.
+Digests use your site's `wp_mail()` setup. If other WordPress emails aren't being delivered, a transactional email/SMTP plugin usually resolves it. The plugin logs delivery problems to your PHP error log, and the **Recent sends** table on the digest list shows the status of each recent run.
 
 = How many digests can I create? =
 
@@ -102,6 +114,10 @@ As many as you like — there is no limit on the number of digests. Each digest 
 5. Per-form field selection for the entry table.
 
 == Changelog ==
+
+= 2.1.0 =
+* New: **Test send** — preview any saved digest to an address of your choice (defaults to your admin email) without contacting the real recipient list or changing the schedule. Always sends, even during a quiet period.
+* New: **Send log** — a "Recent sends" table on the digest list shows recent scheduled, one-time, "Send Now," and test sends with their time, entry count, recipients, type, and delivery status. Clearable at any time.
 
 = 2.0.0 =
 * Unlimited single-form digests are now fully free — no feature is locked, time-limited, or gated.
@@ -128,6 +144,9 @@ As many as you like — there is no limit on the number of digests. Each digest 
 * Initial release: single scheduled digest with summary block and entry table, daily/weekly delivery.
 
 == Upgrade Notice ==
+
+= 2.1.0 =
+Adds a test-send field and a recent-sends log. Existing digests are unaffected. Safe to update.
 
 = 2.0.0 =
 Unlimited single-form digests are now free for everyone. Existing digests keep working unchanged. Safe to update.
