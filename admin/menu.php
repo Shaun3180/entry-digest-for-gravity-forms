@@ -2,7 +2,7 @@
 defined( 'ABSPATH' ) || exit;
 
 // ════════════════════════════════════════════════════════════════
-//  Admin menu — under Gravity Forms › Forms, just below Entries
+//  Admin menu - under Gravity Forms › Forms, just below Entries
 // ════════════════════════════════════════════════════════════════
 /**
  * Register the page as a sub-item of the Gravity Forms "Forms" menu. GF renders
@@ -38,12 +38,40 @@ add_action( 'admin_menu', function () {
 } );
 
 /**
- * Base URL for our admin page — admin.php when under the GF menu, tools.php when
+ * Base URL for our admin page - admin.php when under the GF menu, tools.php when
  * on the Tools fallback.
  */
 function dsagfe_page_url(): string {
 	$parent = class_exists( 'GFForms' ) ? 'admin.php' : 'tools.php';
 	return admin_url( $parent . '?page=entry-digest' );
+}
+
+/**
+ * Process a digest save early, on admin_init (before any output), so we can then
+ * redirect to the saved digest's editor - post/redirect/get. This makes the
+ * test-send field (which needs a saved id) available immediately and stops a
+ * refresh from resubmitting the form.
+ */
+add_action( 'admin_init', 'dsagfe_handle_save_request' );
+function dsagfe_handle_save_request(): void {
+	if ( ! isset( $_POST['dsagfe_save_digest'] ) ) {
+		return;
+	}
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	check_admin_referer( 'dsagfe_save_digest' );
+
+	$saved = dsagfe_handle_save();
+	wp_safe_redirect( add_query_arg(
+		[
+			'action'       => 'edit',
+			'digest'       => rawurlencode( $saved['id'] ),
+			'dsagfe_saved' => $saved['is_new'] ? 'created' : 'updated',
+		],
+		dsagfe_page_url()
+	) );
+	exit;
 }
 
 /**
@@ -57,9 +85,17 @@ function dsagfe_admin_router(): void {
 	// ── Handle POSTs ──────────────────────────────────────────────
 	$notice = '';
 
-	if ( isset( $_POST['dsagfe_save_digest'] ) && check_admin_referer( 'dsagfe_save_digest' ) ) {
-		$notice = dsagfe_handle_save();
-	} elseif ( isset( $_POST['dsagfe_delete_digest'] ) && check_admin_referer( 'dsagfe_delete_digest' ) ) {
+	// Success notice carried over from the post-save redirect below (display only).
+	if ( isset( $_GET['dsagfe_saved'] ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only display flag set by our own redirect; performs no action.
+		$saved_flag = sanitize_key( wp_unslash( $_GET['dsagfe_saved'] ) );
+		$notice     = dsagfe_notice( 'created' === $saved_flag
+			? __( 'Digest created.', 'entry-digest-for-gravity-forms' )
+			: __( 'Digest saved.', 'entry-digest-for-gravity-forms' )
+		);
+	}
+
+	if ( isset( $_POST['dsagfe_delete_digest'] ) && check_admin_referer( 'dsagfe_delete_digest' ) ) {
 		$id      = sanitize_text_field( wp_unslash( $_POST['digest_id'] ?? '' ) );
 		$digests = dsagfe_get_digests();
 		unset( $digests[ $id ] );
@@ -108,8 +144,8 @@ function dsagfe_admin_router(): void {
 			$digests[ $id ]['paused'] = $now_paused;
 			dsagfe_save_digests( $digests );
 			$notice = dsagfe_notice( $now_paused
-				? __( 'Digest paused — scheduled sends are stopped until you resume it.', 'entry-digest-for-gravity-forms' )
-				: __( 'Digest resumed — its schedule is active again.', 'entry-digest-for-gravity-forms' )
+				? __( 'Digest paused - scheduled sends are stopped until you resume it.', 'entry-digest-for-gravity-forms' )
+				: __( 'Digest resumed - its schedule is active again.', 'entry-digest-for-gravity-forms' )
 			);
 		}
 	} elseif ( isset( $_POST['dsagfe_clear_log'] ) && check_admin_referer( 'dsagfe_clear_log' ) ) {
@@ -117,7 +153,7 @@ function dsagfe_admin_router(): void {
 		$notice = dsagfe_notice( __( 'Send log cleared.', 'entry-digest-for-gravity-forms' ) );
 	}
 
-	$action = isset( $_GET['action'] ) ? sanitize_key( $_GET['action'] ) : 'list';
+	$action = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : 'list';
 
 	if ( 'edit' === $action || 'new' === $action ) {
 		dsagfe_render_editor( $action, $notice );

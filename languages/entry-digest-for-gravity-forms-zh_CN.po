@@ -1,504 +1,864 @@
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: Entry Digest for Gravity Forms 1.2.0\n"
 "Report-Msgid-Bugs-To: https://addasitebuilders.com/plugins/entry-digest-for-gravity-forms/\n"
-"POT-Creation-Date: 2026-06-12 01:42\n"
-"PO-Revision-Date: 2026-06-12 01:42\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-06-12 01:42\n"
+"PO-Revision-Date: 2026-06-12 01:42\n"
+"Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Domain: entry-digest-for-gravity-forms\n"
 
+#: admin/menu.php:17
+#: admin/menu.php:31
+#: admin/menu.php:32
 msgid "Entry Digest"
 msgstr "条目摘要"
 
+#: admin/ajax.php:11
+#: admin/menu.php:82
 msgid "Insufficient permissions."
 msgstr "权限不足。"
 
+#: admin/menu.php:103
 msgid "Digest deleted."
 msgstr "摘要已删除。"
 
+#. translators: %s: comma-separated list of recipient email addresses.
+#: admin/menu.php:115
+#, php-format
 msgid "&#10003; Digest triggered. Check %s."
 msgstr "&#10003; 摘要已触发。请查看 %s。"
 
+#: admin/editor.php:43
+#: admin/list.php:14
 msgid "Add Digest"
 msgstr "添加摘要"
 
+#: admin/list.php:20
 msgid "Gravity Forms is not active. Digests will not send until it is."
 msgstr "Gravity Forms 未启用。在启用之前，摘要将不会发送。"
 
-msgid "You're on the free plan."
-msgstr "您正在使用免费版。"
-
-msgid ""
-"Pro unlocks unlimited digests, multi-form aggregation, role & recipient "
-"routing, conditional filtering, and CSV/Excel attachments."
-msgstr "专业版可解锁无限摘要、多表单聚合、按角色和收件人路由、条件筛选以及 CSV/Excel 附件。"
-
-msgid "Start a free Pro trial"
-msgstr "开始免费的专业版试用"
-
+#: admin/list.php:34
 msgid "Set up your first digest"
 msgstr "设置您的第一个摘要"
 
-msgid ""
-"A digest bundles new Gravity Forms entries into one scheduled email — daily "
-"or weekly — so you get a clean summary instead of a flood of individual "
-"notifications."
-msgstr "摘要会将新的 Gravity Forms 条目汇集到一封定时发送的邮件中（每日或每周），让您收到一份清晰的汇总，而不是大量单独的通知。"
-
+#: admin/list.php:38
 msgid "Create your first digest"
 msgstr "创建您的第一个摘要"
 
+#: admin/editor.php:58
+#: admin/list.php:44
+#: admin/list.php:155
+#: includes/settings.php:122
 msgid "Digest"
 msgstr "摘要"
 
+#: admin/list.php:45
 msgid "Forms"
 msgstr "表单"
 
+#: admin/list.php:46
+#: admin/list.php:157
 msgid "Recipients"
 msgstr "收件人"
 
+#: admin/editor.php:161
+#: admin/list.php:47
 msgid "Schedule"
 msgstr "计划"
 
+#: admin/list.php:48
 msgid "Next run"
 msgstr "下次运行"
 
+#: admin/list.php:49
 msgid "Actions"
 msgstr "操作"
 
+#. translators: %d: Gravity Forms form ID.
+#: admin/list.php:60
+#, php-format
 msgid "Form %d (missing)"
 msgstr "表单 %d（缺失）"
 
+#. translators: %d: Gravity Forms form ID.
+#: admin/ajax.php:49
+#: admin/list.php:64
+#, php-format
 msgid "Form %d"
 msgstr "表单 %d"
 
+#. translators: %s: time of day, e.g. 08:00.
+#: admin/list.php:87
+#, php-format
 msgid "Daily %s"
 msgstr "每日 %s"
 
+#. translators: 1: weekday name; 2: time of day.
+#: admin/list.php:90
+#, php-format
 msgid "Weekly %1$s %2$s"
 msgstr "每周 %1$s %2$s"
 
+#. translators: %s: a specific date and time.
+#: admin/list.php:95
+#, php-format
 msgid "Once: %s"
 msgstr "一次性：%s"
 
+#: admin/list.php:101
+#: admin/list.php:172
 msgid "Untitled digest"
 msgstr "未命名摘要"
 
-msgid "Inactive (free plan limit — upgrade to enable)"
-msgstr "未激活（免费版限制 — 升级以启用）"
-
-msgid "— none —"
-msgstr "— 无 —"
-
+#: admin/list.php:111
 msgid "Edit"
 msgstr "编辑"
 
+#: admin/list.php:115
+#: includes/log.php:119
 msgid "Send Now"
 msgstr "立即发送"
 
+#: admin/list.php:122
 msgid "Delete this digest?"
 msgstr "删除此摘要？"
 
+#: admin/list.php:125
 msgid "Delete"
 msgstr "删除"
 
+#. translators: %s: site timezone string, e.g. America/Denver.
+#: admin/list.php:138
+#, php-format
 msgid "Schedules use your site timezone: %s."
 msgstr "计划使用您站点的时区：%s。"
 
-msgid ""
-"Weekly digests cover the past 7 days; daily digests cover the past 24 hours."
+#: admin/list.php:142
+msgid "Weekly digests cover the past 7 days; daily digests cover the past 24 hours."
 msgstr "每周摘要涵盖过去 7 天；每日摘要涵盖过去 24 小时。"
 
-msgid ""
-"The free plan includes one digest. %1$sUpgrade to Pro%2$s for unlimited "
-"digests."
-msgstr "免费版包含一个摘要。%1$s升级到专业版%2$s即可获得无限摘要。"
-
+#: admin/menu.php:93
 msgid "Digest created."
 msgstr "摘要已创建。"
 
+#: admin/menu.php:94
 msgid "Digest saved."
 msgstr "摘要已保存。"
 
-msgid "Security check failed — reload the page."
-msgstr "安全校验失败 — 请重新加载页面。"
-
+#: admin/ajax.php:17
 msgid "Gravity Forms is not active."
 msgstr "Gravity Forms 未启用。"
 
+#: admin/editor.php:16
+#: admin/menu.php:125
 msgid "Digest not found."
 msgstr "未找到摘要。"
 
+#: admin/editor.php:43
 msgid "Edit Digest"
 msgstr "编辑摘要"
 
+#: admin/editor.php:44
 msgid "Back to all digests"
 msgstr "返回所有摘要"
 
-msgid ""
-"Gravity Forms is not active — the form and field lists below are "
-"unavailable."
-msgstr "Gravity Forms 未启用 — 下方的表单和字段列表不可用。"
-
+#: admin/editor.php:62
 msgid "Digest name"
 msgstr "摘要名称"
 
+#: admin/editor.php:64
 msgid "For your reference (and used as the header on multi-form digests)."
 msgstr "供您参考（并用作多表单摘要的标题）。"
 
-msgid "Select one or more forms to aggregate into this digest."
-msgstr "选择一个或多个表单以聚合到此摘要中。"
-
-msgid ""
-"Free plan: one form per digest. Multi-form aggregation is a Pro feature."
-msgstr "免费版：每个摘要一个表单。多表单聚合是专业版功能。"
-
+#. translators: %s: numeric form ID.
+#: admin/editor.php:89
+#: admin/editor.php:287
+#, php-format
 msgid "(ID %s)"
 msgstr "(ID %s)"
 
-msgid "Enter a form ID (Gravity Forms inactive — can't list forms)."
-msgstr "请输入表单 ID（Gravity Forms 未启用 — 无法列出表单）。"
-
+#: admin/editor.php:121
 msgid "Recipient email(s)"
 msgstr "收件人邮箱"
 
+#. translators: %s: example email addresses wrapped in a code tag.
+#: admin/editor.php:125
+#, php-format
 msgid "Comma-separated, e.g. %s"
 msgstr "以逗号分隔，例如 %s"
 
-msgid "Send to roles"
-msgstr "发送给角色"
-
-msgid "Also deliver to every user in the selected role(s)."
-msgstr "同时发送给所选角色中的每个用户。"
-
-msgid "%1$sUpgrade to Pro%2$s to route by role."
-msgstr "%1$s升级到专业版%2$s即可按角色路由。"
-
+#: admin/editor.php:141
 msgid "Email subject"
 msgstr "邮件主题"
 
+#: admin/editor.php:165
 msgid "Recurring frequency"
 msgstr "重复频率"
 
+#: admin/editor.php:168
+#: includes/render-email.php:35
 msgid "Weekly"
 msgstr "每周"
 
+#: admin/editor.php:169
+#: includes/render-email.php:34
 msgid "Daily"
 msgstr "每日"
 
+#: admin/editor.php:170
 msgid "One-time only (no recurring)"
 msgstr "仅一次（不重复）"
 
-msgid ""
-"Weekly covers the past 7 days; daily covers the past 24 hours. Choose %s to "
-"send just once on a date you pick below."
+#. translators: %s: the words "One-time only" wrapped in an em tag.
+#: admin/editor.php:174
+#, php-format
+msgid "Weekly covers the past 7 days; daily covers the past 24 hours. Choose %s to send just once on a date you pick below."
 msgstr "每周涵盖过去 7 天；每日涵盖过去 24 小时。选择 %s 即可在下方所选的日期仅发送一次。"
 
+#. translators: %s: the words "One-time only" wrapped in an em tag.
+#: admin/editor.php:174
 msgid "One-time only"
 msgstr "仅一次"
 
+#: admin/editor.php:180
 msgid "Send day"
 msgstr "发送日"
 
+#: admin/editor.php:185
 msgid "Weekly only."
 msgstr "仅每周。"
 
+#: admin/editor.php:189
 msgid "Send time"
 msgstr "发送时间"
 
+#. translators: %s: site timezone string, e.g. America/Denver.
+#: admin/editor.php:193
+#, php-format
 msgid "For the recurring send. Site timezone: %s"
 msgstr "用于重复发送。站点时区：%s"
 
+#: admin/editor.php:198
 msgid "One-time send"
 msgstr "一次性发送"
 
+#: admin/editor.php:202
 msgid "Clear"
 msgstr "清除"
 
-msgid ""
-"Optional. Pick a future date & time to send this digest once, on top of (or "
-"instead of) the recurring schedule. Site timezone: %s. The date clears "
-"itself automatically after it sends."
+#. translators: %s: site timezone string, e.g. America/Denver.
+#: admin/editor.php:206
+#, php-format
+msgid "Optional. Pick a future date & time to send this digest once, on top of (or instead of) the recurring schedule. Site timezone: %s. The date clears itself automatically after it sends."
 msgstr "可选。选择一个未来的日期和时间，在重复计划之外（或代替它）发送此摘要一次。站点时区：%s。发送后该日期会自动清除。"
 
+#: admin/editor.php:212
 msgid "One-time lookback (days)"
 msgstr "一次性回溯（天）"
 
-msgid ""
-"How far back the one-time send looks for entries. %s = every entry up to the"
-" send moment."
+#. translators: %s: the number 0 wrapped in a code tag.
+#: admin/editor.php:218
+#, php-format
+msgid "How far back the one-time send looks for entries. %s = every entry up to the send moment."
 msgstr "一次性发送回溯查找条目的范围。%s = 直到发送时刻的所有条目。"
 
+#: admin/editor.php:231
 msgid "When there are no new entries"
 msgstr "当没有新条目时"
 
+#: admin/editor.php:234
 msgid "Send a \"no new entries\" note"
 msgstr "发送“无新条目”提示"
 
+#: admin/editor.php:235
 msgid "Don't send anything"
 msgstr "不发送任何内容"
 
-msgid ""
-"By default a quiet period still gets a tidy \"no new entries\" email, so "
-"recipients are never left wondering. Choose \"Don't send anything\" to stay "
-"silent when nothing came in."
-msgstr ""
-"默认情况下，即使在没有活动的时段也会发送一封简洁的“无新条目”邮件，让收件人不会心存疑虑。选择“不发送任何内容”可在没有任何条目时保持静默。"
+#: admin/editor.php:237
+msgid "By default a quiet period still gets a tidy \"no new entries\" email, so recipients are never left wondering. Choose \"Don't send anything\" to stay silent when nothing came in."
+msgstr "默认情况下，即使在没有活动的时段也会发送一封简洁的“无新条目”邮件，让收件人不会心存疑虑。选择“不发送任何内容”可在没有任何条目时保持静默。"
 
+#: admin/editor.php:250
 msgid "Entries right now"
 msgstr "当前条目"
 
+#: admin/editor.php:253
+#: admin/enqueue.php:32
 msgid "Calculating…"
 msgstr "正在计算…"
 
-msgid ""
-"How many active entries would be included if this digest ran right now, "
-"using your current settings. Updates live as you change them; the real send "
-"uses the same rolling window (%s) at send time."
+#. translators: %s: a time window such as "past 7 days".
+#: admin/editor.php:257
+#, php-format
+msgid "How many active entries would be included if this digest ran right now, using your current settings. Updates live as you change them; the real send uses the same rolling window (%s) at send time."
 msgstr "如果此摘要现在运行，按您当前的设置将包含多少个有效条目。会随您的更改实时更新；实际发送时使用相同的滚动时间窗口（%s）。"
 
-msgid "Attachment"
-msgstr "附件"
-
-msgid "None"
-msgstr "无"
-
-msgid "Excel (.xlsx)"
-msgstr "Excel (.xlsx)"
-
-msgid "CSV"
-msgstr "CSV"
-
-msgid ""
-"Attach the full period's entries. Excel produces one sheet per form; CSV "
-"produces one file per form."
-msgstr "附上整个时间段的条目。Excel 为每个表单生成一个工作表；CSV 为每个表单生成一个文件。"
-
-msgid "Pro feature"
-msgstr "专业版功能"
-
-msgid "Per-form fields & filters"
-msgstr "各表单的字段和筛选"
-
-msgid "Choose which fields appear, and (Pro) which entries to include."
-msgstr "选择显示哪些字段，以及（专业版）包含哪些条目。"
-
+#: admin/editor.php:289
 msgid "Fields to include"
 msgstr "要包含的字段"
 
+#: admin/editor.php:289
 msgid "(none checked = all)"
 msgstr "（未勾选 = 全部）"
 
-msgid "Conditional filtering"
-msgstr "条件筛选"
-
-msgid "Match"
-msgstr "匹配"
-
-msgid "all"
-msgstr "全部"
-
-msgid "any"
-msgstr "任一"
-
-msgid "of these rules:"
-msgstr "以下规则："
-
-msgid "field"
-msgstr "字段"
-
-msgid "value"
-msgstr "值"
-
-msgid ""
-"Leave fields blank to ignore a row. Add more rules by saving and reopening."
-msgstr "将字段留空以忽略某一行。保存并重新打开即可添加更多规则。"
-
-msgid ""
-"Send only entries matching conditions (e.g. %1$s). %2$sUpgrade to Pro%3$s."
-msgstr "仅发送符合条件的条目（例如 %1$s）。%2$s升级到专业版%3$s。"
-
-msgid "Status is Complete"
-msgstr "状态为已完成"
-
+#: admin/editor.php:315
 msgid "Create Digest"
 msgstr "创建摘要"
 
+#: admin/editor.php:315
 msgid "Save Digest"
 msgstr "保存摘要"
 
-msgid "Gravity Forms is not active — counts unavailable."
-msgstr "Gravity Forms 未启用 — 无法统计数量。"
-
+#: admin/enqueue.php:35
 msgid "Select a form to see a count."
 msgstr "选择一个表单以查看数量。"
 
+#: admin/enqueue.php:33
 msgid "Unable to calculate."
 msgstr "无法计算。"
 
+#: admin/enqueue.php:36
 msgid "entry"
 msgstr "条目"
 
+#: admin/enqueue.php:37
 msgid "entries"
 msgstr "条目"
 
+#: admin/editor.php:35
+#: includes/digest.php:364
 msgid "past 24 hours"
 msgstr "过去 24 小时"
 
+#: admin/editor.php:36
+#: includes/digest.php:365
 msgid "past 7 days"
 msgstr "过去 7 天"
 
+#: includes/settings.php:25
 msgid "Monday"
 msgstr "星期一"
 
+#: includes/settings.php:26
 msgid "Tuesday"
 msgstr "星期二"
 
+#: includes/settings.php:27
 msgid "Wednesday"
 msgstr "星期三"
 
+#: includes/settings.php:28
 msgid "Thursday"
 msgstr "星期四"
 
+#: includes/settings.php:29
 msgid "Friday"
 msgstr "星期五"
 
+#: includes/settings.php:30
 msgid "Saturday"
 msgstr "星期六"
 
+#: includes/settings.php:31
 msgid "Sunday"
 msgstr "星期日"
 
+#: includes/render-email.php:38
+#: includes/render-email.php:39
+#: includes/render-email.php:309
+#: includes/render-email.php:310
+#: includes/settings.php:43
 msgid "Entry digest"
 msgstr "条目摘要"
 
+#: includes/digest.php:176
+#: includes/settings.php:47
+#: includes/settings.php:125
 msgid "Your Gravity Forms entry digest"
 msgstr "您的 Gravity Forms 条目摘要"
 
-msgid "is"
-msgstr "等于"
-
-msgid "is not"
-msgstr "不等于"
-
-msgid "contains"
-msgstr "包含"
-
-msgid "does not contain"
-msgstr "不包含"
-
-msgid "greater than"
-msgstr "大于"
-
-msgid "less than"
-msgstr "小于"
-
-msgid "is empty"
-msgstr "为空"
-
-msgid "is not empty"
-msgstr "不为空"
-
+#: includes/digest.php:359
 msgid "whole history"
 msgstr "全部历史"
 
+#. translators: %s: an end date/time.
+#: includes/render-email.php:29
+#: includes/render-email.php:304
+#, php-format
 msgid "All entries through %s"
 msgstr "截至 %s 的所有条目"
 
+#: includes/log.php:117
+#: includes/render-email.php:32
 msgid "One-time"
 msgstr "一次性"
 
+#. translators: %s: cadence label such as Daily, Weekly, or One-time.
+#: includes/render-email.php:97
+#, php-format
 msgid "Entry digest · %s"
 msgstr "条目摘要 · %s"
 
+#: includes/render-email.php:117
+#: includes/render-email.php:325
 msgid "Period:"
 msgstr "时间段："
 
+#: includes/render-email.php:119
 msgid "Forms:"
 msgstr "表单："
 
+#: includes/render-email.php:128
 msgid "Form:"
 msgstr "表单："
 
+#. translators: %d: numeric form ID.
+#: includes/render-email.php:128
+#, php-format
 msgid "(ID %d)"
 msgstr "(ID %d)"
 
+#: includes/render-email.php:137
+#: includes/render-email.php:329
 msgid "No new entries were submitted during this period."
 msgstr "在此期间没有提交任何新条目。"
 
+#: includes/render-email.php:155
+#: includes/render-email.php:375
 msgid "Sent automatically by Entry Digest for Gravity Forms."
 msgstr "由 Entry Digest for Gravity Forms 自动发送。"
 
+#. translators: %s: time of day, e.g. 08:00.
+#: includes/render-email.php:163
+#, php-format
 msgid "Delivered daily at %s."
 msgstr "每日 %s 发送。"
 
+#. translators: 1: weekday name; 2: time of day.
+#: includes/render-email.php:166
+#, php-format
 msgid "Delivered every %1$s at %2$s."
 msgstr "每个%1$s的 %2$s 发送。"
 
+#: includes/render-email.php:200
+#: includes/render-email.php:341
 msgid "No new entries for this form."
 msgstr "此表单没有新条目。"
 
+#: includes/render-email.php:206
 msgid "Submitted"
 msgstr "提交时间"
 
-msgid " — the complete set is in the attachment."
-msgstr " — 完整数据见附件。"
-
+#. translators: 1: number of rows shown; 2: total number of entries; 3: trailing clause (a period, or a note about the attachment).
+#: includes/render-email.php:270
+#, php-format
 msgid "Showing the first %1$d of %2$d entries%3$s"
 msgstr "显示 %2$d 个条目中的前 %1$d 个%3$s"
 
-msgid "Entry ID"
-msgstr "条目 ID"
-
-msgid "Date Submitted (UTC)"
-msgstr "提交日期 (UTC)"
-
-msgid "IP Address"
-msgstr "IP 地址"
-
+#: admin/enqueue.php:38
 msgctxt "precedes a time window such as \"past 7 days\""
 msgid "in the"
 msgstr "在"
 
+#: admin/enqueue.php:39
 msgctxt "precedes a time window in the per-form count badge"
 msgid "in"
 msgstr "在"
 
-msgid ""
-"This form was created about %d day ago — the default covers everything since"
-" then."
-msgid_plural ""
-"This form was created about %d days ago — the default covers everything "
-"since then."
-msgstr[0] "此表单创建于约 %d 天前 — 默认值涵盖自那以后的所有内容。"
-
+#. translators: %d: number of days in the lookback window.
+#: includes/digest.php:358
+#, php-format
 msgid "past %d day"
 msgid_plural "past %d days"
 msgstr[0] "过去 %d 天"
 
+#: includes/render-email.php:43
+#: includes/render-email.php:313
 msgid "new entry"
 msgid_plural "new entries"
 msgstr[0] "新条目"
 
+#: includes/render-email.php:45
+#: includes/render-email.php:315
 msgid "new entry today"
 msgid_plural "new entries today"
 msgstr[0] "今日新条目"
 
+#: includes/render-email.php:47
+#: includes/render-email.php:317
 msgid "new entry this week"
 msgid_plural "new entries this week"
 msgstr[0] "本周新条目"
 
+#. translators: %d: number of forms.
+#: includes/render-email.php:52
+#, php-format
 msgid "across %d form"
 msgid_plural "across %d forms"
 msgstr[0] "跨 %d 个表单"
 
+#. translators: %d: number of entries for one form.
+#: includes/render-email.php:194
+#, php-format
 msgid "%d entry"
 msgid_plural "%d entries"
 msgstr[0] "%d 个条目"
+
+#. Plugin Name of the plugin
+#: entry-digest-for-gravity-forms.php
+msgid "Entry Digest for Gravity Forms"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: entry-digest-for-gravity-forms.php
+msgid "https://addasitebuilders.com/plugins"
+msgstr ""
+
+#. Description of the plugin
+#: entry-digest-for-gravity-forms.php
+msgid "Sends scheduled, readable email digests of your Gravity Forms entries - a summary block plus an inline table of submissions - on a daily, weekly, or one-time schedule. Unlimited digests, one form each. Find it under Forms › Entry Digest (or Tools › Entry Digest if Gravity Forms is inactive)."
+msgstr ""
+
+#. Author of the plugin
+#: entry-digest-for-gravity-forms.php
+msgid "Add-A-Site Apps"
+msgstr ""
+
+#. Author URI of the plugin
+#: entry-digest-for-gravity-forms.php
+msgid "https://addasitebuilders.com"
+msgstr ""
+
+#: admin/ajax.php:14
+msgid "Security check failed - reload the page."
+msgstr ""
+
+#: admin/editor.php:49
+msgid "Gravity Forms is not active - the form and field lists below are unavailable."
+msgstr ""
+
+#: admin/editor.php:68
+msgid "Form"
+msgstr ""
+
+#: admin/editor.php:83
+msgid "Choose the form this digest covers."
+msgstr ""
+
+#. translators: 1: opening anchor tag to the Pro page; 2: closing anchor tag.
+#: admin/editor.php:98
+#, php-format
+msgid "Tip: combining several forms into a single digest is available in %1$sEntry Digest Pro%2$s."
+msgstr ""
+
+#: admin/editor.php:107
+msgid "Enter a form ID (Gravity Forms inactive - can't list forms)."
+msgstr ""
+
+#: admin/editor.php:117
+msgid "Email"
+msgstr ""
+
+#. translators: %d: number of days since the form was created.
+#: admin/editor.php:223
+#, php-format
+msgid "This form was created about %d day ago - the default covers everything since then."
+msgid_plural "This form was created about %d days ago - the default covers everything since then."
+msgstr[0] ""
+
+#: admin/editor.php:246
+msgid "Entries &amp; fields"
+msgstr ""
+
+#: admin/editor.php:263
+msgid "Entry links"
+msgstr ""
+
+#: admin/editor.php:267
+msgid "Link each row to its entry in the WordPress admin"
+msgstr ""
+
+#: admin/editor.php:269
+msgid "Adds an admin link on each entry’s date. It only works for recipients who can log in and view Gravity Forms entries, so turn it off when emailing people without admin access."
+msgstr ""
+
+#: admin/editor.php:275
+msgid "Choose which fields appear in the entry table for each form."
+msgstr ""
+
+#: admin/editor.php:321
+msgid "Test send"
+msgstr ""
+
+#: admin/editor.php:325
+msgid "Send a test to"
+msgstr ""
+
+#: admin/editor.php:331
+msgid "Send test"
+msgstr ""
+
+#: admin/editor.php:332
+msgid "Emails this digest - using its current saved settings - to just this address. Your real recipient list is never contacted, and the schedule is unchanged. Save any edits above first. A test always sends, even if there are no new entries."
+msgstr ""
+
+#: admin/editor.php:338
+msgid "Save the digest first, then a test-send field appears here so you can preview it to yourself."
+msgstr ""
+
+#: admin/enqueue.php:34
+msgid "Gravity Forms is not active - counts unavailable."
+msgstr ""
+
+#: admin/list.php:36
+msgid "A digest bundles new Gravity Forms entries into one scheduled email - daily or weekly - so you get a clean summary instead of a flood of individual notifications."
+msgstr ""
+
+#: admin/list.php:76
+#: admin/list.php:103
+msgid "Paused"
+msgstr ""
+
+#: admin/list.php:107
+msgid "- none -"
+msgstr ""
+
+#: admin/list.php:120
+msgid "Resume"
+msgstr ""
+
+#: admin/list.php:120
+msgid "Pause"
+msgstr ""
+
+#: admin/list.php:150
+msgid "Recent sends"
+msgstr ""
+
+#: admin/list.php:154
+msgid "When"
+msgstr ""
+
+#: admin/list.php:156
+msgid "Entries"
+msgstr ""
+
+#: admin/list.php:158
+msgid "Type"
+msgstr ""
+
+#: admin/list.php:159
+msgid "Status"
+msgstr ""
+
+#: admin/list.php:182
+msgid "Clear the send log?"
+msgstr ""
+
+#: admin/list.php:184
+msgid "Clear log"
+msgstr ""
+
+#: admin/list.php:188
+msgid "“Sent” means the email was handed to your site’s mailer, not a guarantee it reached the inbox. Showing the most recent sends."
+msgstr ""
+
+#: admin/menu.php:127
+msgid "Enter a valid email address for the test send."
+msgstr ""
+
+#. translators: %s: the email address the test was sent to.
+#: admin/menu.php:133
+#, php-format
+msgid "&#10003; Test digest sent to %s. Your real recipient list was not contacted."
+msgstr ""
+
+#: admin/menu.php:147
+msgid "Digest paused - scheduled sends are stopped until you resume it."
+msgstr ""
+
+#: admin/menu.php:148
+msgid "Digest resumed - its schedule is active again."
+msgstr ""
+
+#: admin/menu.php:153
+msgid "Send log cleared."
+msgstr ""
+
+#: admin/pro-page.php:24
+msgid "Unlimited Forms per Digest"
+msgstr ""
+
+#: admin/pro-page.php:25
+msgid "Run as many digests as you need, all while rolling several forms into one email. Aggregate your various forms into a single morning summary instead of juggling separate notifications."
+msgstr ""
+
+#: admin/pro-page.php:28
+msgid "Per-Recipient & Role Routing"
+msgstr ""
+
+#: admin/pro-page.php:29
+msgid "Send the right digest to the right people. Route the admissions form to your admissions lead and the support form to your help desk - by individual recipient or by WordPress role."
+msgstr ""
+
+#: admin/pro-page.php:32
+msgid "Conditional Filtering"
+msgstr ""
+
+#: admin/pro-page.php:33
+msgid "Include only the entries that matter. Set rules like “Status is Complete” or “Budget greater than 1000” - match all or any - and your digest filters itself automatically on every run."
+msgstr ""
+
+#: admin/pro-page.php:36
+msgid "CSV & Excel Attachments"
+msgstr ""
+
+#: admin/pro-page.php:37
+msgid "Attach the full period’s entries as a CSV or native Excel (.xlsx) file. Recipients get the scannable summary in the email and the complete dataset ready to sort, filter, or import."
+msgstr ""
+
+#: admin/pro-page.php:40
+msgid "Custom Email Branding"
+msgstr ""
+
+#: admin/pro-page.php:41
+msgid "Upload your logo, set an accent color, and replace the default footer credit with your own text. Every digest your site sends reflects your brand instead of the plugin’s."
+msgstr ""
+
+#: admin/pro-page.php:44
+msgid "Priority Support"
+msgstr ""
+
+#: admin/pro-page.php:45
+msgid "Get fast, direct help from the developer. Pro licenses come with priority email support so setup questions and edge cases don’t sit in a queue."
+msgstr ""
+
+#: admin/pro-page.php:48
+msgid "Extended Send History"
+msgstr ""
+
+#: admin/pro-page.php:49
+msgid "Configurable send-log retention beyond the default of five recent sends."
+msgstr ""
+
+#: admin/pro-page.php:76
+msgid "Entry Digest Pro - see what the optional add-on gives you"
+msgstr ""
+
+#: admin/pro-page.php:80
+msgid "Everything on this screen is free and unrestricted. The optional Pro add-on is a separate plugin that adds the extras below - nothing here is locked or disabled."
+msgstr ""
+
+#: admin/pro-page.php:94
+msgid "Try Pro free for 14 days - no credit card required."
+msgstr ""
+
+#: admin/pro-page.php:98
+msgid "Get Entry Digest Pro"
+msgstr ""
+
+#: admin/pro-page.php:101
+msgid "Hide this for a year"
+msgstr ""
+
+#. translators: %s: the external website host the button opens, e.g. addasitebuilders.com.
+#: admin/pro-page.php:107
+#, php-format
+msgid "Opens %s in a new tab."
+msgstr ""
+
+#. translators: %s: human-readable duration, e.g. "3 hours".
+#: includes/cron-health.php:76
+#, php-format
+msgid "A scheduled digest was due %s ago but hasn’t run. This usually means WordPress’s task scheduler (WP-Cron) isn’t firing, so your digests may not send on time."
+msgstr ""
+
+#: includes/cron-health.php:81
+msgid "WP-Cron is turned off on this site (DISABLE_WP_CRON), so a real cron job must call wp-cron.php. Check that your server cron or host scheduler is configured and actually running."
+msgstr ""
+
+#: includes/cron-health.php:83
+msgid "On low-traffic sites WP-Cron may rarely run, because it only fires when someone visits the site. A real server cron job that calls wp-cron.php on a fixed schedule makes sends reliable."
+msgstr ""
+
+#: includes/cron-health.php:89
+#: includes/cron-health.php:179
+msgid "Learn about WP-Cron"
+msgstr ""
+
+#: includes/cron-health.php:93
+#: includes/cron-health.php:163
+msgid "Entry Digest: scheduled sends may not be running"
+msgstr ""
+
+#: includes/cron-health.php:153
+msgid "WP-Cron is turned off on this site (DISABLE_WP_CRON), so a real cron job must call wp-cron.php. Check that your server cron or host scheduler is configured and running."
+msgstr ""
+
+#: includes/cron-health.php:154
+msgid "On low-traffic sites WP-Cron may rarely fire, because it only runs when someone visits the site. A server cron job calling wp-cron.php on a fixed schedule makes sends reliable."
+msgstr ""
+
+#. translators: %s: human-readable duration, e.g. "3 hours".
+#: includes/cron-health.php:169
+#, php-format
+msgid "A scheduled digest was due <strong>%s ago</strong> but hasn't run. Your digests may not be sending on time."
+msgstr ""
+
+#: includes/cron-health.php:176
+msgid "View digest list →"
+msgstr ""
+
+#. translators: %s: the digest's email subject. Prefixed onto a test send.
+#: includes/digest.php:179
+#, php-format
+msgid "[Test] %s"
+msgstr ""
+
+#: includes/log.php:97
+msgid "Sent"
+msgstr ""
+
+#: includes/log.php:99
+msgid "Failed"
+msgstr ""
+
+#: includes/log.php:101
+msgid "Skipped (quiet period)"
+msgstr ""
+
+#: includes/log.php:103
+msgid "No recipients"
+msgstr ""
+
+#: includes/log.php:115
+msgid "Scheduled"
+msgstr ""
+
+#: includes/log.php:121
+msgid "Test"
+msgstr ""
+
+#: includes/render-email.php:267
+msgid " - the complete set is in the attachment."
+msgstr ""
+
+#: includes/render-email.php:354
+msgid "Submitted:"
+msgstr ""
+
+#. translators: 1: number of rows shown; 2: total number of entries.
+#: includes/render-email.php:369
+#, php-format
+msgid "Showing the first %1$d of %2$d entries."
+msgstr ""
+
+#: admin/editor.php:82
+msgid "Select one or more forms for this digest."
+msgstr ""

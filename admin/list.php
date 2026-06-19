@@ -14,13 +14,11 @@ function dsagfe_render_list( string $notice ): void {
 		<?php echo ' <a href="' . esc_url( $base_url . '&action=new' ) . '" class="page-title-action">' . esc_html__( 'Add Digest', 'entry-digest-for-gravity-forms' ) . '</a>'; ?>
 		<hr class="wp-header-end">
 
-		<?php echo $notice; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+		<?php echo wp_kses_post( $notice ); ?>
 
 		<?php if ( ! $gf_active ) : ?>
 			<div class="notice notice-error"><p><?php esc_html_e( 'Gravity Forms is not active. Digests will not send until it is.', 'entry-digest-for-gravity-forms' ); ?></p></div>
 		<?php endif; ?>
-
-		<?php echo dsagfe_cron_health_notice_html(); // phpcs:ignore WordPress.Security.EscapeOutput -- markup is fully escaped at build time. ?>
 
 		<?php
 		/**
@@ -35,7 +33,7 @@ function dsagfe_render_list( string $notice ): void {
 				<span class="dashicons dashicons-email-alt" style="font-size:48px;width:48px;height:48px;color:#7c3aed;"></span>
 				<h2 style="margin:16px 0 8px;"><?php esc_html_e( 'Set up your first digest', 'entry-digest-for-gravity-forms' ); ?></h2>
 				<p style="color:#555;max-width:420px;margin:0 auto 20px;">
-					<?php esc_html_e( 'A digest bundles new Gravity Forms entries into one scheduled email — daily or weekly — so you get a clean summary instead of a flood of individual notifications.', 'entry-digest-for-gravity-forms' ); ?>
+					<?php esc_html_e( 'A digest bundles new Gravity Forms entries into one scheduled email - daily or weekly - so you get a clean summary instead of a flood of individual notifications.', 'entry-digest-for-gravity-forms' ); ?>
 				</p>
 				<a href="<?php echo esc_url( $base_url . '&action=new' ); ?>" class="button button-primary button-hero"><?php esc_html_e( 'Create your first digest', 'entry-digest-for-gravity-forms' ); ?></a>
 			</div>
@@ -79,24 +77,24 @@ function dsagfe_render_list( string $notice ): void {
 						} else {
 							$next_fmt = $next
 								? ( new DateTime( '@' . $next ) )->setTimezone( wp_timezone() )->format( 'M j, Y g:i A' )
-								: '—';
+								: '-';
 						}
 
 						// Schedule label: recurring part (if any) plus one-time part (if set).
 						$parts = [];
 						if ( 'daily' === $d['frequency'] ) {
 							/* translators: %s: time of day, e.g. 08:00. */
-							$parts[] = sprintf( __( 'Daily %s', 'entry-digest-for-gravity-forms' ), esc_html( $d['send_time'] ) );
+							$parts[] = esc_html( sprintf( __( 'Daily %s', 'entry-digest-for-gravity-forms' ), $d['send_time'] ) );
 						} elseif ( 'weekly' === $d['frequency'] ) {
 							/* translators: 1: weekday name; 2: time of day. */
-							$parts[] = sprintf( __( 'Weekly %1$s %2$s', 'entry-digest-for-gravity-forms' ), esc_html( dsagfe_day_label( $d['send_day'] ) ), esc_html( $d['send_time'] ) );
+							$parts[] = esc_html( sprintf( __( 'Weekly %1$s %2$s', 'entry-digest-for-gravity-forms' ), dsagfe_day_label( $d['send_day'] ), $d['send_time'] ) );
 						}
 						if ( ! empty( $d['onetime_at'] ) ) {
 							$once_dt = DateTime::createFromFormat( 'Y-m-d H:i', $d['onetime_at'], wp_timezone() );
 							/* translators: %s: a specific date and time. */
-							$parts[] = sprintf( __( 'Once: %s', 'entry-digest-for-gravity-forms' ), esc_html( $once_dt ? $once_dt->format( 'M j, Y g:i A' ) : $d['onetime_at'] ) );
+							$parts[] = esc_html( sprintf( __( 'Once: %s', 'entry-digest-for-gravity-forms' ), $once_dt ? $once_dt->format( 'M j, Y g:i A' ) : $d['onetime_at'] ) );
 						}
-						$sched = $parts ? implode( '<br>', $parts ) : '—';
+						$sched = $parts ? implode( '<br>', $parts ) : '-';
 						?>
 						<tr<?php echo $is_paused ? ' style="opacity:0.6;"' : ''; ?>>
 							<td>
@@ -106,8 +104,8 @@ function dsagfe_render_list( string $notice ): void {
 								<?php endif; ?>
 							</td>
 							<td><?php echo esc_html( implode( ', ', $form_names ) ); ?></td>
-							<td><?php echo esc_html( $rcpts ? implode( ', ', $rcpts ) : __( '— none —', 'entry-digest-for-gravity-forms' ) ); ?></td>
-							<td><?php echo $sched; // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+							<td><?php echo esc_html( $rcpts ? implode( ', ', $rcpts ) : __( '- none -', 'entry-digest-for-gravity-forms' ) ); ?></td>
+							<td><?php echo $sched; // phpcs:ignore WordPress.Security.EscapeOutput -- $parts individually escaped above; <br> separators are literal markup. ?></td>
 							<td><?php echo esc_html( $next_fmt ); ?></td>
 							<td>
 								<a href="<?php echo esc_url( $base_url . '&action=edit&digest=' . rawurlencode( $id ) ); ?>" class="button button-small"><?php esc_html_e( 'Edit', 'entry-digest-for-gravity-forms' ); ?></a>
@@ -173,7 +171,7 @@ function dsagfe_render_list( string $notice ): void {
 							<td><?php echo esc_html( $when ); ?></td>
 							<td><?php echo esc_html( $row['label'] ?: __( 'Untitled digest', 'entry-digest-for-gravity-forms' ) ); ?></td>
 							<td><?php echo esc_html( number_format_i18n( (int) $row['count'] ) ); ?></td>
-							<td><?php echo esc_html( $row['recipients'] ?: '—' ); ?></td>
+							<td><?php echo esc_html( $row['recipients'] ?: '-' ); ?></td>
 							<td><?php echo esc_html( dsagfe_log_context_label( (string) $row['context'] ) ); ?></td>
 							<td><strong style="color:<?php echo esc_attr( $st_color ); ?>;"><?php echo esc_html( $st_label ); ?></strong></td>
 						</tr>
@@ -195,7 +193,7 @@ function dsagfe_render_list( string $notice ): void {
 		/**
 		 * Fires after the "Recent sends" log section on the digest list screen,
 		 * whether or not the log currently has entries. Add-ons can use this to
-		 * render log-related settings — for example, a configurable retention
+		 * render log-related settings - for example, a configurable retention
 		 * control. Core renders nothing here.
 		 */
 		do_action( 'dsagfe_after_log_table' );

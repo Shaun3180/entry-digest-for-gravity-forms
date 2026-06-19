@@ -2,7 +2,7 @@
 defined( 'ABSPATH' ) || exit;
 
 // ════════════════════════════════════════════════════════════════
-//  Send log — a capped, rolling history of recent digest sends
+//  Send log - a capped, rolling history of recent digest sends
 // ════════════════════════════════════════════════════════════════
 /**
  * Recent sends are recorded in their own option (separate from settings, so the
@@ -17,7 +17,7 @@ define( 'DSAGFE_LOG_DEFAULT_MAX', 10 );
 /**
  * Number of log records to retain (filterable).
  *
- * The free plugin keeps the most recent few sends — enough to confirm digests
+ * The free plugin keeps the most recent few sends - enough to confirm digests
  * are running and to debug a recent problem. The retention count is exposed via
  * the 'dsagfe_log_max' filter, so it is a default, not a hard limit: any site
  * owner (or the optional Pro add-on, which offers a configurable history) can

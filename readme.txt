@@ -4,11 +4,11 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.4.0
+Stable tag: 2.6.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Stop drowning in per-entry notification emails. Get one clean, scheduled digest of your Gravity Forms submissions — a summary plus an entry table.
+Stop drowning in per-entry notification emails. Get one clean, scheduled digest of your Gravity Forms submissions - a summary plus an entry table.
 
 == Description ==
 
@@ -23,18 +23,18 @@ Gravity Forms' built-in notifications fire on every single submission. For a bus
 * A **summary block** with the new-entry count and reporting period.
 * An **inline entry table** showing the fields you choose, formatted for easy reading on desktop and mobile.
 * **Daily or weekly** scheduling, sent at the time and on the day you pick, in your site's timezone.
-* **One-time sends** — schedule a digest for a specific future date and time, on its own or alongside a recurring schedule, with a custom lookback window.
+* **One-time sends** - schedule a digest for a specific future date and time, on its own or alongside a recurring schedule, with a custom lookback window.
 * A **"Send Now"** button to preview a digest on demand.
 * A **test send** that previews a digest to any address you choose without contacting the real recipient list.
-* A **send log** showing recent digest runs — when they fired, how many entries, and delivery status — for easy debugging and peace of mind.
-* **Pause/Resume** any digest with one click — stop its scheduled sends without deleting it or losing its settings.
-* **Graceful quiet periods** — when no entries arrived you can either receive a tidy "no new entries" note (the default, so you're never left wondering) or choose to stay silent, per digest.
+* A **send log** showing recent digest runs - when they fired, how many entries, and delivery status - for easy debugging and peace of mind.
+* **Pause/Resume** any digest with one click - stop its scheduled sends without deleting it or losing its settings.
+* **Graceful quiet periods** - when no entries arrived you can either receive a tidy "no new entries" note (the default, so you're never left wondering) or choose to stay silent, per digest.
 
 = Features =
 
-Everything here is free and fully functional — no feature is locked, time-limited, or gated behind a key:
+Everything here is free and fully functional - no feature is locked, time-limited, or gated behind a key:
 
-* Unlimited digests — create as many as you need.
+* Unlimited digests - create as many as you need.
 * Daily or weekly delivery on a chosen day/time, and/or a one-time send on a future date you pick.
 * Configurable lookback window for one-time sends.
 * Configurable quiet-period behavior: send a "no new entries" note or stay silent, per digest.
@@ -42,25 +42,25 @@ Everything here is free and fully functional — no feature is locked, time-limi
 * Live entry-count preview as you build a digest.
 * Summary block with entry count and date range.
 * "Send Now" button to preview a digest on demand.
-* Test send to any address — preview a digest to yourself without emailing the real recipients.
+* Test send to any address - preview a digest to yourself without emailing the real recipients.
 * Send log of the most recent runs (the last 5) with entry counts and delivery status.
-* Pause/Resume toggle per digest — suspend scheduled sends without deleting the digest.
-* Scheduler health check — a clear admin notice if a scheduled digest is overdue, so you find out when WP-Cron isn't firing instead of wondering why an email never arrived.
+* Pause/Resume toggle per digest - suspend scheduled sends without deleting the digest.
+* Scheduler health check - a clear admin notice if a scheduled digest is overdue, so you find out when WP-Cron isn't firing instead of wondering why an email never arrived.
 * Clean, branded HTML email that renders well across mail clients, with a plain-text alternative included automatically.
-* Plain-text fallback — every digest is sent as multipart (HTML plus a plain-text version), which improves deliverability and works in text-only mail clients and with screen readers.
+* Plain-text fallback - every digest is sent as multipart (HTML plus a plain-text version), which improves deliverability and works in text-only mail clients and with screen readers.
 
 Each digest covers one form. (Need to combine several forms into a single email? See the optional Pro add-on below.)
 
 = Optional Pro add-on =
 
-A separate, optional Pro add-on — distributed from [addasitebuilders.com](https://addasitebuilders.com/plugins), not from WordPress.org — adds aggregation, routing, and exports for teams and agencies:
+A separate, optional Pro add-on - distributed from [addasitebuilders.com](https://addasitebuilders.com/plugins), not from WordPress.org - adds aggregation, routing, and exports for teams and agencies:
 
-* Multi-form aggregation — combine entries from several forms into a single digest email.
-* Conditional filtering — include only entries that match your rules.
+* Multi-form aggregation - combine entries from several forms into a single digest email.
+* Conditional filtering - include only entries that match your rules.
 * CSV and Excel (.xlsx) attachments of the full period's entries.
 * Role-based recipients (deliver to every user in a chosen WordPress role).
-* Custom email branding — your logo, accent color, and a white-label footer.
-* Extended send-log history — retain a configurable number of past sends instead of just the most recent few.
+* Custom email branding - your logo, accent color, and a white-label footer.
+* Extended send-log history - retain a configurable number of past sends instead of just the most recent few.
 
 This plugin is complete and fully functional without it. The Pro add-on simply hooks in if installed; nothing here is disabled while it is absent.
 
@@ -100,7 +100,7 @@ Yes. Each digest on the list has a **Pause** button. Pausing keeps all of its se
 
 = Can I send a test to myself without emailing everyone? =
 
-Yes. Open a saved digest in the editor and use the **Test send** field (it defaults to your own admin email). It builds the digest from that digest's current saved settings and sends it only to the address you enter — your real recipient list is never contacted and the schedule is unchanged. A test always sends, even during a quiet period, so you can see exactly what recipients would get.
+Yes. Open a saved digest in the editor and use the **Test send** field (it defaults to your own admin email). It builds the digest from that digest's current saved settings and sends it only to the address you enter - your real recipient list is never contacted and the schedule is unchanged. A test always sends, even during a quiet period, so you can see exactly what recipients would get.
 
 = How do I tell whether my digests are actually running? =
 
@@ -110,38 +110,51 @@ The digest list screen shows a **Recent sends** table: each scheduled, one-time,
 
 Digests use your site's `wp_mail()` setup. If other WordPress emails aren't being delivered, a transactional email/SMTP plugin usually resolves it. The plugin logs delivery problems to your PHP error log, and the **Recent sends** table on the digest list shows the status of each recent run.
 
-If the scheduler itself isn't firing — common on very low-traffic sites, or when WP-Cron is disabled without a real server cron to replace it — the digest list shows a warning when a scheduled send is overdue, with guidance on how to fix it.
+If the scheduler itself isn't firing - common on very low-traffic sites, or when WP-Cron is disabled without a real server cron to replace it - the digest list shows a warning when a scheduled send is overdue, with guidance on how to fix it.
 
 = How many digests can I create? =
 
-As many as you like — there is no limit on the number of digests. Each digest covers one form. Combining several forms into a single digest (multi-form aggregation), role-based recipients, conditional filtering, and CSV/Excel attachments are available through the optional Pro add-on sold separately at addasitebuilders.com.
+As many as you like - there is no limit on the number of digests. Each digest covers one form. Combining several forms into a single digest (multi-form aggregation), role-based recipients, conditional filtering, and CSV/Excel attachments are available through the optional Pro add-on sold separately at addasitebuilders.com.
 
 == Screenshots ==
 
-1. The digest email — summary block plus the inline entry table.
+1. The digest email - summary block plus the inline entry table.
 2. The digest list, showing schedule and next-run time for each digest.
 3. The digest editor: form, recipients, subject, and schedule.
-4. The schedule picker — frequency, day, and time in your site timezone.
+4. The schedule picker - frequency, day, and time in your site timezone.
 5. Per-form field selection for the entry table.
 
 == Changelog ==
 
+= 2.6.1 =
+* The form selector's single/multiple mode is now filterable, and core processes whatever forms a digest holds. No change to the default single-form experience.
+
+= 2.6.0 =
+* Security: escaped all admin-screen output (schedule labels and admin notices) per the WordPress output-escaping guidelines.
+* Core digests cover a single form; removed the optional multi-form extension hook from the plugin core.
+* Added a dismissible "Entry Digest Pro" panel at the bottom of the digest screen describing the optional add-on. It is informational only - nothing in this plugin is gated or disabled, and it hides itself when the add-on is active.
+* Code quality: unified internal constant prefixes to resolve Plugin Check naming warnings.
+* After saving a digest you are returned to its editor, so the test-send field is available right away (post/redirect/get).
+
+= 2.5.0 =
+* Improvement: **Scheduler health check now surfaces on the main dashboard.** The overdue-digest warning now appears as a dismissible admin notice on the WordPress dashboard as well as the digest list page - so you're alerted the moment you log in, not only when you visit the digest screen. The notice is shown to admins only, dismissible, and re-surfaces after 7 days if the problem persists.
+
 = 2.4.0 =
-* New: **Plain-text fallback** — digests are now sent as multipart email (HTML plus an automatically generated plain-text version), improving deliverability and accessibility for text-only clients and screen readers.
+* New: **Plain-text fallback** - digests are now sent as multipart email (HTML plus an automatically generated plain-text version), improving deliverability and accessibility for text-only clients and screen readers.
 * Change: the **send log** now retains the most recent 5 sends by default (filterable via `dsagfe_log_max`). The optional Pro add-on adds a configurable, extended history.
 
 = 2.3.0 =
-* New: **Scheduler health check** — the digest list shows a warning when a scheduled send is overdue, which usually means WP-Cron isn't firing (a low-traffic site, or WP-Cron disabled without a working server cron). The message adapts to your setup and links to guidance. No warning is shown for a healthy scheduler.
+* New: **Scheduler health check** - the digest list shows a warning when a scheduled send is overdue, which usually means WP-Cron isn't firing (a low-traffic site, or WP-Cron disabled without a working server cron). The message adapts to your setup and links to guidance. No warning is shown for a healthy scheduler.
 
 = 2.2.0 =
 * New: **Pause/Resume** toggle on the digest list. Pausing keeps a digest's settings but removes it from the schedule (no automatic sends) until you resume it; paused digests are clearly marked and can still be sent manually via "Send Now" or a test send.
 
 = 2.1.0 =
-* New: **Test send** — preview any saved digest to an address of your choice (defaults to your admin email) without contacting the real recipient list or changing the schedule. Always sends, even during a quiet period.
-* New: **Send log** — a "Recent sends" table on the digest list shows recent scheduled, one-time, "Send Now," and test sends with their time, entry count, recipients, type, and delivery status. Clearable at any time.
+* New: **Test send** - preview any saved digest to an address of your choice (defaults to your admin email) without contacting the real recipient list or changing the schedule. Always sends, even during a quiet period.
+* New: **Send log** - a "Recent sends" table on the digest list shows recent scheduled, one-time, "Send Now," and test sends with their time, entry count, recipients, type, and delivery status. Clearable at any time.
 
 = 2.0.0 =
-* Unlimited single-form digests are now fully free — no feature is locked, time-limited, or gated.
+* Unlimited single-form digests are now fully free - no feature is locked, time-limited, or gated.
 * Advanced features (multi-form aggregation, role recipients, conditional filtering, CSV/Excel attachments) moved to an optional Pro add-on distributed separately at addasitebuilders.com; the add-on hooks in only if installed.
 * Editor JavaScript is now properly enqueued (no inline scripts).
 * Internal cleanup: removed bundled monetization SDK.
@@ -165,6 +178,9 @@ As many as you like — there is no limit on the number of digests. Each digest 
 * Initial release: single scheduled digest with summary block and entry table, daily/weekly delivery.
 
 == Upgrade Notice ==
+
+= 2.5.0 =
+The scheduler health warning now also appears on the main WordPress dashboard as a dismissible notice. No settings changes required. Safe to update.
 
 = 2.4.0 =
 Digests now include a plain-text version for better deliverability. The send log keeps the most recent 5 entries by default. Existing digests are unaffected. Safe to update.

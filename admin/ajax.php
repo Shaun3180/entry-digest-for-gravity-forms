@@ -11,7 +11,7 @@ function dsagfe_ajax_entry_count(): void {
 		wp_send_json_error( [ 'message' => __( 'Insufficient permissions.', 'entry-digest-for-gravity-forms' ) ], 403 );
 	}
 	if ( ! check_ajax_referer( 'dsagfe_entry_count', 'nonce', false ) ) {
-		wp_send_json_error( [ 'message' => __( 'Security check failed — reload the page.', 'entry-digest-for-gravity-forms' ) ], 400 );
+		wp_send_json_error( [ 'message' => __( 'Security check failed - reload the page.', 'entry-digest-for-gravity-forms' ) ], 400 );
 	}
 	if ( ! class_exists( 'GFAPI' ) ) {
 		wp_send_json_error( [ 'message' => __( 'Gravity Forms is not active.', 'entry-digest-for-gravity-forms' ) ] );
@@ -22,10 +22,6 @@ function dsagfe_ajax_entry_count(): void {
 
 	$form_ids = array_values( array_unique( array_map( 'intval', (array) ( $raw['form_ids'] ?? [] ) ) ) );
 	$form_ids = array_values( array_filter( $form_ids, static fn( $f ) => $f > 0 ) );
-	if ( ! dsagfe_multiform_enabled() ) {
-		$form_ids = array_slice( $form_ids, 0, 1 );
-	}
-
 	$frequency = in_array( $raw['frequency'] ?? '', [ 'daily', 'weekly', 'none' ], true ) ? $raw['frequency'] : 'weekly';
 
 	// With no recurring schedule (one-time only), preview the one-time lookback
