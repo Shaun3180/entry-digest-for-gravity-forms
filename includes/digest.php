@@ -2,7 +2,7 @@
 defined( 'ABSPATH' ) || exit;
 
 // ════════════════════════════════════════════════════════════════
-//  Field map — shared by the digest builder and the admin field picker
+//  Field map - shared by the digest builder and the admin field picker
 // ════════════════════════════════════════════════════════════════
 /**
  * Build an ordered [ key => label ] map of exportable fields for a form.
@@ -20,7 +20,7 @@ function dsagfe_build_field_map( array $form ): array {
 				if ( ! empty( $input['isHidden'] ) ) {
 					continue;
 				}
-				$field_map[ (string) $input['id'] ] = trim( $field->label . ' — ' . $input['label'] );
+				$field_map[ (string) $input['id'] ] = trim( $field->label . ' - ' . $input['label'] );
 			}
 		} else {
 			$field_map[ (string) $field->id ] = (string) $field->label;
@@ -129,7 +129,7 @@ function dsagfe_run_all_active(): void {
  *                          (the digest's configured one-time lookback window).
  * @param array  $args      Optional. {
  *     @type string[] $override_to Recipient address(es) to use instead of the
- *                                 digest's configured list — a test/preview send
+ *                                 digest's configured list - a test/preview send
  *                                 that never contacts the real recipients.
  *     @type string   $context     Log context: 'scheduled' | 'one-time' |
  *                                 'manual' | 'test'. Defaults based on $mode.
@@ -152,9 +152,6 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring', array
 	$label   = (string) ( $d['label'] ?? '' );
 
 	$form_ids = (array) $d['form_ids'];
-	if ( ! dsagfe_multiform_enabled() ) {
-		$form_ids = array_slice( $form_ids, 0, 1 );
-	}
 
 	if ( $is_test ) {
 		$recipients = array_values( array_unique( array_filter(

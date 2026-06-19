@@ -66,7 +66,7 @@ function edfgfp_editor_filter_ui( string $fid, array $d, array $field_map ): voi
 		<tr>
 			<td>
 				<select name="dsagfe_digest[filters][<?php echo esc_attr( $fid ); ?>][<?php echo (int) $i; ?>][field]">
-					<option value="">— <?php esc_html_e( 'field', 'entry-digest-for-gravity-forms-pro' ); ?> —</option>
+					<option value="">- <?php esc_html_e( 'field', 'entry-digest-for-gravity-forms-pro' ); ?> -</option>
 					<?php foreach ( $field_map as $k => $lab ) : ?>
 						<option value="<?php echo esc_attr( $k ); ?>" <?php selected( (string) $rf, (string) $k ); ?>><?php echo esc_html( $lab ); ?></option>
 					<?php endforeach; ?>

@@ -1,20 +1,12 @@
 <?php
 defined( 'ABSPATH' ) || exit;
 
-// ── Capability helpers ───────────────────────────────────────────
+// ── Add-on pointer ───────────────────────────────────────────────
 /**
- * Whether a single digest may aggregate more than one form.
+ * Product-page URL for the optional Pro add-on (filterable).
  *
- * Core ships single-form digests (one form per digest). The optional Pro add-on
- * enables multi-form aggregation by returning true on the 'dsagfe_allow_multiform'
- * filter. This is a neutral extension point — there is no license check here.
- */
-function dsagfe_multiform_enabled(): bool {
-	return (bool) apply_filters( 'dsagfe_allow_multiform', false );
-}
-
-/**
- * Marketing URL for the optional Pro add-on (filterable).
+ * Used only to link out from the informational "Entry Digest Pro" page and the
+ * editor tip. This is a plain marketing link - it gates nothing.
  */
 function dsagfe_pro_url(): string {
 	return (string) apply_filters(
@@ -178,7 +170,7 @@ function dsagfe_get_digests(): array {
 }
 
 /**
- * The digests that are actually scheduled / sent — every configured digest that
+ * The digests that are actually scheduled / sent - every configured digest that
  * is not paused. Paused digests keep their configuration but are excluded from
  * cron scheduling (manual "Send Now" and test sends still work on them).
  */

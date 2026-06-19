@@ -22,7 +22,7 @@ function dsagfe_enqueue_admin_assets(): void {
 
 	wp_enqueue_script(
 		'dsagfe-editor',
-		EDFGF_URL . 'admin/js/editor.js',
+		DSAGFE_URL . 'admin/js/editor.js',
 		[],
 		DSAGFE_VERSION,
 		true
@@ -31,7 +31,7 @@ function dsagfe_enqueue_admin_assets(): void {
 	wp_localize_script( 'dsagfe-editor', 'DSAGFE_I18N', [
 		'calculating' => __( 'Calculating…', 'entry-digest-for-gravity-forms' ),
 		'unable'      => __( 'Unable to calculate.', 'entry-digest-for-gravity-forms' ),
-		'gfInactive'  => __( 'Gravity Forms is not active — counts unavailable.', 'entry-digest-for-gravity-forms' ),
+		'gfInactive'  => __( 'Gravity Forms is not active - counts unavailable.', 'entry-digest-for-gravity-forms' ),
 		'selectForm'  => __( 'Select a form to see a count.', 'entry-digest-for-gravity-forms' ),
 		'entry'       => __( 'entry', 'entry-digest-for-gravity-forms' ),
 		'entries'     => __( 'entries', 'entry-digest-for-gravity-forms' ),

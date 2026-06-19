@@ -2,7 +2,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Pro: custom email branding — logo, accent color, and a white-label footer.
+ * Pro: custom email branding - logo, accent color, and a white-label footer.
  *
  * Stored per digest under brand_logo / brand_accent / brand_footer, edited via
  * the free plugin's editor hook, and applied through its email-render filters.

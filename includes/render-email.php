@@ -2,7 +2,7 @@
 defined( 'ABSPATH' ) || exit;
 
 // ════════════════════════════════════════════════════════════════
-//  HTML digest builder — summary block + per-form entry tables
+//  HTML digest builder - summary block + per-form entry tables
 // ════════════════════════════════════════════════════════════════
 function dsagfe_local_datetime( string $utc, string $format = 'M j, Y g:i A' ): string {
 	$ts = strtotime( $utc . ' UTC' );
@@ -264,7 +264,7 @@ function dsagfe_render_section_table( array $sec, array $d, bool $multi_form, st
 					 */
 					$has_attachment = (bool) apply_filters( 'dsagfe_email_has_attachment', false, $d, $sec );
 					$suffix = $has_attachment
-						? __( ' — the complete set is in the attachment.', 'entry-digest-for-gravity-forms' )
+						? __( ' - the complete set is in the attachment.', 'entry-digest-for-gravity-forms' )
 						: '.';
 					/* translators: 1: number of rows shown; 2: total number of entries; 3: trailing clause (a period, or a note about the attachment). */
 					printf( esc_html__( 'Showing the first %1$d of %2$d entries%3$s', 'entry-digest-for-gravity-forms' ), (int) DSAGFE_MAX_TABLE_ROWS, (int) $count, esc_html( $suffix ) );
@@ -278,7 +278,7 @@ function dsagfe_render_section_table( array $sec, array $d, bool $multi_form, st
 }
 
 // ════════════════════════════════════════════════════════════════
-//  Plain-text digest builder — multipart/alternative fallback
+//  Plain-text digest builder - multipart/alternative fallback
 // ════════════════════════════════════════════════════════════════
 /**
  * Build a readable plain-text version of a digest run, used as the

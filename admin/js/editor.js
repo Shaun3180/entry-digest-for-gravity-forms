@@ -1,5 +1,5 @@
 /**
- * Entry Digest for Gravity Forms — digest editor screen behavior.
+ * Entry Digest for Gravity Forms - digest editor screen behavior.
  *
  * Localized data is provided by admin/enqueue.php:
  *   - window.DSAGFE_I18N  : translated UI strings

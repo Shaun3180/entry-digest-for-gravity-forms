@@ -3,8 +3,10 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Sanitize + save one digest from $_POST.
+ *
+ * @return array{id:string,is_new:bool} The saved digest id and whether it was newly created.
  */
-function dsagfe_handle_save(): string {
+function dsagfe_handle_save(): array {
 	// Nonce already verified by check_admin_referer() in menu.php before this function is called.
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- nonce checked upstream; individual values sanitized below.
 	$raw = wp_unslash( (array) ( $_POST['dsagfe_digest'] ?? [] ) );
@@ -19,7 +21,7 @@ function dsagfe_handle_save(): string {
 	$def = dsagfe_digest_defaults();
 	$d   = [ 'id' => $id ];
 
-	// Pause state isn't an editor field — it's toggled from the list — so carry the
+	// Pause state isn't an editor field - it's toggled from the list - so carry the
 	// existing value through a save instead of letting it reset to the default.
 	$d['paused'] = ! $is_new && ! empty( $digests[ $id ]['paused'] );
 
@@ -35,14 +37,11 @@ function dsagfe_handle_save(): string {
 	) );
 	$d['to_email'] = implode( ', ', $emails );
 
-	// Forms — one per digest in core; the Pro add-on enables aggregating several.
+	// Forms - one per digest in core; the Pro add-on enables aggregating several.
 	$form_ids = array_values( array_unique( array_map( 'intval', (array) ( $raw['form_ids'] ?? [] ) ) ) );
 	$form_ids = array_values( array_filter( $form_ids, static fn( $f ) => $f > 0 ) );
 	if ( empty( $form_ids ) ) {
 		$form_ids = [ 1 ];
-	}
-	if ( ! dsagfe_multiform_enabled() ) {
-		$form_ids = array_slice( $form_ids, 0, 1 );
 	}
 	$d['form_ids'] = $form_ids;
 
@@ -105,8 +104,6 @@ function dsagfe_handle_save(): string {
 	$digests[ $id ] = dsagfe_normalize_digest( $d, $id );
 	dsagfe_save_digests( $digests );
 
-	return dsagfe_notice( $is_new
-		? __( 'Digest created.', 'entry-digest-for-gravity-forms' )
-		: __( 'Digest saved.', 'entry-digest-for-gravity-forms' )
-	);
+	// Return the saved id so the router can redirect to its editor (post/redirect/get).
+	return [ 'id' => $id, 'is_new' => $is_new ];
 }

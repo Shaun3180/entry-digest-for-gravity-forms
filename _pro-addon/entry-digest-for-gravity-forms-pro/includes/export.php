@@ -26,7 +26,7 @@ function dsagfe_build_attachments( string $format, array $sections ): array {
 		return $files;
 	}
 
-	// xlsx — one sheet per form with data.
+	// xlsx - one sheet per form with data.
 	$sheets    = [];
 	$used_names = [];
 	foreach ( $sections as $sec ) {
@@ -129,7 +129,7 @@ function dsagfe_write_csv( string $filepath, array $headers, array $rows ): bool
 }
 
 // ════════════════════════════════════════════════════════════════
-//  Minimal .xlsx writer — pure PHP, multi-sheet, no Composer deps
+//  Minimal .xlsx writer - pure PHP, multi-sheet, no Composer deps
 // ════════════════════════════════════════════════════════════════
 /**
  * @param string $filepath
@@ -200,7 +200,7 @@ function dsagfe_write_xlsx( string $filepath, array $sheets ): bool {
 
 	$n = count( $sheets );
 
-	// [Content_Types].xml — one Override per worksheet.
+	// [Content_Types].xml - one Override per worksheet.
 	$ct_overrides = '';
 	for ( $i = 1; $i <= $n; $i++ ) {
 		$ct_overrides .= '<Override PartName="/xl/worksheets/sheet' . $i . '.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>';

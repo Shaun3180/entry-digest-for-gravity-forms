@@ -43,10 +43,10 @@ function dsagfe_render_editor( string $action, string $notice ): void {
         <h1><?php echo esc_html( 'new' === $action ? __( 'Add Digest', 'entry-digest-for-gravity-forms' ) : __( 'Edit Digest', 'entry-digest-for-gravity-forms' ) ); ?></h1>
 		<p><a href="<?php echo esc_url( $base_url ); ?>">&larr; <?php esc_html_e( 'Back to all digests', 'entry-digest-for-gravity-forms' ); ?></a></p>
 
-        <?php echo $notice; // phpcs:ignore WordPress.Security.EscapeOutput -- trusted markup built by dsagfe_notice(). ?>
+        <?php echo wp_kses_post( $notice ); ?>
 
 		<?php if ( ! $gf ) : ?>
-			<div class="notice notice-error"><p><?php esc_html_e( 'Gravity Forms is not active — the form and field lists below are unavailable.', 'entry-digest-for-gravity-forms' ); ?></p></div>
+			<div class="notice notice-error"><p><?php esc_html_e( 'Gravity Forms is not active - the form and field lists below are unavailable.', 'entry-digest-for-gravity-forms' ); ?></p></div>
 		<?php endif; ?>
 
 		<form method="post" action="<?php echo esc_url( $base_url . '&action=' . $action . ( $d['id'] ? '&digest=' . rawurlencode( $d['id'] ) : '' ) ); ?>">
@@ -68,36 +68,43 @@ function dsagfe_render_editor( string $action, string $notice ): void {
 						<th scope="row"><?php esc_html_e( 'Form', 'entry-digest-for-gravity-forms' ); ?></th>
 						<td>
 							<?php if ( $gf && $all_forms ) : ?>
-								<?php $multiform = dsagfe_multiform_enabled(); ?>
+								<?php
+								/**
+								 * Filter whether the form selector accepts more than one form. Core is
+								 * single-form (a radio list); an add-on may return true to allow choosing
+								 * several. Core stores and processes whatever forms a digest holds.
+								 */
+								$multiple = (bool) apply_filters( 'dsagfe_form_selector_multiple', false );
+								?>
 								<fieldset>
 									<p class="description" style="margin-bottom:8px;">
-										<?php echo $multiform
-											? esc_html__( 'Select one or more forms to aggregate into this digest.', 'entry-digest-for-gravity-forms' )
-											: esc_html__( 'Choose the form this digest covers.', 'entry-digest-for-gravity-forms' ); ?>
+										<?php echo esc_html( $multiple
+											? __( 'Select one or more forms for this digest.', 'entry-digest-for-gravity-forms' )
+											: __( 'Choose the form this digest covers.', 'entry-digest-for-gravity-forms' ) ); ?>
 									</p>
 									<?php foreach ( $all_forms as $form ) : ?>
 										<?php $fid = (string) $form['id']; $checked = in_array( (int) $fid, $d['form_ids'], true ); ?>
 										<label style="display:block;margin-bottom:4px;">
-											<input type="<?php echo $multiform ? 'checkbox' : 'radio'; ?>" name="dsagfe_digest[form_ids][]" value="<?php echo esc_attr( $fid ); ?>" class="dsagfe-form-toggle" data-fid="<?php echo esc_attr( $fid ); ?>" <?php checked( $checked ); ?>>
+											<input type="<?php echo esc_attr( $multiple ? 'checkbox' : 'radio' ); ?>" name="dsagfe_digest[form_ids][]" value="<?php echo esc_attr( $fid ); ?>" class="dsagfe-form-toggle" data-fid="<?php echo esc_attr( $fid ); ?>" <?php checked( $checked ); ?>>
 											<?php echo esc_html( $form['title'] ); ?> <span style="color:#888;"><?php /* translators: %s: numeric form ID. */ printf( esc_html__( '(ID %s)', 'entry-digest-for-gravity-forms' ), esc_html( $fid ) ); ?></span>
 										</label>
 									<?php endforeach; ?>
 								</fieldset>
-								<?php if ( ! $multiform ) : ?>
-									<p class="description" style="margin-top:6px;">
-										<?php
-										printf(
-											/* translators: 1: opening anchor tag to the Pro page; 2: closing anchor tag. */
-											esc_html__( 'Tip: combining several forms into a single digest is available in %1$sEntry Digest Pro%2$s.', 'entry-digest-for-gravity-forms' ),
-											'<a href="' . esc_url( dsagfe_pro_url() ) . '" target="_blank" rel="noopener">',
-											'</a>'
-										); // phpcs:ignore WordPress.Security.EscapeOutput
-										?>
-									</p>
+								<?php if ( ! $multiple ) : ?>
+								<p class="description" style="margin-top:6px;">
+									<?php
+									printf(
+										/* translators: 1: opening anchor tag to the Pro page; 2: closing anchor tag. */
+										esc_html__( 'Tip: combining several forms into a single digest is available in %1$sEntry Digest Pro%2$s.', 'entry-digest-for-gravity-forms' ),
+										'<a href="' . esc_url( dsagfe_pro_url() ) . '" target="_blank" rel="noopener">',
+										'</a>'
+									); // phpcs:ignore WordPress.Security.EscapeOutput -- format string escaped via esc_html__(); anchor markup is hardcoded.
+									?>
+								</p>
 								<?php endif; ?>
 							<?php else : ?>
 								<input type="number" name="dsagfe_digest[form_ids][]" value="<?php echo esc_attr( $d['form_ids'][0] ?? 1 ); ?>" min="1" class="small-text">
-								<p class="description"><?php esc_html_e( "Enter a form ID (Gravity Forms inactive — can't list forms).", 'entry-digest-for-gravity-forms' ); ?></p>
+								<p class="description"><?php esc_html_e( "Enter a form ID (Gravity Forms inactive - can't list forms).", 'entry-digest-for-gravity-forms' ); ?></p>
 							<?php endif; ?>
 						</td>
 					</tr>
@@ -213,7 +220,7 @@ function dsagfe_render_editor( string $action, string $notice ): void {
 								<?php if ( $forms_age > 0 ) : ?>
 									<?php
 									/* translators: %d: number of days since the form was created. */
-									printf( esc_html( _n( 'This form was created about %d day ago — the default covers everything since then.', 'This form was created about %d days ago — the default covers everything since then.', $forms_age, 'entry-digest-for-gravity-forms' ) ), (int) $forms_age );
+									printf( esc_html( _n( 'This form was created about %d day ago - the default covers everything since then.', 'This form was created about %d days ago - the default covers everything since then.', $forms_age, 'entry-digest-for-gravity-forms' ) ), (int) $forms_age );
 									?>
 								<?php endif; ?>
 							</p>
@@ -322,7 +329,7 @@ function dsagfe_render_editor( string $action, string $notice ): void {
 								<input type="hidden" name="digest_id" value="<?php echo esc_attr( $d['id'] ); ?>">
 								<input type="email" id="dsagfe_test_email" name="test_email" value="<?php echo esc_attr( wp_get_current_user()->user_email ); ?>" class="regular-text" placeholder="you@example.com">
 								<button type="submit" name="dsagfe_send_test" class="button"><?php esc_html_e( 'Send test', 'entry-digest-for-gravity-forms' ); ?></button>
-								<p class="description"><?php esc_html_e( 'Emails this digest — using its current saved settings — to just this address. Your real recipient list is never contacted, and the schedule is unchanged. Save any edits above first. A test always sends, even if there are no new entries.', 'entry-digest-for-gravity-forms' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Emails this digest - using its current saved settings - to just this address. Your real recipient list is never contacted, and the schedule is unchanged. Save any edits above first. A test always sends, even if there are no new entries.', 'entry-digest-for-gravity-forms' ); ?></p>
 							</form>
 						</td>
 					</tr>
