@@ -21,32 +21,28 @@ add_action( 'wp_ajax_dsagfe_dismiss_pro_panel', 'dsagfe_ajax_dismiss_pro_panel' 
 function dsagfe_pro_features(): array {
 	return [
 		[
-			'title' => __( 'Unlimited Forms per Digest', 'entry-digest-for-gravity-forms' ),
-			'body'  => __( 'Run as many digests as you need, all while rolling several forms into one email. Aggregate your various forms into a single morning summary instead of juggling separate notifications.', 'entry-digest-for-gravity-forms' ),
-		],
-		[
-			'title' => __( 'Per-Recipient & Role Routing', 'entry-digest-for-gravity-forms' ),
-			'body'  => __( 'Send the right digest to the right people. Route the admissions form to your admissions lead and the support form to your help desk - by individual recipient or by WordPress role.', 'entry-digest-for-gravity-forms' ),
+			'title' => __( 'CSV & Excel Attachments', 'entry-digest-for-gravity-forms' ),
+			'body'  => __( 'Attach the full period’s entries as a CSV or native Excel (.xlsx) file. Recipients get the scannable summary in the email and the complete dataset ready to sort, filter, or import.', 'entry-digest-for-gravity-forms' ),
 		],
 		[
 			'title' => __( 'Conditional Filtering', 'entry-digest-for-gravity-forms' ),
 			'body'  => __( 'Include only the entries that matter. Set rules like “Status is Complete” or “Budget greater than 1000” - match all or any - and your digest filters itself automatically on every run.', 'entry-digest-for-gravity-forms' ),
 		],
 		[
-			'title' => __( 'CSV & Excel Attachments', 'entry-digest-for-gravity-forms' ),
-			'body'  => __( 'Attach the full period’s entries as a CSV or native Excel (.xlsx) file. Recipients get the scannable summary in the email and the complete dataset ready to sort, filter, or import.', 'entry-digest-for-gravity-forms' ),
+			'title' => __( 'Per-Recipient & Role Routing', 'entry-digest-for-gravity-forms' ),
+			'body'  => __( 'Send the right digest to the right people. Route your admissions form to your admissions lead and your support form to your help desk - by individual recipient or by WordPress role.', 'entry-digest-for-gravity-forms' ),
 		],
 		[
 			'title' => __( 'Custom Email Branding', 'entry-digest-for-gravity-forms' ),
 			'body'  => __( 'Upload your logo, set an accent color, and replace the default footer credit with your own text. Every digest your site sends reflects your brand instead of the plugin’s.', 'entry-digest-for-gravity-forms' ),
 		],
 		[
-			'title' => __( 'Priority Support', 'entry-digest-for-gravity-forms' ),
-			'body'  => __( 'Get fast, direct help from the developer. Pro licenses come with priority email support so setup questions and edge cases don’t sit in a queue.', 'entry-digest-for-gravity-forms' ),
-		],
-		[
 			'title' => __( 'Extended Send History', 'entry-digest-for-gravity-forms' ),
 			'body'  => __( 'Configurable send-log retention beyond the default of five recent sends.', 'entry-digest-for-gravity-forms' ),
+		],
+		[
+			'title' => __( 'Priority Support', 'entry-digest-for-gravity-forms' ),
+			'body'  => __( 'Get fast, direct help from the developer. Pro licenses come with priority email support so setup questions and edge cases don’t sit in a queue.', 'entry-digest-for-gravity-forms' ),
 		],
 	];
 }
