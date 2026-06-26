@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.6.2
+Stable tag: 2.6.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,7 @@ Gravity Forms' built-in notifications fire on every single submission. For a bus
 Everything here is free and fully functional - no feature is locked, time-limited, or gated behind a key:
 
 * Unlimited digests - create as many as you need.
+* One or more forms per digest - cover a single form or roll several forms into one combined email.
 * Daily or weekly delivery on a chosen day/time, and/or a one-time send on a future date you pick.
 * Configurable lookback window for one-time sends.
 * Configurable quiet-period behavior: send a "no new entries" note or stay silent, per digest.
@@ -49,18 +50,18 @@ Everything here is free and fully functional - no feature is locked, time-limite
 * Clean, branded HTML email that renders well across mail clients, with a plain-text alternative included automatically.
 * Plain-text fallback - every digest is sent as multipart (HTML plus a plain-text version), which improves deliverability and works in text-only mail clients and with screen readers.
 
-Each digest covers one form. (Need to combine several forms into a single email? See the optional Pro add-on below.)
+A digest can cover one form or several - combine entries from multiple forms into a single email at no cost.
 
 = Optional Pro add-on =
 
-A separate, optional Pro add-on - distributed from [addasitebuilders.com](https://addasitebuilders.com/plugins), not from WordPress.org - adds aggregation, routing, and exports for teams and agencies:
+A separate, optional Pro add-on - distributed from [addasitebuilders.com](https://addasitebuilders.com/plugins), not from WordPress.org - adds exports, filtering, routing, and branding for teams and agencies:
 
-* Multi-form aggregation - combine entries from several forms into a single digest email.
-* Conditional filtering - include only entries that match your rules.
-* CSV and Excel (.xlsx) attachments of the full period's entries.
-* Role-based recipients (deliver to every user in a chosen WordPress role).
+* CSV and Excel (.xlsx) attachments of the full period's entries - the email shows the summary, the attachment carries the complete dataset.
+* Conditional filtering - include only entries that match your rules (for example "Status is Complete" or "Budget greater than 1000").
+* Per-recipient and role-based routing - send each form's entries to the right person or to every user in a chosen WordPress role.
 * Custom email branding - your logo, accent color, and a white-label footer.
 * Extended send-log history - retain a configurable number of past sends instead of just the most recent few.
+* Priority email support.
 
 This plugin is complete and fully functional without it. The Pro add-on simply hooks in if installed; nothing here is disabled while it is absent.
 
@@ -114,7 +115,7 @@ If the scheduler itself isn't firing - common on very low-traffic sites, or when
 
 = How many digests can I create? =
 
-As many as you like - there is no limit on the number of digests. Each digest covers one form. Combining several forms into a single digest (multi-form aggregation), role-based recipients, conditional filtering, and CSV/Excel attachments are available through the optional Pro add-on sold separately at addasitebuilders.com.
+As many as you like - there is no limit on the number of digests, and each digest can cover one form or several combined into a single email. Role-based recipient routing, conditional filtering, CSV/Excel attachments, and custom branding are available through the optional Pro add-on sold separately at addasitebuilders.com.
 
 == Screenshots ==
 
@@ -125,6 +126,11 @@ As many as you like - there is no limit on the number of digests. Each digest co
 5. Per-form field selection for the entry table.
 
 == Changelog ==
+
+= 2.6.3 =
+* Multi-form digests are now a free, core feature: a single digest can combine entries from several forms into one email, selectable directly in the editor. Nothing is locked or gated.
+* The optional Pro add-on now focuses on CSV/Excel attachments, conditional filtering, per-recipient and role-based routing, custom branding, and extended send-log history.
+* No data changes - existing digests keep working exactly as before.
 
 = 2.6.2 =
 * Compliance: all admin JavaScript is now loaded through the standard wp_enqueue_script()/wp_localize_script() APIs - the remaining inline `<script>` blocks (overdue-cron notice and Pro panel) and inline `onsubmit` confirmations were moved into properly enqueued files, loaded only on the screens that use them and with the WordPress 6.3 `defer` strategy.

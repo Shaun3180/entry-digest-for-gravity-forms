@@ -37,7 +37,7 @@ function dsagfe_handle_save(): array {
 	) );
 	$d['to_email'] = implode( ', ', $emails );
 
-	// Forms - one per digest in core; the Pro add-on enables aggregating several.
+	// Forms - a digest can cover one or more forms (a free, core feature).
 	$form_ids = array_values( array_unique( array_map( 'intval', (array) ( $raw['form_ids'] ?? [] ) ) ) );
 	$form_ids = array_values( array_filter( $form_ids, static fn( $f ) => $f > 0 ) );
 	if ( empty( $form_ids ) ) {

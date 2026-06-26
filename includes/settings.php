@@ -41,7 +41,7 @@ function dsagfe_digest_defaults(): array {
 	return [
 		'id'            => '',
 		'label'         => __( 'Entry digest', 'entry-digest-for-gravity-forms' ),
-		'form_ids'      => [ 1 ],          // One form per digest in core; Pro add-on allows several.
+		'form_ids'      => [ 1 ],          // A digest can include one or more forms (free, core feature).
 		'to_email'      => '',
 		'roles'         => [],             // Add-on: WP roles whose members also receive the digest.
 		'email_subject' => __( 'Your Gravity Forms entry digest', 'entry-digest-for-gravity-forms' ),

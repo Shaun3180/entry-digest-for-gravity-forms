@@ -70,11 +70,12 @@ function dsagfe_render_editor( string $action, string $notice ): void {
 							<?php if ( $gf && $all_forms ) : ?>
 								<?php
 								/**
-								 * Filter whether the form selector accepts more than one form. Core is
-								 * single-form (a radio list); an add-on may return true to allow choosing
-								 * several. Core stores and processes whatever forms a digest holds.
+								 * Filter whether the form selector accepts more than one form.
+								 * Defaults to true: choosing several forms for one digest is a free,
+								 * core feature. Kept as an extension point so a site or add-on can
+								 * force single-select if it ever wants to.
 								 */
-								$multiple = (bool) apply_filters( 'dsagfe_form_selector_multiple', false );
+								$multiple = (bool) apply_filters( 'dsagfe_form_selector_multiple', true );
 								?>
 								<fieldset>
 									<p class="description" style="margin-bottom:8px;">
@@ -90,18 +91,6 @@ function dsagfe_render_editor( string $action, string $notice ): void {
 										</label>
 									<?php endforeach; ?>
 								</fieldset>
-								<?php if ( ! $multiple ) : ?>
-								<p class="description" style="margin-top:6px;">
-									<?php
-									printf(
-										/* translators: 1: opening anchor tag to the Pro page; 2: closing anchor tag. */
-										esc_html__( 'Tip: combining several forms into a single digest is available in %1$sEntry Digest Pro%2$s.', 'entry-digest-for-gravity-forms' ),
-										'<a href="' . esc_url( dsagfe_pro_url() ) . '" target="_blank" rel="noopener">',
-										'</a>'
-									); // phpcs:ignore WordPress.Security.EscapeOutput -- format string escaped via esc_html__(); anchor markup is hardcoded.
-									?>
-								</p>
-								<?php endif; ?>
 							<?php else : ?>
 								<input type="number" name="dsagfe_digest[form_ids][]" value="<?php echo esc_attr( $d['form_ids'][0] ?? 1 ); ?>" min="1" class="small-text">
 								<p class="description"><?php esc_html_e( "Enter a form ID (Gravity Forms inactive - can't list forms).", 'entry-digest-for-gravity-forms' ); ?></p>
