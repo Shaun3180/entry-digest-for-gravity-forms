@@ -119,7 +119,7 @@ function dsagfe_render_list( string $notice ): void {
 									<input type="hidden" name="digest_id" value="<?php echo esc_attr( $id ); ?>">
 									<button type="submit" name="dsagfe_toggle_pause" class="button button-small"><?php echo esc_html( $is_paused ? __( 'Resume', 'entry-digest-for-gravity-forms' ) : __( 'Pause', 'entry-digest-for-gravity-forms' ) ); ?></button>
 								</form>
-								<form method="post" style="display:inline;" onsubmit="return confirm('<?php echo esc_js( __( 'Delete this digest?', 'entry-digest-for-gravity-forms' ) ); ?>');">
+								<form method="post" style="display:inline;" class="dsagfe-confirm" data-confirm="<?php echo esc_attr__( 'Delete this digest?', 'entry-digest-for-gravity-forms' ); ?>">
 									<?php wp_nonce_field( 'dsagfe_delete_digest' ); ?>
 									<input type="hidden" name="digest_id" value="<?php echo esc_attr( $id ); ?>">
 									<button type="submit" name="dsagfe_delete_digest" class="button button-small button-link-delete"><?php esc_html_e( 'Delete', 'entry-digest-for-gravity-forms' ); ?></button>
@@ -179,7 +179,7 @@ function dsagfe_render_list( string $notice ): void {
 				</tbody>
 			</table>
 			<div style="margin-top:8px;">
-				<form method="post" style="display:inline;" onsubmit="return confirm('<?php echo esc_js( __( 'Clear the send log?', 'entry-digest-for-gravity-forms' ) ); ?>');">
+				<form method="post" style="display:inline;" class="dsagfe-confirm" data-confirm="<?php echo esc_attr__( 'Clear the send log?', 'entry-digest-for-gravity-forms' ); ?>">
 					<?php wp_nonce_field( 'dsagfe_clear_log' ); ?>
 					<button type="submit" name="dsagfe_clear_log" class="button button-small"><?php esc_html_e( 'Clear log', 'entry-digest-for-gravity-forms' ); ?></button>
 				</form>
