@@ -10,10 +10,29 @@ defined( 'ABSPATH' ) || exit;
  * disable, or unlock anything in this plugin. It is shown only on free installs
  * (hidden automatically when the Pro add-on is active) and can be dismissed for a
  * year per user.
+ *
+ * The panel's styling lives in admin/css/pro-panel.css and its dismiss behavior
+ * in admin/js/list.js - both enqueued from admin/enqueue.php. No CSS or JS is
+ * emitted inline here.
  */
 
 add_action( 'dsagfe_after_log_table', 'dsagfe_render_pro_panel' );
 add_action( 'wp_ajax_dsagfe_dismiss_pro_panel', 'dsagfe_ajax_dismiss_pro_panel' );
+
+/**
+ * Whether the optional Pro add-on is installed and active. The add-on defines
+ * EDFGFP_VERSION when it boots, so a constant check is the whole contract.
+ */
+function dsagfe_pro_active(): bool {
+	return defined( 'EDFGFP_VERSION' );
+}
+
+/**
+ * Small "PRO" badge markup used to label optional add-on features in the panel.
+ */
+function dsagfe_pro_badge(): string {
+	return '<span class="dsagfe-pro-badge">' . esc_html__( 'PRO', 'entry-digest-for-gravity-forms' ) . '</span>';
+}
 
 /**
  * The Pro feature list shown in the panel.
@@ -38,7 +57,7 @@ function dsagfe_pro_features(): array {
 		],
 		[
 			'title' => __( 'Extended Send History', 'entry-digest-for-gravity-forms' ),
-			'body'  => __( 'Configurable send-log retention beyond the default of five recent sends.', 'entry-digest-for-gravity-forms' ),
+			'body'  => __( 'Configurable send-log retention beyond the default of ten recent sends.', 'entry-digest-for-gravity-forms' ),
 		],
 		[
 			'title' => __( 'Priority Support', 'entry-digest-for-gravity-forms' ),
@@ -56,47 +75,60 @@ function dsagfe_pro_panel_dismissed(): bool {
 }
 
 /**
+ * Whether the upsell panel should render for the current request/user. Used both
+ * here and by admin/enqueue.php to decide whether to load the panel's assets.
+ */
+function dsagfe_pro_panel_should_show(): bool {
+	return ! dsagfe_pro_active()
+		&& current_user_can( 'manage_options' )
+		&& ! dsagfe_pro_panel_dismissed();
+}
+
+/**
  * Render the collapsible Pro panel (free installs only).
  */
 function dsagfe_render_pro_panel(): void {
-	// Hidden when the Pro add-on is active, for users who can't act on it, or once dismissed.
-	if ( defined( 'EDFGFP_VERSION' ) || ! current_user_can( 'manage_options' ) || dsagfe_pro_panel_dismissed() ) {
+	if ( ! dsagfe_pro_panel_should_show() ) {
 		return;
 	}
 
 	$pro_url = dsagfe_pro_url();
 	?>
-	<details id="dsagfe-pro-panel" open style="max-width:1000px;margin:30px 0 10px;border:1px solid #dcdcde;border-radius:8px;background:#fbfaff;">
-		<summary style="cursor:pointer;padding:14px 18px;font-size:15px;font-weight:600;color:#1d2327;">
+	<details id="dsagfe-pro-panel" class="dsagfe-pro-panel" open>
+		<summary class="dsagfe-pro-panel__summary">
 			<?php esc_html_e( 'Entry Digest Pro - see what the optional add-on gives you', 'entry-digest-for-gravity-forms' ); ?>
 		</summary>
-		<div style="padding:4px 18px 18px;">
-			<p style="max-width:700px;font-size:13px;color:#50575e;margin:0 0 16px;">
+		<div class="dsagfe-pro-panel__body">
+			<p class="dsagfe-pro-panel__intro">
 				<?php esc_html_e( 'Everything on this screen is free and unrestricted. The optional Pro add-on is a separate plugin that adds the extras below - nothing here is locked or disabled.', 'entry-digest-for-gravity-forms' ); ?>
 			</p>
-			<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;">
+			<div class="dsagfe-pro-grid">
 				<?php foreach ( dsagfe_pro_features() as $feature ) : ?>
-					<div style="background:#fff;border:1px solid #e2e2e7;border-radius:6px;padding:14px 16px;">
-						<h3 style="margin:0 0 6px;font-size:14px;line-height:1.4;color:#1d2327;">
+					<div class="dsagfe-pro-card">
+						<h3 class="dsagfe-pro-card__title">
 							<?php echo esc_html( $feature['title'] ); ?>
-							<span style="display:inline-block;margin-left:5px;padding:1px 6px;border-radius:9px;background:#7c3aed;color:#fff;font-size:10px;font-weight:700;letter-spacing:.04em;vertical-align:middle;">PRO</span>
+							<?php echo wp_kses_post( dsagfe_pro_badge() ); ?>
 						</h3>
-						<p style="margin:0;color:#646970;font-size:12.5px;line-height:1.55;"><?php echo esc_html( $feature['body'] ); ?></p>
+						<p class="dsagfe-pro-card__body"><?php echo esc_html( $feature['body'] ); ?></p>
 					</div>
 				<?php endforeach; ?>
 			</div>
-			<p style="margin:18px 0 4px;font-size:13.5px;font-weight:600;color:#1d2327;">
+			<p class="dsagfe-pro-panel__trial">
 				<?php esc_html_e( 'Try Pro free for 14 days - no credit card required.', 'entry-digest-for-gravity-forms' ); ?>
 			</p>
-			<p style="margin:6px 0 6px;">
+			<p class="dsagfe-pro-panel__actions">
 				<a href="<?php echo esc_url( $pro_url ); ?>" class="button button-primary" target="_blank" rel="noopener">
 					<?php esc_html_e( 'Get Entry Digest Pro', 'entry-digest-for-gravity-forms' ); ?>
 				</a>
-				<a href="#" id="dsagfe-pro-dismiss" style="margin-left:12px;color:#646970;font-size:12px;text-decoration:underline;">
+				<a href="#"
+					id="dsagfe-pro-dismiss"
+					class="dsagfe-pro-dismiss"
+					data-nonce="<?php echo esc_attr( wp_create_nonce( 'dsagfe_dismiss_pro_panel' ) ); ?>"
+					data-ajax-url="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
 					<?php esc_html_e( 'Hide this for a year', 'entry-digest-for-gravity-forms' ); ?>
 				</a>
 			</p>
-			<p class="description" style="font-size:11.5px;color:#787c82;margin:4px 0 0;">
+			<p class="description dsagfe-pro-panel__note">
 				<?php
 				/* translators: %s: the external website host the button opens, e.g. addasitebuilders.com. */
 				printf( esc_html__( 'Opens %s in a new tab.', 'entry-digest-for-gravity-forms' ), esc_html( (string) wp_parse_url( $pro_url, PHP_URL_HOST ) ) );
@@ -105,10 +137,6 @@ function dsagfe_render_pro_panel(): void {
 		</div>
 	</details>
 	<?php
-	// The panel's behavior (remembering the collapsed state and the "Hide this for
-	// a year" dismissal) is handled by admin/js/list.js, enqueued on this screen
-	// from admin/enqueue.php. The dismissal nonce and AJAX URL are passed to that
-	// script via wp_localize_script() as window.DSAGFE_PRO.
 }
 
 /**
