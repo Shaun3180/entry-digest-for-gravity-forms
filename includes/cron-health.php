@@ -123,7 +123,7 @@ function dsagfe_maybe_show_overdue_notice(): void {
 	$page   = isset( $_GET['page'] )   ? sanitize_key( wp_unslash( $_GET['page'] ) )   : '';
 	$action = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : '';
 	// phpcs:enable
-	$is_list_page = ( 'entry-digest' === $page ) && ( '' === $action || 'list' === $action );
+	$is_list_page = ( 'dsagfe-entry-digest' === $page ) && ( '' === $action || 'list' === $action );
 
 	if ( ! $is_dashboard && ! $is_list_page ) {
 		return;
@@ -146,7 +146,6 @@ function dsagfe_maybe_show_overdue_notice(): void {
 	}
 
 	$ago      = human_time_diff( $health['next'], time() );
-	$nonce    = wp_create_nonce( 'dsagfe_dismiss_overdue_notice' );
 	$earliest = (int) $health['next'];
 
 	$fix = $health['disabled']
@@ -155,11 +154,15 @@ function dsagfe_maybe_show_overdue_notice(): void {
 
 	$learn_url = 'https://developer.wordpress.org/plugins/cron/';
 	$list_url  = class_exists( 'GFForms' )
-		? admin_url( 'admin.php?page=entry-digest' )
-		: admin_url( 'tools.php?page=entry-digest' );
+		? admin_url( 'admin.php?page=dsagfe-entry-digest' )
+		: admin_url( 'tools.php?page=dsagfe-entry-digest' );
 
+	// The dismissal AJAX call is wired up by admin/js/notices.js, which is enqueued
+	// on this screen from admin/enqueue.php. The overdue event timestamp is passed
+	// to that script via the data-earliest attribute below; the nonce and AJAX URL
+	// are provided through wp_localize_script() as window.DSAGFE_NOTICE.
 	?>
-	<div class="notice notice-warning is-dismissible" id="dsagfe-overdue-notice">
+	<div class="notice notice-warning is-dismissible" id="dsagfe-overdue-notice" data-earliest="<?php echo esc_attr( (string) $earliest ); ?>">
 		<p><strong><?php esc_html_e( 'Entry Digest: scheduled sends may not be running', 'entry-digest-for-gravity-forms' ); ?></strong></p>
 		<p>
 			<?php
@@ -178,19 +181,6 @@ function dsagfe_maybe_show_overdue_notice(): void {
 		</p>
 		<p><?php echo $fix; // phpcs:ignore WordPress.Security.EscapeOutput -- already escaped above. ?> <a href="<?php echo esc_url( $learn_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Learn about WP-Cron', 'entry-digest-for-gravity-forms' ); ?></a></p>
 	</div>
-	<script>
-	( function () {
-		document.addEventListener( 'click', function ( e ) {
-			if ( ! e.target || ! e.target.classList.contains( 'notice-dismiss' ) ) { return; }
-			if ( ! e.target.closest( '#dsagfe-overdue-notice' ) ) { return; }
-			var fd = new FormData();
-			fd.append( 'action',   'dsagfe_dismiss_overdue_notice' );
-			fd.append( 'nonce',    '<?php echo esc_js( $nonce ); ?>' );
-			fd.append( 'earliest', '<?php echo esc_js( (string) $earliest ); ?>' );
-			fetch( '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', { method: 'POST', body: fd, credentials: 'same-origin' } );
-		} );
-	}() );
-	</script>
 	<?php
 }
 

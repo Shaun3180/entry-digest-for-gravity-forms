@@ -23,6 +23,11 @@ function dsagfe_uninstall_cleanup() {
 	delete_option( DSAGFE_OPTION_KEY );
 	delete_option( DSAGFE_LOG_OPTION_KEY );
 
+	// Remove the per-user meta the plugin stores (Pro-panel and overdue-notice
+	// dismissals) for every user on this site, so nothing is left behind.
+	delete_metadata( 'user', 0, 'dsagfe_pro_panel_dismissed', '', true );
+	delete_metadata( 'user', 0, 'dsagfe_cron_notice_dismissed', '', true );
+
 	// Clear every scheduled instance of our cron hook, regardless of args.
 	$crons = function_exists( '_get_cron_array' ) ? _get_cron_array() : array();
 	if ( ! empty( $crons ) ) {

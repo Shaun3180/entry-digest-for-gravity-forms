@@ -13,7 +13,7 @@ add_filter( 'gform_addon_navigation', 'dsagfe_register_gf_menu' );
 function dsagfe_register_gf_menu( $menu_items ) {
 	$menu_items   = is_array( $menu_items ) ? $menu_items : [];
 	$menu_items[] = [
-		'name'       => 'entry-digest',
+		'name'       => 'dsagfe-entry-digest',
 		'label'      => __( 'Entry Digest', 'entry-digest-for-gravity-forms' ),
 		'callback'   => 'dsagfe_admin_router',
 		'permission' => apply_filters( 'dsagfe_menu_capability', 'manage_options' ),
@@ -31,7 +31,7 @@ add_action( 'admin_menu', function () {
 			__( 'Entry Digest', 'entry-digest-for-gravity-forms' ),
 			__( 'Entry Digest', 'entry-digest-for-gravity-forms' ),
 			apply_filters( 'dsagfe_menu_capability', 'manage_options' ),
-			'entry-digest',
+			'dsagfe-entry-digest',
 			'dsagfe_admin_router'
 		);
 	}
@@ -43,7 +43,7 @@ add_action( 'admin_menu', function () {
  */
 function dsagfe_page_url(): string {
 	$parent = class_exists( 'GFForms' ) ? 'admin.php' : 'tools.php';
-	return admin_url( $parent . '?page=entry-digest' );
+	return admin_url( $parent . '?page=dsagfe-entry-digest' );
 }
 
 /**

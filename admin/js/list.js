@@ -1,0 +1,61 @@
+/**
+ * Entry Digest for Gravity Forms - digest list screen behavior.
+ *
+ * Handles two things on the digest list screen:
+ *   1. A confirmation prompt before destructive form submissions (delete a
+ *      digest, clear the send log). Forms opt in with class="dsagfe-confirm" and
+ *      a data-confirm message.
+ *   2. The optional "Entry Digest Pro" upsell panel: remembering its
+ *      collapsed/expanded state (per browser) and the "Hide this for a year"
+ *      dismissal (persisted server-side, per user).
+ *
+ * Data is provided by admin/enqueue.php via wp_localize_script():
+ *   - window.DSAGFE_PRO : { url, nonce }
+ */
+( function () {
+	'use strict';
+
+	// 1. Confirm before submitting destructive forms.
+	document.querySelectorAll( 'form.dsagfe-confirm' ).forEach( function ( form ) {
+		form.addEventListener( 'submit', function ( e ) {
+			var msg = form.getAttribute( 'data-confirm' );
+			if ( msg && ! window.confirm( msg ) ) {
+				e.preventDefault();
+			}
+		} );
+	} );
+
+	// 2. Pro upsell panel.
+	( function () {
+		var pro   = window.DSAGFE_PRO || {};
+		var panel = document.getElementById( 'dsagfe-pro-panel' );
+		if ( ! panel ) {
+			return;
+		}
+
+		// Remember the collapsed/expanded state across page loads (per browser).
+		try {
+			if ( '1' === window.localStorage.getItem( 'dsagfeProPanelCollapsed' ) ) {
+				panel.open = false;
+			}
+			panel.addEventListener( 'toggle', function () {
+				try {
+					window.localStorage.setItem( 'dsagfeProPanelCollapsed', panel.open ? '0' : '1' );
+				} catch ( err ) {}
+			} );
+		} catch ( err ) {}
+
+		// "Hide this for a year" - dismiss server-side, per user.
+		var link = document.getElementById( 'dsagfe-pro-dismiss' );
+		if ( link ) {
+			link.addEventListener( 'click', function ( e ) {
+				e.preventDefault();
+				panel.style.display = 'none';
+				var fd = new FormData();
+				fd.append( 'action', 'dsagfe_dismiss_pro_panel' );
+				fd.append( 'nonce', pro.nonce || '' );
+				fetch( pro.url, { method: 'POST', body: fd, credentials: 'same-origin' } );
+			} );
+		}
+	}() );
+}() );

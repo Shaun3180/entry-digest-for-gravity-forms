@@ -69,7 +69,6 @@ function dsagfe_render_pro_panel(): void {
 	}
 
 	$pro_url = dsagfe_pro_url();
-	$nonce   = wp_create_nonce( 'dsagfe_dismiss_pro_panel' );
 	?>
 	<details id="dsagfe-pro-panel" open style="max-width:1000px;margin:30px 0 10px;border:1px solid #dcdcde;border-radius:8px;background:#fbfaff;">
 		<summary style="cursor:pointer;padding:14px 18px;font-size:15px;font-weight:600;color:#1d2327;">
@@ -109,36 +108,11 @@ function dsagfe_render_pro_panel(): void {
 			</p>
 		</div>
 	</details>
-	<script>
-	( function () {
-		var panel = document.getElementById( 'dsagfe-pro-panel' );
-		if ( ! panel ) { return; }
-
-		// Remember the collapsed/expanded state across page loads (per browser).
-		try {
-			if ( '1' === window.localStorage.getItem( 'dsagfeProPanelCollapsed' ) ) {
-				panel.open = false;
-			}
-			panel.addEventListener( 'toggle', function () {
-				try { window.localStorage.setItem( 'dsagfeProPanelCollapsed', panel.open ? '0' : '1' ); } catch ( err ) {}
-			} );
-		} catch ( err ) {}
-
-		// "Hide this for a year" - dismiss server-side, per user.
-		var link = document.getElementById( 'dsagfe-pro-dismiss' );
-		if ( link ) {
-			link.addEventListener( 'click', function ( e ) {
-				e.preventDefault();
-				panel.style.display = 'none';
-				var fd = new FormData();
-				fd.append( 'action', 'dsagfe_dismiss_pro_panel' );
-				fd.append( 'nonce', '<?php echo esc_js( $nonce ); ?>' );
-				fetch( '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', { method: 'POST', body: fd, credentials: 'same-origin' } );
-			} );
-		}
-	}() );
-	</script>
 	<?php
+	// The panel's behavior (remembering the collapsed state and the "Hide this for
+	// a year" dismissal) is handled by admin/js/list.js, enqueued on this screen
+	// from admin/enqueue.php. The dismissal nonce and AJAX URL are passed to that
+	// script via wp_localize_script() as window.DSAGFE_PRO.
 }
 
 /**

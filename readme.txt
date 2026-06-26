@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.6.1
+Stable tag: 2.6.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -125,6 +125,11 @@ As many as you like - there is no limit on the number of digests. Each digest co
 5. Per-form field selection for the entry table.
 
 == Changelog ==
+
+= 2.6.2 =
+* Compliance: all admin JavaScript is now loaded through the standard wp_enqueue_script()/wp_localize_script() APIs - the remaining inline `<script>` blocks (overdue-cron notice and Pro panel) and inline `onsubmit` confirmations were moved into properly enqueued files, loaded only on the screens that use them and with the WordPress 6.3 `defer` strategy.
+* Compliance: renamed the admin page slug to a plugin-prefixed `dsagfe-entry-digest` so it cannot collide with another plugin's menu.
+* Uninstall now also removes the plugin's per-user dismissal meta, leaving nothing behind.
 
 = 2.6.1 =
 * The form selector's single/multiple mode is now filterable, and core processes whatever forms a digest holds. No change to the default single-form experience.
