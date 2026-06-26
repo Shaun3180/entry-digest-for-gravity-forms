@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.6.3
+Stable tag: 2.6.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,7 +44,7 @@ Everything here is free and fully functional - no feature is locked, time-limite
 * Summary block with entry count and date range.
 * "Send Now" button to preview a digest on demand.
 * Test send to any address - preview a digest to yourself without emailing the real recipients.
-* Send log of the most recent runs (the last 5) with entry counts and delivery status.
+* Send log of the most recent runs (the last 10) with entry counts and delivery status.
 * Pause/Resume toggle per digest - suspend scheduled sends without deleting the digest.
 * Scheduler health check - a clear admin notice if a scheduled digest is overdue, so you find out when WP-Cron isn't firing instead of wondering why an email never arrived.
 * Clean, branded HTML email that renders well across mail clients, with a plain-text alternative included automatically.
@@ -127,6 +127,10 @@ As many as you like - there is no limit on the number of digests, and each diges
 
 == Changelog ==
 
+= 2.6.4 =
+* Code quality: the optional Pro upsell panel now loads its styles from an enqueued stylesheet (admin/css/pro-panel.css) using CSS classes instead of inline style attributes, and its dismiss action reads the nonce/AJAX URL from data attributes. No change to what the panel shows or does.
+* Fixed on-screen text: the free send log keeps the most recent 10 sends by default (filterable via `dsagfe_log_max`). The Features list and Pro upsell wording now match the actual default of ten.
+
 = 2.6.3 =
 * Multi-form digests are now a free, core feature: a single digest can combine entries from several forms into one email, selectable directly in the editor. Nothing is locked or gated.
 * The optional Pro add-on now focuses on CSV/Excel attachments, conditional filtering, per-recipient and role-based routing, custom branding, and extended send-log history.
@@ -194,7 +198,7 @@ As many as you like - there is no limit on the number of digests, and each diges
 The scheduler health warning now also appears on the main WordPress dashboard as a dismissible notice. No settings changes required. Safe to update.
 
 = 2.4.0 =
-Digests now include a plain-text version for better deliverability. The send log keeps the most recent 5 entries by default. Existing digests are unaffected. Safe to update.
+Digests now include a plain-text version for better deliverability. The send log keeps the most recent 10 entries by default. Existing digests are unaffected. Safe to update.
 
 = 2.3.0 =
 Adds an admin warning when a scheduled digest is overdue, so you catch WP-Cron problems early. Existing digests are unaffected. Safe to update.

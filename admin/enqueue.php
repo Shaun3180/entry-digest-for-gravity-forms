@@ -74,10 +74,17 @@ function dsagfe_enqueue_admin_assets(): void {
 			$footer_defer
 		);
 
-		wp_localize_script( 'dsagfe-list', 'DSAGFE_PRO', [
-			'url'   => admin_url( 'admin-ajax.php' ),
-			'nonce' => wp_create_nonce( 'dsagfe_dismiss_pro_panel' ),
-		] );
+		// The Pro upsell panel's stylesheet - loaded only when the panel will
+		// actually render (free install, capable user, not dismissed). The dismiss
+		// nonce and AJAX URL are passed through data attributes on the link itself.
+		if ( function_exists( 'dsagfe_pro_panel_should_show' ) && dsagfe_pro_panel_should_show() ) {
+			wp_enqueue_style(
+				'dsagfe-pro-panel',
+				DSAGFE_URL . 'admin/css/pro-panel.css',
+				[],
+				DSAGFE_VERSION
+			);
+		}
 	}
 
 	// ── Overdue-cron notice dismissal (dashboard + our list screen) ──

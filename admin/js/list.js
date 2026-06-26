@@ -9,8 +9,8 @@
  *      collapsed/expanded state (per browser) and the "Hide this for a year"
  *      dismissal (persisted server-side, per user).
  *
- * Data is provided by admin/enqueue.php via wp_localize_script():
- *   - window.DSAGFE_PRO : { url, nonce }
+ * The Pro panel's dismiss nonce and AJAX URL are read from data-nonce /
+ * data-ajax-url attributes on the dismiss link itself (no localized globals).
  */
 ( function () {
 	'use strict';
@@ -27,7 +27,6 @@
 
 	// 2. Pro upsell panel.
 	( function () {
-		var pro   = window.DSAGFE_PRO || {};
 		var panel = document.getElementById( 'dsagfe-pro-panel' );
 		if ( ! panel ) {
 			return;
@@ -53,8 +52,8 @@
 				panel.style.display = 'none';
 				var fd = new FormData();
 				fd.append( 'action', 'dsagfe_dismiss_pro_panel' );
-				fd.append( 'nonce', pro.nonce || '' );
-				fetch( pro.url, { method: 'POST', body: fd, credentials: 'same-origin' } );
+				fd.append( 'nonce', link.getAttribute( 'data-nonce' ) || '' );
+				fetch( link.getAttribute( 'data-ajax-url' ), { method: 'POST', body: fd, credentials: 'same-origin' } );
 			} );
 		}
 	}() );
