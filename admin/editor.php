@@ -131,6 +131,14 @@ function edfgf_render_editor( string $action, string $notice ): void {
 						<td><input type="text" id="edfgf_subject" name="edfgf_digest[email_subject]" value="<?php echo esc_attr( $d['email_subject'] ); ?>" class="regular-text"></td>
 					</tr>
 
+					<tr>
+						<th scope="row"><label for="edfgf_reply_to"><?php esc_html_e( 'Reply-to address', 'entry-digest-for-gravity-forms' ); ?></label></th>
+						<td>
+							<input type="email" id="edfgf_reply_to" name="edfgf_digest[reply_to]" value="<?php echo esc_attr( $d['reply_to'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'e.g. team@example.com', 'entry-digest-for-gravity-forms' ); ?>">
+							<p class="description"><?php esc_html_e( 'When a recipient replies to a digest, their reply goes here instead of the site mailer address. Leave blank to use the mailer default.', 'entry-digest-for-gravity-forms' ); ?></p>
+						</td>
+					</tr>
+
 					<?php
 					/**
 					 * Fires in the Email section, after the subject row. Add-ons can
