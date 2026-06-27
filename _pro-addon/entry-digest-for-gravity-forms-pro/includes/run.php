@@ -41,13 +41,13 @@ function edfgfp_filter_run_entries( array $entries, array $d, int $fid ): array 
  * @param int      $total_count Total entries across sections.
  * @return string[] Temp file paths (deleted by core after sending).
  */
-add_filter( 'edfgf_attachments', 'edfgfp_build_attachments', 10, 4 );
-function edfgfp_build_attachments( array $attachments, array $sections, array $d, int $total_count ): array {
-	$format = $d['attach_format'] ?? 'none';
-	if ( 'none' === $format || $total_count < 1 ) {
-		return $attachments;
-	}
-	return array_merge( $attachments, edfgfp_build_attachments( $format, $sections ) );
+add_filter( 'edfgf_attachments', 'edfgfp_attachments_filter', 10, 4 );
+function edfgfp_attachments_filter( array $attachments, array $sections, array $d, int $total_count ): array {
+    $format = $d['attach_format'] ?? 'none';
+    if ( 'none' === $format || $total_count < 1 ) {
+        return $attachments;
+    }
+    return array_merge( $attachments, edfgfp_build_attachments( $format, $sections ) );
 }
 
 /**
