@@ -44,6 +44,7 @@ function edfgf_digest_defaults(): array {
 		'form_ids'      => [ 1 ],          // A digest can include one or more forms (free, core feature).
 		'to_email'      => '',
 		'roles'         => [],             // Add-on: WP roles whose members also receive the digest.
+		'reply_to'      => '',             // Optional Reply-To address; '' means use the mailer default.
 		'email_subject' => __( 'Your Gravity Forms entry digest', 'entry-digest-for-gravity-forms' ),
 		'frequency'     => 'weekly',       // 'weekly' | 'daily' | 'none' (none = no recurring digest; one-time only)
 		'paused'        => false,          // true = keep config but stop all scheduled sends (manual Send Now / test still work)
@@ -86,6 +87,7 @@ function edfgf_normalize_digest( array $d, string $id = '' ): array {
 	$out['id']            = $id ?: ( ! empty( $d['id'] ) ? (string) $d['id'] : edfgf_new_id() );
 	$out['label']         = (string) $out['label'];
 	$out['to_email']      = (string) $out['to_email'];
+	$out['reply_to']      = (string) $out['reply_to'];
 	$out['email_subject'] = (string) $out['email_subject'];
 	$out['frequency']     = in_array( $out['frequency'], [ 'daily', 'weekly', 'none' ], true ) ? $out['frequency'] : 'weekly';
 	$out['paused']        = ! empty( $out['paused'] );
