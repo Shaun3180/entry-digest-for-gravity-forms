@@ -110,6 +110,11 @@ function edfgf_render_list( string $notice ): void {
 							<td>
 								<a href="<?php echo esc_url( $base_url . '&action=edit&digest=' . rawurlencode( $id ) ); ?>" class="button button-small"><?php esc_html_e( 'Edit', 'entry-digest-for-gravity-forms' ); ?></a>
 								<form method="post" style="display:inline;">
+									<?php wp_nonce_field( 'edfgf_duplicate_digest' ); ?>
+									<input type="hidden" name="digest_id" value="<?php echo esc_attr( $id ); ?>">
+									<button type="submit" name="edfgf_duplicate_digest" class="button button-small"><?php esc_html_e( 'Duplicate', 'entry-digest-for-gravity-forms' ); ?></button>
+								</form>
+								<form method="post" style="display:inline;">
 									<?php wp_nonce_field( 'edfgf_send_now' ); ?>
 									<input type="hidden" name="digest_id" value="<?php echo esc_attr( $id ); ?>">
 									<button type="submit" name="edfgf_send_now" class="button button-small"><?php esc_html_e( 'Send Now', 'entry-digest-for-gravity-forms' ); ?></button>
