@@ -5,10 +5,10 @@ defined( 'ABSPATH' ) || exit;
  * Pro: configurable send-log retention.
  *
  * The free plugin keeps a small rolling log (a handful of recent sends) and
- * exposes the count through the `dsagfe_log_max` filter. Pro hooks that filter
+ * exposes the count through the `edfgf_log_max` filter. Pro hooks that filter
  * (see run.php) to honor a site-chosen value, and this file provides the UI to
  * set it: a control rendered beneath the core "Recent sends" table via the
- * `dsagfe_after_log_table` action, saved to the `edfgfp_log_max` option through
+ * `edfgf_after_log_table` action, saved to the `edfgfp_log_max` option through
  * admin-post.php.
  */
 
@@ -18,7 +18,7 @@ const EDFGFP_LOG_MAX_CEILING = 100000;
 /**
  * Render the retention control under the send-log table.
  */
-add_action( 'dsagfe_after_log_table', 'edfgfp_render_log_setting' );
+add_action( 'edfgf_after_log_table', 'edfgfp_render_log_setting' );
 function edfgfp_render_log_setting(): void {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
@@ -68,7 +68,7 @@ function edfgfp_handle_save_log_max(): void {
 	$max = max( 1, min( EDFGFP_LOG_MAX_CEILING, $max ) );
 	update_option( 'edfgfp_log_max', $max, false );
 
-	$redirect = function_exists( 'dsagfe_page_url' ) ? dsagfe_page_url() : admin_url();
+	$redirect = function_exists( 'edfgf_page_url' ) ? edfgf_page_url() : admin_url();
 	wp_safe_redirect( add_query_arg( 'edfgfp_log_saved', '1', $redirect ) );
 	exit;
 }

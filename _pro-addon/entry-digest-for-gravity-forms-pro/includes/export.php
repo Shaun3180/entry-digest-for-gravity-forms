@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return string[] Temp file paths.
  */
-function dsagfe_build_attachments( string $format, array $sections ): array {
+function edfgfp_build_attachments( string $format, array $sections ): array {
 	$tmp = trailingslashit( sys_get_temp_dir() );
 
 	if ( 'csv' === $format ) {
@@ -16,10 +16,10 @@ function dsagfe_build_attachments( string $format, array $sections ): array {
 			if ( $sec['count'] < 1 ) {
 				continue;
 			}
-			[ $headers, $rows ] = dsagfe_section_table( $sec );
-			$base = sanitize_file_name( 'entry-digest-' . dsagfe_slug( $sec['form']['title'] ) . '-' . gmdate( 'Y-m-d' ) . '.csv' );
+			[ $headers, $rows ] = edfgfp_section_table( $sec );
+			$base = sanitize_file_name( 'entry-digest-' . edfgfp_slug( $sec['form']['title'] ) . '-' . gmdate( 'Y-m-d' ) . '.csv' );
 			$path = $tmp . $i . '-' . $base;
-			if ( dsagfe_write_csv( $path, $headers, $rows ) ) {
+			if ( edfgfp_write_csv( $path, $headers, $rows ) ) {
 				$files[] = $path;
 			}
 		}
@@ -33,21 +33,21 @@ function dsagfe_build_attachments( string $format, array $sections ): array {
 		if ( $sec['count'] < 1 ) {
 			continue;
 		}
-		[ $headers, $rows ] = dsagfe_section_table( $sec );
-		$name = dsagfe_unique_sheet_name( $sec['form']['title'], $used_names );
+		[ $headers, $rows ] = edfgfp_section_table( $sec );
+		$name = edfgfp_unique_sheet_name( $sec['form']['title'], $used_names );
 		$sheets[] = [ 'name' => $name, 'headers' => $headers, 'rows' => $rows ];
 	}
 	if ( empty( $sheets ) ) {
 		return [];
 	}
 	$path = $tmp . sanitize_file_name( 'entry-digest-' . gmdate( 'Y-m-d' ) . '.xlsx' );
-	return dsagfe_write_xlsx( $path, $sheets ) ? [ $path ] : [];
+	return edfgfp_write_xlsx( $path, $sheets ) ? [ $path ] : [];
 }
 
 /**
  * Build [ headers, rows ] for a section's full data export.
  */
-function dsagfe_section_table( array $sec ): array {
+function edfgfp_section_table( array $sec ): array {
 	$field_map = $sec['field_map'];
 	$headers   = array_merge( [
 		__( 'Entry ID', 'entry-digest-for-gravity-forms' ),
@@ -65,7 +65,7 @@ function dsagfe_section_table( array $sec ): array {
 	return [ $headers, $rows ];
 }
 
-function dsagfe_slug( string $s ): string {
+function edfgfp_slug( string $s ): string {
 	$s = sanitize_title( $s );
 	return $s ?: 'form';
 }
@@ -73,7 +73,7 @@ function dsagfe_slug( string $s ): string {
 /**
  * A valid, unique (<=31 char) Excel sheet name.
  */
-function dsagfe_unique_sheet_name( string $title, array &$used ): string {
+function edfgfp_unique_sheet_name( string $title, array &$used ): string {
 	$name = preg_replace( '/[\\\\\\/\\?\\*\\[\\]:]/', ' ', $title );
 	$name = trim( mb_substr( $name, 0, 28 ) );
 	if ( '' === $name ) {
@@ -95,7 +95,7 @@ function dsagfe_unique_sheet_name( string $title, array &$used ): string {
  *
  * @param string[] $fields
  */
-function dsagfe_csv_line( array $fields ): string {
+function edfgfp_csv_line( array $fields ): string {
 	$cells = [];
 	foreach ( $fields as $field ) {
 		$field = (string) $field;
@@ -107,7 +107,7 @@ function dsagfe_csv_line( array $fields ): string {
 	return implode( ',', $cells ) . "\r\n";
 }
 
-function dsagfe_write_csv( string $filepath, array $headers, array $rows ): bool {
+function edfgfp_write_csv( string $filepath, array $headers, array $rows ): bool {
 	global $wp_filesystem;
 	if ( ! function_exists( 'WP_Filesystem' ) ) {
 		require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -120,9 +120,9 @@ function dsagfe_write_csv( string $filepath, array $headers, array $rows ): bool
 	}
 
 	$content  = "\xEF\xBB\xBF"; // UTF-8 BOM for Excel.
-	$content .= dsagfe_csv_line( $headers );
+	$content .= edfgfp_csv_line( $headers );
 	foreach ( $rows as $row ) {
-		$content .= dsagfe_csv_line( array_map( 'strval', $row ) );
+		$content .= edfgfp_csv_line( array_map( 'strval', $row ) );
 	}
 
 	return (bool) $wp_filesystem->put_contents( $filepath, $content, FS_CHMOD_FILE );
@@ -135,7 +135,7 @@ function dsagfe_write_csv( string $filepath, array $headers, array $rows ): bool
  * @param string $filepath
  * @param array  $sheets  [ [ 'name' => str, 'headers' => [], 'rows' => [[]] ], ... ]
  */
-function dsagfe_write_xlsx( string $filepath, array $sheets ): bool {
+function edfgfp_write_xlsx( string $filepath, array $sheets ): bool {
 	if ( ! class_exists( 'ZipArchive' ) ) {
 		return false;
 	}
@@ -164,7 +164,7 @@ function dsagfe_write_xlsx( string $filepath, array $sheets ): bool {
 
 		$xml .= '<row r="' . $row_num . '">';
 		foreach ( $headers as $ci => $val ) {
-			$xml .= '<c r="' . dsagfe_col_letter( $ci ) . $row_num . '" t="s" s="1"><v>' . $si( $val ) . '</v></c>';
+			$xml .= '<c r="' . edfgfp_col_letter( $ci ) . $row_num . '" t="s" s="1"><v>' . $si( $val ) . '</v></c>';
 		}
 		$xml .= '</row>';
 		$row_num++;
@@ -175,13 +175,13 @@ function dsagfe_write_xlsx( string $filepath, array $sheets ): bool {
 				if ( $ci >= $col_count ) {
 					break;
 				}
-				$xml .= '<c r="' . dsagfe_col_letter( $ci ) . $row_num . '" t="s"><v>' . $si( $val ) . '</v></c>';
+				$xml .= '<c r="' . edfgfp_col_letter( $ci ) . $row_num . '" t="s"><v>' . $si( $val ) . '</v></c>';
 			}
 			$xml .= '</row>';
 			$row_num++;
 		}
 
-		$last_col = dsagfe_col_letter( max( 0, $col_count - 1 ) );
+		$last_col = edfgfp_col_letter( max( 0, $col_count - 1 ) );
 		$last_row = max( 1, $row_num - 1 );
 
 		$sheet_parts[ $sidx ] = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -284,7 +284,7 @@ function dsagfe_write_xlsx( string $filepath, array $sheets ): bool {
 /**
  * Convert a 0-based column index to an Excel column letter (A, B, …, Z, AA, …).
  */
-function dsagfe_col_letter( int $index ): string {
+function edfgfp_col_letter( int $index ): string {
 	$letter = '';
 	$n      = $index + 1;
 	while ( $n > 0 ) {

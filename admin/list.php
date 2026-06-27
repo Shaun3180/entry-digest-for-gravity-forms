@@ -4,10 +4,10 @@ defined( 'ABSPATH' ) || exit;
 /**
  * The digest list screen.
  */
-function dsagfe_render_list( string $notice ): void {
-	$digests   = dsagfe_get_digests();
+function edfgf_render_list( string $notice ): void {
+	$digests   = edfgf_get_digests();
 	$gf_active = class_exists( 'GFAPI' );
-	$base_url  = dsagfe_page_url();
+	$base_url  = edfgf_page_url();
 	?>
 	<div class="wrap">
 		<h1 class="wp-heading-inline">Entry Digest for Gravity Forms</h1>
@@ -25,7 +25,7 @@ function dsagfe_render_list( string $notice ): void {
 		 * Fires just below the list-screen header, before the digest table. Add-ons
 		 * can use this to render notices (for example, a Pro upsell).
 		 */
-		do_action( 'dsagfe_list_after_header' );
+		do_action( 'edfgf_list_after_header' );
 		?>
 
 		<?php if ( empty( $digests ) ) : ?>
@@ -63,13 +63,13 @@ function dsagfe_render_list( string $notice ): void {
 							/* translators: %d: Gravity Forms form ID. */
 							$form_names = array_map( static fn( $f ) => sprintf( __( 'Form %d', 'entry-digest-for-gravity-forms' ), (int) $f ), $d['form_ids'] );
 						}
-						$rcpts     = dsagfe_resolve_recipients( $d );
+						$rcpts     = edfgf_resolve_recipients( $d );
 						$is_paused = ! empty( $d['paused'] );
 
 						// Next run = earliest of the recurring and one-time events. A paused
 						// digest has no scheduled events, so it simply shows "Paused".
-						$next_rec  = wp_next_scheduled( DSAGFE_CRON_HOOK, [ (string) $id ] );
-						$next_once = wp_next_scheduled( DSAGFE_CRON_HOOK, [ (string) $id, 'once' ] );
+						$next_rec  = wp_next_scheduled( EDFGF_CRON_HOOK, [ (string) $id ] );
+						$next_once = wp_next_scheduled( EDFGF_CRON_HOOK, [ (string) $id, 'once' ] );
 						$candidates = array_filter( [ $next_rec, $next_once ] );
 						$next       = $candidates ? min( $candidates ) : 0;
 						if ( $is_paused ) {
@@ -87,7 +87,7 @@ function dsagfe_render_list( string $notice ): void {
 							$parts[] = esc_html( sprintf( __( 'Daily %s', 'entry-digest-for-gravity-forms' ), $d['send_time'] ) );
 						} elseif ( 'weekly' === $d['frequency'] ) {
 							/* translators: 1: weekday name; 2: time of day. */
-							$parts[] = esc_html( sprintf( __( 'Weekly %1$s %2$s', 'entry-digest-for-gravity-forms' ), dsagfe_day_label( $d['send_day'] ), $d['send_time'] ) );
+							$parts[] = esc_html( sprintf( __( 'Weekly %1$s %2$s', 'entry-digest-for-gravity-forms' ), edfgf_day_label( $d['send_day'] ), $d['send_time'] ) );
 						}
 						if ( ! empty( $d['onetime_at'] ) ) {
 							$once_dt = DateTime::createFromFormat( 'Y-m-d H:i', $d['onetime_at'], wp_timezone() );
@@ -110,19 +110,19 @@ function dsagfe_render_list( string $notice ): void {
 							<td>
 								<a href="<?php echo esc_url( $base_url . '&action=edit&digest=' . rawurlencode( $id ) ); ?>" class="button button-small"><?php esc_html_e( 'Edit', 'entry-digest-for-gravity-forms' ); ?></a>
 								<form method="post" style="display:inline;">
-									<?php wp_nonce_field( 'dsagfe_send_now' ); ?>
+									<?php wp_nonce_field( 'edfgf_send_now' ); ?>
 									<input type="hidden" name="digest_id" value="<?php echo esc_attr( $id ); ?>">
-									<button type="submit" name="dsagfe_send_now" class="button button-small"><?php esc_html_e( 'Send Now', 'entry-digest-for-gravity-forms' ); ?></button>
+									<button type="submit" name="edfgf_send_now" class="button button-small"><?php esc_html_e( 'Send Now', 'entry-digest-for-gravity-forms' ); ?></button>
 								</form>
 								<form method="post" style="display:inline;">
-									<?php wp_nonce_field( 'dsagfe_toggle_pause' ); ?>
+									<?php wp_nonce_field( 'edfgf_toggle_pause' ); ?>
 									<input type="hidden" name="digest_id" value="<?php echo esc_attr( $id ); ?>">
-									<button type="submit" name="dsagfe_toggle_pause" class="button button-small"><?php echo esc_html( $is_paused ? __( 'Resume', 'entry-digest-for-gravity-forms' ) : __( 'Pause', 'entry-digest-for-gravity-forms' ) ); ?></button>
+									<button type="submit" name="edfgf_toggle_pause" class="button button-small"><?php echo esc_html( $is_paused ? __( 'Resume', 'entry-digest-for-gravity-forms' ) : __( 'Pause', 'entry-digest-for-gravity-forms' ) ); ?></button>
 								</form>
-								<form method="post" style="display:inline;" class="dsagfe-confirm" data-confirm="<?php echo esc_attr__( 'Delete this digest?', 'entry-digest-for-gravity-forms' ); ?>">
-									<?php wp_nonce_field( 'dsagfe_delete_digest' ); ?>
+								<form method="post" style="display:inline;" class="edfgf-confirm" data-confirm="<?php echo esc_attr__( 'Delete this digest?', 'entry-digest-for-gravity-forms' ); ?>">
+									<?php wp_nonce_field( 'edfgf_delete_digest' ); ?>
 									<input type="hidden" name="digest_id" value="<?php echo esc_attr( $id ); ?>">
-									<button type="submit" name="dsagfe_delete_digest" class="button button-small button-link-delete"><?php esc_html_e( 'Delete', 'entry-digest-for-gravity-forms' ); ?></button>
+									<button type="submit" name="edfgf_delete_digest" class="button button-small button-link-delete"><?php esc_html_e( 'Delete', 'entry-digest-for-gravity-forms' ); ?></button>
 								</form>
 							</td>
 						</tr>
@@ -144,7 +144,7 @@ function dsagfe_render_list( string $notice ): void {
 
 		<?php
 		// ── Recent sends (send log) ──────────────────────────────────
-		$log = dsagfe_get_log();
+		$log = edfgf_get_log();
 		if ( ! empty( $log ) ) :
 			?>
 			<h2 style="margin-top:30px;"><?php esc_html_e( 'Recent sends', 'entry-digest-for-gravity-forms' ); ?></h2>
@@ -165,23 +165,23 @@ function dsagfe_render_list( string $notice ): void {
 						$when = ( new DateTime( '@' . (int) $row['time'] ) )
 							->setTimezone( wp_timezone() )
 							->format( 'M j, Y g:i A' );
-						list( $st_label, $st_color ) = dsagfe_log_status_meta( (string) $row['status'] );
+						list( $st_label, $st_color ) = edfgf_log_status_meta( (string) $row['status'] );
 						?>
 						<tr>
 							<td><?php echo esc_html( $when ); ?></td>
 							<td><?php echo esc_html( $row['label'] ?: __( 'Untitled digest', 'entry-digest-for-gravity-forms' ) ); ?></td>
 							<td><?php echo esc_html( number_format_i18n( (int) $row['count'] ) ); ?></td>
 							<td><?php echo esc_html( $row['recipients'] ?: '-' ); ?></td>
-							<td><?php echo esc_html( dsagfe_log_context_label( (string) $row['context'] ) ); ?></td>
+							<td><?php echo esc_html( edfgf_log_context_label( (string) $row['context'] ) ); ?></td>
 							<td><strong style="color:<?php echo esc_attr( $st_color ); ?>;"><?php echo esc_html( $st_label ); ?></strong></td>
 						</tr>
 					<?php endforeach; ?>
 				</tbody>
 			</table>
 			<div style="margin-top:8px;">
-				<form method="post" style="display:inline;" class="dsagfe-confirm" data-confirm="<?php echo esc_attr__( 'Clear the send log?', 'entry-digest-for-gravity-forms' ); ?>">
-					<?php wp_nonce_field( 'dsagfe_clear_log' ); ?>
-					<button type="submit" name="dsagfe_clear_log" class="button button-small"><?php esc_html_e( 'Clear log', 'entry-digest-for-gravity-forms' ); ?></button>
+				<form method="post" style="display:inline;" class="edfgf-confirm" data-confirm="<?php echo esc_attr__( 'Clear the send log?', 'entry-digest-for-gravity-forms' ); ?>">
+					<?php wp_nonce_field( 'edfgf_clear_log' ); ?>
+					<button type="submit" name="edfgf_clear_log" class="button button-small"><?php esc_html_e( 'Clear log', 'entry-digest-for-gravity-forms' ); ?></button>
 				</form>
 			</div>
 			<p class="description" style="font-size:12px;color:#666;">
@@ -196,7 +196,7 @@ function dsagfe_render_list( string $notice ): void {
 		 * render log-related settings - for example, a configurable retention
 		 * control. Core renders nothing here.
 		 */
-		do_action( 'dsagfe_after_log_table' );
+		do_action( 'edfgf_after_log_table' );
 		?>
 	</div>
 	<?php

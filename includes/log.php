@@ -11,20 +11,20 @@ defined( 'ABSPATH' ) || exit;
  * problems and reassures clients that scheduled digests are actually running.
  */
 
-define( 'DSAGFE_LOG_OPTION_KEY',  'dsagfe_send_log' );
-define( 'DSAGFE_LOG_DEFAULT_MAX', 10 );
+define( 'EDFGF_LOG_OPTION_KEY',  'edfgf_send_log' );
+define( 'EDFGF_LOG_DEFAULT_MAX', 10 );
 
 /**
  * Number of log records to retain (filterable).
  *
  * The free plugin keeps the most recent few sends - enough to confirm digests
  * are running and to debug a recent problem. The retention count is exposed via
- * the 'dsagfe_log_max' filter, so it is a default, not a hard limit: any site
+ * the 'edfgf_log_max' filter, so it is a default, not a hard limit: any site
  * owner (or the optional Pro add-on, which offers a configurable history) can
  * raise it.
  */
-function dsagfe_log_max(): int {
-	$max = (int) apply_filters( 'dsagfe_log_max', DSAGFE_LOG_DEFAULT_MAX );
+function edfgf_log_max(): int {
+	$max = (int) apply_filters( 'edfgf_log_max', EDFGF_LOG_DEFAULT_MAX );
 	return max( 1, $max );
 }
 
@@ -33,8 +33,8 @@ function dsagfe_log_max(): int {
  *
  * @return array<int,array>
  */
-function dsagfe_get_log(): array {
-	$log = get_option( DSAGFE_LOG_OPTION_KEY, [] );
+function edfgf_get_log(): array {
+	$log = get_option( EDFGF_LOG_OPTION_KEY, [] );
 	return is_array( $log ) ? $log : [];
 }
 
@@ -51,7 +51,7 @@ function dsagfe_get_log(): array {
  *     @type string $context    'scheduled' | 'one-time' | 'manual' | 'test'.
  * }
  */
-function dsagfe_log_record( array $record ): void {
+function edfgf_log_record( array $record ): void {
 	$record = wp_parse_args( $record, [
 		'time'       => time(),
 		'digest_id'  => '',
@@ -71,19 +71,19 @@ function dsagfe_log_record( array $record ): void {
 	$record['status']     = (string) $record['status'];
 	$record['context']    = (string) $record['context'];
 
-	$log = dsagfe_get_log();
+	$log = edfgf_get_log();
 	array_unshift( $log, $record );
-	$log = array_slice( $log, 0, dsagfe_log_max() );
+	$log = array_slice( $log, 0, edfgf_log_max() );
 
 	// Non-autoloaded: the log is only read on our admin screen.
-	update_option( DSAGFE_LOG_OPTION_KEY, $log, false );
+	update_option( EDFGF_LOG_OPTION_KEY, $log, false );
 }
 
 /**
  * Empty the send log.
  */
-function dsagfe_clear_log(): void {
-	delete_option( DSAGFE_LOG_OPTION_KEY );
+function edfgf_clear_log(): void {
+	delete_option( EDFGF_LOG_OPTION_KEY );
 }
 
 /**
@@ -91,7 +91,7 @@ function dsagfe_clear_log(): void {
  *
  * @return array{0:string,1:string} [ label, hex color ]
  */
-function dsagfe_log_status_meta( string $status ): array {
+function edfgf_log_status_meta( string $status ): array {
 	switch ( $status ) {
 		case 'sent':
 			return [ __( 'Sent', 'entry-digest-for-gravity-forms' ), '#008a20' ];
@@ -109,7 +109,7 @@ function dsagfe_log_status_meta( string $status ): array {
 /**
  * Display label for a send context.
  */
-function dsagfe_log_context_label( string $context ): string {
+function edfgf_log_context_label( string $context ): string {
 	switch ( $context ) {
 		case 'scheduled':
 			return __( 'Scheduled', 'entry-digest-for-gravity-forms' );

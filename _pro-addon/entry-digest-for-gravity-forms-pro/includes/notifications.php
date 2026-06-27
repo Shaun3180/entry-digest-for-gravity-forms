@@ -37,7 +37,7 @@ function edfgfp_notifications_nonce(): string {
 }
 
 // ── Per-form notification controls (inside each form block) ──────────────────
-add_action( 'dsagfe_editor_form_block', 'edfgfp_editor_notifications_ui', 20, 3 );
+add_action( 'edfgf_editor_form_block', 'edfgfp_editor_notifications_ui', 20, 3 );
 function edfgfp_editor_notifications_ui( string $fid, array $d, array $field_map ): void {
 	if ( ! class_exists( 'GFAPI' ) || ! edfgfp_can_edit_notifications() ) {
 		return;

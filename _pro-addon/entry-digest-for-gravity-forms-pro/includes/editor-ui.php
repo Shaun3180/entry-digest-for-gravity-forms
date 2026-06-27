@@ -7,11 +7,11 @@ defined( 'ABSPATH' ) || exit;
  * the live entry-count preview reflect filtering.
  *
  * All markup here mirrors the field names the free plugin already understands
- * (dsagfe_digest[roles], [filters], [filter_logic], [attach_format]).
+ * (edfgf_digest[roles], [filters], [filter_logic], [attach_format]).
  */
 
 // ── Role recipients (after the recipient email row) ──────────────────────────
-add_action( 'dsagfe_editor_after_recipients', 'edfgfp_editor_roles_row' );
+add_action( 'edfgf_editor_after_recipients', 'edfgfp_editor_roles_row' );
 function edfgfp_editor_roles_row( array $d ): void {
 	$roles = (array) ( $d['roles'] ?? [] );
 	?>
@@ -22,7 +22,7 @@ function edfgfp_editor_roles_row( array $d ): void {
 				<p class="description" style="margin-bottom:8px;"><?php esc_html_e( 'Also deliver to every user in the selected role(s).', 'entry-digest-for-gravity-forms-pro' ); ?></p>
 				<?php foreach ( wp_roles()->get_names() as $role_key => $role_name ) : ?>
 					<label style="display:inline-block;margin:0 14px 4px 0;">
-						<input type="checkbox" name="dsagfe_digest[roles][]" value="<?php echo esc_attr( $role_key ); ?>" <?php checked( in_array( $role_key, $roles, true ) ); ?>>
+						<input type="checkbox" name="edfgf_digest[roles][]" value="<?php echo esc_attr( $role_key ); ?>" <?php checked( in_array( $role_key, $roles, true ) ); ?>>
 						<?php echo esc_html( translate_user_role( $role_name ) ); ?>
 					</label>
 				<?php endforeach; ?>
@@ -33,14 +33,14 @@ function edfgfp_editor_roles_row( array $d ): void {
 }
 
 // ── Attachment selector (Email section, after the subject) ───────────────────
-add_action( 'dsagfe_editor_email_options', 'edfgfp_editor_attachment_row' );
+add_action( 'edfgf_editor_email_options', 'edfgfp_editor_attachment_row' );
 function edfgfp_editor_attachment_row( array $d ): void {
 	$fmt = $d['attach_format'] ?? 'none';
 	?>
 	<tr>
 		<th scope="row"><?php esc_html_e( 'Attachment', 'entry-digest-for-gravity-forms-pro' ); ?></th>
 		<td>
-			<select name="dsagfe_digest[attach_format]">
+			<select name="edfgf_digest[attach_format]">
 				<option value="none" <?php selected( $fmt, 'none' ); ?>><?php esc_html_e( 'None', 'entry-digest-for-gravity-forms-pro' ); ?></option>
 				<option value="xlsx" <?php selected( $fmt, 'xlsx' ); ?>><?php esc_html_e( 'Excel (.xlsx)', 'entry-digest-for-gravity-forms-pro' ); ?></option>
 				<option value="csv"  <?php selected( $fmt, 'csv' ); ?>><?php esc_html_e( 'CSV', 'entry-digest-for-gravity-forms-pro' ); ?></option>
@@ -52,9 +52,9 @@ function edfgfp_editor_attachment_row( array $d ): void {
 }
 
 // ── Conditional filtering (inside each per-form block) ───────────────────────
-add_action( 'dsagfe_editor_form_block', 'edfgfp_editor_filter_ui', 10, 3 );
+add_action( 'edfgf_editor_form_block', 'edfgfp_editor_filter_ui', 10, 3 );
 function edfgfp_editor_filter_ui( string $fid, array $d, array $field_map ): void {
-	$ops       = dsagfe_filter_operators();
+	$ops       = edfgfp_filter_operators();
 	$f_filters = (array) ( $d['filters'][ $fid ]['rules'] ?? [] );
 	$f_logic   = $d['filters'][ $fid ]['logic'] ?? 'all';
 
@@ -65,7 +65,7 @@ function edfgfp_editor_filter_ui( string $fid, array $d, array $field_map ): voi
 		?>
 		<tr>
 			<td>
-				<select name="dsagfe_digest[filters][<?php echo esc_attr( $fid ); ?>][<?php echo (int) $i; ?>][field]">
+				<select name="edfgf_digest[filters][<?php echo esc_attr( $fid ); ?>][<?php echo (int) $i; ?>][field]">
 					<option value="">- <?php esc_html_e( 'field', 'entry-digest-for-gravity-forms-pro' ); ?> -</option>
 					<?php foreach ( $field_map as $k => $lab ) : ?>
 						<option value="<?php echo esc_attr( $k ); ?>" <?php selected( (string) $rf, (string) $k ); ?>><?php echo esc_html( $lab ); ?></option>
@@ -73,13 +73,13 @@ function edfgfp_editor_filter_ui( string $fid, array $d, array $field_map ): voi
 				</select>
 			</td>
 			<td>
-				<select name="dsagfe_digest[filters][<?php echo esc_attr( $fid ); ?>][<?php echo (int) $i; ?>][op]">
+				<select name="edfgf_digest[filters][<?php echo esc_attr( $fid ); ?>][<?php echo (int) $i; ?>][op]">
 					<?php foreach ( $ops as $ok => $olabel ) : ?>
 						<option value="<?php echo esc_attr( $ok ); ?>" <?php selected( $ro, $ok ); ?>><?php echo esc_html( $olabel ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</td>
-			<td><input type="text" name="dsagfe_digest[filters][<?php echo esc_attr( $fid ); ?>][<?php echo (int) $i; ?>][value]" value="<?php echo esc_attr( $rv ); ?>" placeholder="<?php esc_attr_e( 'value', 'entry-digest-for-gravity-forms-pro' ); ?>"></td>
+			<td><input type="text" name="edfgf_digest[filters][<?php echo esc_attr( $fid ); ?>][<?php echo (int) $i; ?>][value]" value="<?php echo esc_attr( $rv ); ?>" placeholder="<?php esc_attr_e( 'value', 'entry-digest-for-gravity-forms-pro' ); ?>"></td>
 		</tr>
 		<?php
 	};
@@ -87,13 +87,13 @@ function edfgfp_editor_filter_ui( string $fid, array $d, array $field_map ): voi
 	<p style="font-weight:600;margin:14px 0 6px;"><?php esc_html_e( 'Conditional filtering', 'entry-digest-for-gravity-forms-pro' ); ?></p>
 	<p class="description" style="margin-bottom:6px;">
 		<?php esc_html_e( 'Match', 'entry-digest-for-gravity-forms-pro' ); ?>
-		<select name="dsagfe_digest[filter_logic][<?php echo esc_attr( $fid ); ?>]">
+		<select name="edfgf_digest[filter_logic][<?php echo esc_attr( $fid ); ?>]">
 			<option value="all" <?php selected( $f_logic, 'all' ); ?>><?php esc_html_e( 'all', 'entry-digest-for-gravity-forms-pro' ); ?></option>
 			<option value="any" <?php selected( $f_logic, 'any' ); ?>><?php esc_html_e( 'any', 'entry-digest-for-gravity-forms-pro' ); ?></option>
 		</select>
 		<?php esc_html_e( 'of these rules:', 'entry-digest-for-gravity-forms-pro' ); ?>
 	</p>
-	<table class="dsagfe-filters" data-fid="<?php echo esc_attr( $fid ); ?>" style="margin-bottom:8px;">
+	<table class="edfgfp-filters" data-fid="<?php echo esc_attr( $fid ); ?>" style="margin-bottom:8px;">
 		<tbody>
 			<?php
 			$existing = $f_filters ?: [ [ 'field' => '', 'op' => 'is', 'value' => '' ] ];
@@ -110,7 +110,7 @@ function edfgfp_editor_filter_ui( string $fid, array $d, array $field_map ): voi
 }
 
 // ── Persist Pro fields on save ───────────────────────────────────────────────
-add_filter( 'dsagfe_save_digest', 'edfgfp_save_pro_fields', 10, 3 );
+add_filter( 'edfgf_save_digest', 'edfgfp_save_pro_fields', 10, 3 );
 function edfgfp_save_pro_fields( array $d, array $raw, array $form_ids ): array {
 	// Roles.
 	$d['roles'] = ! empty( $raw['roles'] )
@@ -118,7 +118,7 @@ function edfgfp_save_pro_fields( array $d, array $raw, array $form_ids ): array 
 		: [];
 
 	// Conditional filters (reuses the engine's parser).
-	$d['filters'] = dsagfe_parse_posted_filters( $raw, $form_ids, true );
+	$d['filters'] = edfgfp_parse_posted_filters( $raw, $form_ids, true );
 
 	// Attachment format.
 	$fmt = $raw['attach_format'] ?? 'none';
@@ -128,12 +128,12 @@ function edfgfp_save_pro_fields( array $d, array $raw, array $form_ids ): array 
 }
 
 // ── Make the live count preview reflect filtering ────────────────────────────
-add_filter( 'dsagfe_preview_count', 'edfgfp_preview_count_with_filters', 10, 5 );
+add_filter( 'edfgf_preview_count', 'edfgfp_preview_count_with_filters', 10, 5 );
 function edfgfp_preview_count_with_filters( array $result, array $raw, array $form_ids, string $frequency, $override ): array {
 	if ( ! class_exists( 'GFAPI' ) ) {
 		return $result;
 	}
-	$filters = dsagfe_parse_posted_filters( $raw, $form_ids, true );
+	$filters = edfgfp_parse_posted_filters( $raw, $form_ids, true );
 	if ( empty( $filters ) ) {
 		return $result;
 	}
@@ -155,7 +155,7 @@ function edfgfp_preview_count_with_filters( array $result, array $raw, array $fo
 			$entries = is_array( $entries ) ? $entries : [];
 			$count   = 0;
 			foreach ( $entries as $e ) {
-				if ( dsagfe_entry_matches( $e, $conf['rules'], $logic ) ) {
+				if ( edfgfp_entry_matches( $e, $conf['rules'], $logic ) ) {
 					$count++;
 				}
 			}

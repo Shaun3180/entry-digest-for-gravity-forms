@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Build an ordered [ key => label ] map of exportable fields for a form.
  */
-function dsagfe_build_field_map( array $form ): array {
+function edfgf_build_field_map( array $form ): array {
 	$single_value_types = [ 'date', 'time', 'list', 'fileupload', 'post_image', 'signature' ];
 	$field_map          = [];
 
@@ -36,7 +36,7 @@ function dsagfe_build_field_map( array $form ): array {
  *
  * @param int[] $form_ids
  */
-function dsagfe_forms_age_days( array $form_ids ): int {
+function edfgf_forms_age_days( array $form_ids ): int {
 	if ( ! class_exists( 'GFAPI' ) ) {
 		return 0;
 	}
@@ -69,7 +69,7 @@ function dsagfe_forms_age_days( array $form_ids ): int {
 /**
  * Filter a field map down to the selected keys (empty selection = all).
  */
-function dsagfe_filter_field_map( array $field_map, array $include_fields ): array {
+function edfgf_filter_field_map( array $field_map, array $include_fields ): array {
 	if ( empty( $include_fields ) ) {
 		return $field_map;
 	}
@@ -89,12 +89,12 @@ function dsagfe_filter_field_map( array $field_map, array $include_fields ): arr
  * addresses.
  *
  * Add-ons can append more recipients (for example, everyone in a chosen WP role)
- * via the 'dsagfe_recipients' filter. The list returned here is always
+ * via the 'edfgf_recipients' filter. The list returned here is always
  * de-duplicated and validated.
  *
  * @return string[] De-duplicated, validated email addresses.
  */
-function dsagfe_resolve_recipients( array $d ): array {
+function edfgf_resolve_recipients( array $d ): array {
 	$emails = array_map( 'trim', explode( ',', (string) ( $d['to_email'] ?? '' ) ) );
 
 	/**
@@ -103,7 +103,7 @@ function dsagfe_resolve_recipients( array $d ): array {
 	 * @param string[] $emails Recipient email addresses gathered so far.
 	 * @param array    $d      The digest configuration.
 	 */
-	$emails = (array) apply_filters( 'dsagfe_recipients', $emails, $d );
+	$emails = (array) apply_filters( 'edfgf_recipients', $emails, $d );
 
 	$emails = array_values( array_unique( array_filter(
 		array_map( 'trim', $emails ),
@@ -115,9 +115,9 @@ function dsagfe_resolve_recipients( array $d ): array {
 // ════════════════════════════════════════════════════════════════
 //  Main run
 // ════════════════════════════════════════════════════════════════
-function dsagfe_run_all_active(): void {
-	foreach ( array_keys( dsagfe_active_digests() ) as $id ) {
-		dsagfe_run_digest( (string) $id );
+function edfgf_run_all_active(): void {
+	foreach ( array_keys( edfgf_active_digests() ) as $id ) {
+		edfgf_run_digest( (string) $id );
 	}
 }
 
@@ -135,12 +135,12 @@ function dsagfe_run_all_active(): void {
  *                                 'manual' | 'test'. Defaults based on $mode.
  * }
  */
-function dsagfe_run_digest( string $digest_id, string $mode = 'recurring', array $args = [] ): void {
+function edfgf_run_digest( string $digest_id, string $mode = 'recurring', array $args = [] ): void {
 	if ( ! class_exists( 'GFAPI' ) ) {
 		return;
 	}
 
-	$d = dsagfe_get_digest( $digest_id );
+	$d = edfgf_get_digest( $digest_id );
 	if ( ! $d ) {
 		return;
 	}
@@ -159,10 +159,10 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring', array
 			static fn( $e ) => is_email( $e )
 		) ) );
 	} else {
-		$recipients = dsagfe_resolve_recipients( $d );
+		$recipients = edfgf_resolve_recipients( $d );
 	}
 	if ( empty( $recipients ) ) {
-		dsagfe_log_record( [
+		edfgf_log_record( [
 			'digest_id'  => $digest_id,
 			'label'      => $label,
 			'count'      => 0,
@@ -226,10 +226,10 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring', array
 		 * @param array  $d       The digest configuration.
 		 * @param int    $fid     The Gravity Forms form ID.
 		 */
-		$entries = (array) apply_filters( 'dsagfe_run_entries', $entries, $d, $fid );
+		$entries = (array) apply_filters( 'edfgf_run_entries', $entries, $d, $fid );
 
-		$field_map = dsagfe_filter_field_map(
-			dsagfe_build_field_map( $form ),
+		$field_map = edfgf_filter_field_map(
+			edfgf_build_field_map( $form ),
 			(array) ( $d['fields'][ (string) $fid ] ?? [] )
 		);
 
@@ -243,7 +243,7 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring', array
 	}
 
 	if ( empty( $sections ) ) {
-		dsagfe_log_record( [
+		edfgf_log_record( [
 			'digest_id'  => $digest_id,
 			'label'      => $label,
 			'count'      => 0,
@@ -259,7 +259,7 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring', array
 	// can opt out per digest by setting quiet_behavior to 'skip'. A test send
 	// always delivers so the tester can see exactly what recipients would get.
 	if ( 0 === $total_count && 'skip' === ( $d['quiet_behavior'] ?? 'send' ) && ! $is_test ) {
-		dsagfe_log_record( [
+		edfgf_log_record( [
 			'digest_id'  => $digest_id,
 			'label'      => $label,
 			'count'      => 0,
@@ -271,7 +271,7 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring', array
 	}
 
 	// Compose HTML.
-	$html = dsagfe_build_digest_html( $sections, $d, $total_count, $start_date, $end_date, $mode );
+	$html = edfgf_build_digest_html( $sections, $d, $total_count, $start_date, $end_date, $mode );
 
 	/**
 	 * Filter the list of file paths to attach to the digest email.
@@ -287,7 +287,7 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring', array
 	 * @param int      $total_count Total entries across all sections.
 	 */
 	$attachments = ( $total_count > 0 )
-		? (array) apply_filters( 'dsagfe_attachments', [], $sections, $d, $total_count )
+		? (array) apply_filters( 'edfgf_attachments', [], $sections, $d, $total_count )
 		: [];
 	$tmp_files   = $attachments;
 
@@ -295,7 +295,7 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring', array
 	// AltBody so the message goes out as multipart/alternative (HTML + text).
 	// This improves deliverability and accessibility. The hook is added only for
 	// this send and removed immediately after, so it never affects other mail.
-	$text_body = dsagfe_build_digest_text( $sections, $d, $total_count, $start_date, $end_date, $mode );
+	$text_body = edfgf_build_digest_text( $sections, $d, $total_count, $start_date, $end_date, $mode );
 	$set_alt   = static function ( $phpmailer ) use ( $text_body ) {
 		if ( '' !== $text_body ) {
 			$phpmailer->AltBody = $text_body;
@@ -319,7 +319,7 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring', array
 		}
 	}
 
-	dsagfe_log_record( [
+	edfgf_log_record( [
 		'digest_id'  => $digest_id,
 		'label'      => $label,
 		'count'      => $total_count,
@@ -336,14 +336,14 @@ function dsagfe_run_digest( string $digest_id, string $mode = 'recurring', array
  * same rolling window as a real run (daily = 24h, weekly = 7 days).
  *
  * Add-ons that filter entries can adjust these counts via the
- * 'dsagfe_count_entries_for' filter on the returned array.
+ * 'edfgf_count_entries_for' filter on the returned array.
  *
  * @param int[]  $form_ids  Selected form IDs.
  * @param string $frequency 'daily' | 'weekly'.
  *
  * @return array{per_form: array<string,int>, total: int, days_back: int, window: string}
  */
-function dsagfe_count_entries_for( array $form_ids, string $frequency, ?int $days_back_override = null ): array {
+function edfgf_count_entries_for( array $form_ids, string $frequency, ?int $days_back_override = null ): array {
 	$end_date = gmdate( 'Y-m-d H:i:s' );
 
 	// A non-null override drives a one-time-style window: N days back, or

@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
  * from several forms into one email. The free plugin stores and processes
  * whatever forms a digest holds; this filter only opens up the selector.
  */
-add_filter( 'dsagfe_form_selector_multiple', '__return_true' );
+add_filter( 'edfgf_form_selector_multiple', '__return_true' );
 
 /**
  * Pro: apply per-form conditional filtering during a digest run.
@@ -17,7 +17,7 @@ add_filter( 'dsagfe_form_selector_multiple', '__return_true' );
  * @param int   $fid     Form ID.
  * @return array
  */
-add_filter( 'dsagfe_run_entries', 'edfgfp_filter_run_entries', 10, 3 );
+add_filter( 'edfgf_run_entries', 'edfgfp_filter_run_entries', 10, 3 );
 function edfgfp_filter_run_entries( array $entries, array $d, int $fid ): array {
 	$conf = $d['filters'][ (string) $fid ] ?? [];
 	if ( empty( $conf['rules'] ) ) {
@@ -28,7 +28,7 @@ function edfgfp_filter_run_entries( array $entries, array $d, int $fid ): array 
 
 	return array_values( array_filter(
 		$entries,
-		static fn( $e ) => dsagfe_entry_matches( $e, $rules, $logic )
+		static fn( $e ) => edfgfp_entry_matches( $e, $rules, $logic )
 	) );
 }
 
@@ -41,13 +41,13 @@ function edfgfp_filter_run_entries( array $entries, array $d, int $fid ): array 
  * @param int      $total_count Total entries across sections.
  * @return string[] Temp file paths (deleted by core after sending).
  */
-add_filter( 'dsagfe_attachments', 'edfgfp_build_attachments', 10, 4 );
+add_filter( 'edfgf_attachments', 'edfgfp_build_attachments', 10, 4 );
 function edfgfp_build_attachments( array $attachments, array $sections, array $d, int $total_count ): array {
 	$format = $d['attach_format'] ?? 'none';
 	if ( 'none' === $format || $total_count < 1 ) {
 		return $attachments;
 	}
-	return array_merge( $attachments, dsagfe_build_attachments( $format, $sections ) );
+	return array_merge( $attachments, edfgfp_build_attachments( $format, $sections ) );
 }
 
 /**
@@ -58,7 +58,7 @@ function edfgfp_build_attachments( array $attachments, array $sections, array $d
  * @param array $d
  * @return bool
  */
-add_filter( 'dsagfe_email_has_attachment', 'edfgfp_email_has_attachment', 10, 2 );
+add_filter( 'edfgf_email_has_attachment', 'edfgfp_email_has_attachment', 10, 2 );
 function edfgfp_email_has_attachment( bool $has_attachment, array $d ): bool {
 	return 'none' !== ( $d['attach_format'] ?? 'none' );
 }
@@ -73,7 +73,7 @@ function edfgfp_email_has_attachment( bool $has_attachment, array $d ): bool {
  * @param int $max The free plugin's retention default.
  * @return int
  */
-add_filter( 'dsagfe_log_max', 'edfgfp_log_max' );
+add_filter( 'edfgf_log_max', 'edfgfp_log_max' );
 function edfgfp_log_max( $max ): int {
 	$pro_max = (int) get_option( 'edfgfp_log_max', 1000 );
 	return $pro_max > 0 ? $pro_max : (int) $max;

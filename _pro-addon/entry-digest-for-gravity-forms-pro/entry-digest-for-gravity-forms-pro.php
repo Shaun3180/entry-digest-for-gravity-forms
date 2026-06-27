@@ -19,7 +19,7 @@
  * never be bundled inside the free plugin's WordPress.org zip.
  *
  * It works purely by hooking into the free plugin's documented extension points
- * (the `dsagfe_*` actions/filters), so the free plugin remains fully functional
+ * (the `edfgf_*` actions/filters), so the free plugin remains fully functional
  * on its own.
  * ─────────────────────────────────────────────────────────────────────────
  */
@@ -70,7 +70,7 @@ if ( edfgfp_dev_license() ) {
  */
 add_action( 'plugins_loaded', 'edfgfp_bootstrap' );
 function edfgfp_bootstrap(): void {
-	if ( ! function_exists( 'dsagfe_get_digests' ) ) {
+	if ( ! function_exists( 'edfgf_get_digests' ) ) {
 		add_action( 'admin_notices', function () {
 			echo '<div class="notice notice-error"><p>';
 			echo esc_html__( 'Entry Digest for Gravity Forms - Pro requires the free "Entry Digest for Gravity Forms" plugin to be installed and active.', 'entry-digest-for-gravity-forms-pro' );

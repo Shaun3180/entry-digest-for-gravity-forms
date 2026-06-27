@@ -4,7 +4,7 @@ defined( 'ABSPATH' ) || exit;
 // ════════════════════════════════════════════════════════════════
 //  Conditional filtering engine (Pro)
 // ════════════════════════════════════════════════════════════════
-function dsagfe_filter_operators(): array {
+function edfgfp_filter_operators(): array {
 	return [
 		'is'           => __( 'is', 'entry-digest-for-gravity-forms' ),
 		'is_not'       => __( 'is not', 'entry-digest-for-gravity-forms' ),
@@ -24,7 +24,7 @@ function dsagfe_filter_operators(): array {
  * @param array  $rules List of [ 'field' => key, 'op' => op, 'value' => str ].
  * @param string $logic 'all' | 'any'.
  */
-function dsagfe_entry_matches( array $entry, array $rules, string $logic = 'all' ): bool {
+function edfgfp_entry_matches( array $entry, array $rules, string $logic = 'all' ): bool {
 	if ( empty( $rules ) ) {
 		return true;
 	}
@@ -73,18 +73,18 @@ function dsagfe_entry_matches( array $entry, array $rules, string $logic = 'all'
 	return ! in_array( false, $results, true );
 }
 /**
- * Parse posted filter rules (mirrors dsagfe_handle_save). Pro only.
+ * Parse posted filter rules (mirrors edfgf_handle_save). Pro only.
  *
  * @return array form_id => [ 'logic' => all|any, 'rules' => [ {field,op,value} ] ]
  */
-function dsagfe_parse_posted_filters( array $raw, array $form_ids, bool $is_pro ): array {
+function edfgfp_parse_posted_filters( array $raw, array $form_ids, bool $is_pro ): array {
 	$filters = [];
 	if ( ! $is_pro ) {
 		return $filters;
 	}
 	$filters_in = (array) ( $raw['filters'] ?? [] );
 	$logic_in   = (array) ( $raw['filter_logic'] ?? [] );
-	$ops        = array_keys( dsagfe_filter_operators() );
+	$ops        = array_keys( edfgfp_filter_operators() );
 	foreach ( $form_ids as $fid ) {
 		$rules_raw = (array) ( $filters_in[ (string) $fid ] ?? [] );
 		$rules     = [];

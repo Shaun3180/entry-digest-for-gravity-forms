@@ -2,27 +2,27 @@
  * Entry Digest for Gravity Forms - digest editor screen behavior.
  *
  * Localized data is provided by admin/enqueue.php:
- *   - window.DSAGFE_I18N  : translated UI strings
- *   - window.DSAGFE_COUNT : { url, nonce, gf } for the live entry-count preview
+ *   - window.EDFGF_I18N  : translated UI strings
+ *   - window.EDFGF_COUNT : { url, nonce, gf } for the live entry-count preview
  */
 ( function () {
 	'use strict';
 
-	var I18N  = window.DSAGFE_I18N || {};
-	var COUNT = window.DSAGFE_COUNT || {};
+	var I18N  = window.EDFGF_I18N || {};
+	var COUNT = window.EDFGF_COUNT || {};
 
 	// ── Show only the per-form config blocks for the selected forms ──────────
 	( function () {
 		function sync() {
 			var checked = {};
-			document.querySelectorAll( '.dsagfe-form-toggle' ).forEach( function ( el ) {
+			document.querySelectorAll( '.edfgf-form-toggle' ).forEach( function ( el ) {
 				if ( el.checked ) { checked[ el.dataset.fid ] = true; }
 			} );
-			document.querySelectorAll( '.dsagfe-form-block' ).forEach( function ( block ) {
+			document.querySelectorAll( '.edfgf-form-block' ).forEach( function ( block ) {
 				block.style.display = checked[ block.dataset.fid ] ? '' : 'none';
 			} );
 		}
-		document.querySelectorAll( '.dsagfe-form-toggle' ).forEach( function ( el ) {
+		document.querySelectorAll( '.edfgf-form-toggle' ).forEach( function ( el ) {
 			el.addEventListener( 'change', sync );
 		} );
 		sync();
@@ -30,9 +30,9 @@
 
 	// ── Show/hide schedule rows based on frequency + one-time date ───────────
 	( function () {
-		var freq     = document.getElementById( 'dsagfe_freq' );
-		var onetime  = document.getElementById( 'dsagfe_onetime' );
-		var clearBtn = document.getElementById( 'dsagfe_onetime_clear' );
+		var freq     = document.getElementById( 'edfgf_freq' );
+		var onetime  = document.getElementById( 'edfgf_onetime' );
+		var clearBtn = document.getElementById( 'edfgf_onetime_clear' );
 		if ( ! freq ) { return; }
 
 		function show( sel, on ) {
@@ -42,9 +42,9 @@
 		}
 		function sync() {
 			var f = freq.value;
-			show( '.dsagfe-weekly-row', f === 'weekly' );                     // send day: weekly only
-			show( '.dsagfe-recurring-row', f === 'daily' || f === 'weekly' ); // recurring send time
-			show( '.dsagfe-onetime-row', !! ( onetime && onetime.value ) );   // lookback: only with a date
+			show( '.edfgf-weekly-row', f === 'weekly' );                     // send day: weekly only
+			show( '.edfgf-recurring-row', f === 'daily' || f === 'weekly' ); // recurring send time
+			show( '.edfgf-onetime-row', !! ( onetime && onetime.value ) );   // lookback: only with a date
 		}
 		freq.addEventListener( 'change', sync );
 		if ( onetime ) { onetime.addEventListener( 'input', sync ); }
@@ -60,7 +60,7 @@
 
 	// ── Live entry-count preview ─────────────────────────────────────────────
 	( function () {
-		var preview = document.getElementById( 'dsagfe-count-preview' );
+		var preview = document.getElementById( 'edfgf-count-preview' );
 		if ( ! preview ) { return; }
 
 		function esc( s ) { var d = document.createElement( 'div' ); d.textContent = s; return d.innerHTML; }
@@ -71,7 +71,7 @@
 		}
 
 		var theForm = preview.closest( 'form' );
-		var badges  = document.querySelectorAll( '.dsagfe-form-count' );
+		var badges  = document.querySelectorAll( '.edfgf-form-count' );
 		var timer   = null;
 		var seq     = 0;
 
@@ -108,7 +108,7 @@
 			var mySeq = ++seq;
 			preview.innerHTML = '<em>' + esc( I18N.calculating ) + '</em>';
 			var fd = new FormData( theForm );
-			fd.append( 'action', 'dsagfe_entry_count' );
+			fd.append( 'action', 'edfgf_entry_count' );
 			fd.append( 'nonce', COUNT.nonce );
 			fetch( COUNT.url, { method: 'POST', body: fd, credentials: 'same-origin' } )
 				.then( function ( r ) { return r.json(); } )
@@ -129,15 +129,15 @@
 
 		theForm.addEventListener( 'change', function ( e ) {
 			if ( e.target.closest && (
-				e.target.id === 'dsagfe_freq' ||
-				e.target.id === 'dsagfe_onetime' ||
-				e.target.id === 'dsagfe_lookback' ||
-				e.target.classList.contains( 'dsagfe-form-toggle' ) ||
+				e.target.id === 'edfgf_freq' ||
+				e.target.id === 'edfgf_onetime' ||
+				e.target.id === 'edfgf_lookback' ||
+				e.target.classList.contains( 'edfgf-form-toggle' ) ||
 				( e.target.name && ( e.target.name.indexOf( '[filters]' ) !== -1 || e.target.name.indexOf( '[filter_logic]' ) !== -1 ) )
 			) ) { debounced(); }
 		} );
 		theForm.addEventListener( 'input', function ( e ) {
-			if ( e.target.name && ( e.target.name.indexOf( '[filters]' ) !== -1 || e.target.id === 'dsagfe_lookback' ) ) { debounced(); }
+			if ( e.target.name && ( e.target.name.indexOf( '[filters]' ) !== -1 || e.target.id === 'edfgf_lookback' ) ) { debounced(); }
 		} );
 
 		update();
