@@ -307,7 +307,11 @@ function edfgf_run_digest( string $digest_id, string $mode = 'recurring', array 
 		$to,
 		$subject,
 		$html,
-		[ 'Content-Type: text/html; charset=UTF-8' ],
+		array_filter( [
+			'Content-Type: text/html; charset=UTF-8',
+			// Reply-To: only added when a valid address is configured for this digest.
+			( is_email( $d['reply_to'] ?? '' ) ? 'Reply-To: ' . sanitize_email( $d['reply_to'] ) : '' ),
+		] ),
 		$attachments
 	);
 
