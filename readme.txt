@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.7.0
+Stable tag: 2.7.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -126,6 +126,9 @@ As many as you like - there is no limit on the number of digests, and each diges
 5. Per-form field selection for the entry table.
 
 == Changelog ==
+
+= 2.7.1 =
+* New: **Reply-to address** — each digest can now have an optional Reply-To email address. When a recipient replies to a digest, their reply goes to that address instead of the site mailer default. Leave it blank to keep the existing behavior.
 
 = 2.7.0 =
 * New: **Duplicate digest** — a Duplicate button on the digest list creates an instant copy of any digest, opens it in the editor ready to rename, and starts it unpaused with a clean schedule (no inherited one-time date).
