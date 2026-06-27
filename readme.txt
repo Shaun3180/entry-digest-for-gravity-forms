@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.6.6
+Stable tag: 2.7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -126,6 +126,9 @@ As many as you like - there is no limit on the number of digests, and each diges
 5. Per-form field selection for the entry table.
 
 == Changelog ==
+
+= 2.7.0 =
+* New: **Duplicate digest** — a Duplicate button on the digest list creates an instant copy of any digest, opens it in the editor ready to rename, and starts it unpaused with a clean schedule (no inherited one-time date).
 
 = 2.6.6 =
 * Maintenance: standardized every internal identifier (functions, classes of options, hooks, constants, AJAX actions, admin page slug, CSS classes, and script handles) under a single distinct plugin prefix to eliminate any chance of collision with other plugins. No change to features or behavior.
