@@ -75,8 +75,52 @@ function edfgf_handle_save_request(): void {
 }
 
 /**
- * Route the admin page between the digest list and the editor, handling POSTs.
+ * Handle a duplicate-digest request early on admin_init so we can redirect to
+ * the new digest's editor immediately (post/redirect/get). The copy gets a fresh
+ * id and label suffixed with " (copy)"; paused state and one-time date are
+ * cleared so the duplicate starts active and schedule-clean.
  */
+add_action( 'admin_init', 'edfgf_handle_duplicate_request' );
+function edfgf_handle_duplicate_request(): void {
+	if ( ! isset( $_POST['edfgf_duplicate_digest'] ) ) {
+		return;
+	}
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	check_admin_referer( 'edfgf_duplicate_digest' );
+
+	$id      = sanitize_text_field( wp_unslash( $_POST['digest_id'] ?? '' ) );
+	$source  = edfgf_get_digest( $id );
+	if ( ! $source ) {
+		return;
+	}
+
+	$digests = edfgf_get_digests();
+	$new_id  = edfgf_new_id();
+
+	$copy              = $source;
+	$copy['id']        = $new_id;
+	/* translators: %s: the original digest's name. */
+	$copy['label']     = sprintf( __( '%s (copy)', 'entry-digest-for-gravity-forms' ), $source['label'] ?: __( 'Untitled digest', 'entry-digest-for-gravity-forms' ) );
+	$copy['paused']    = false; // always start active
+	$copy['onetime_at'] = '';   // don't inherit a one-time date that may have already passed
+
+	$digests[ $new_id ] = edfgf_normalize_digest( $copy, $new_id );
+	edfgf_save_digests( $digests );
+
+	wp_safe_redirect( add_query_arg(
+		[
+			'action'       => 'edit',
+			'digest'       => rawurlencode( $new_id ),
+			'edfgf_saved'  => 'created',
+		],
+		edfgf_page_url()
+	) );
+	exit;
+}
+
+
 function edfgf_admin_router(): void {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( esc_html__( 'Insufficient permissions.', 'entry-digest-for-gravity-forms' ) );
