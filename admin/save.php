@@ -28,6 +28,10 @@ function edfgf_handle_save(): array {
 	$d['label']         = sanitize_text_field( $raw['label'] ?? $def['label'] ) ?: $def['label'];
 	$d['email_subject'] = sanitize_text_field( $raw['email_subject'] ?? $def['email_subject'] ) ?: $def['email_subject'];
 
+	// Reply-To: a single email address or empty (meaning "use the mailer default").
+	$reply_to_raw  = sanitize_email( trim( (string) ( $raw['reply_to'] ?? '' ) ) );
+	$d['reply_to'] = is_email( $reply_to_raw ) ? $reply_to_raw : '';
+
 	// Recipients.
 	$emails = array_values( array_filter(
 		array_map( static function ( string $e ): string {
