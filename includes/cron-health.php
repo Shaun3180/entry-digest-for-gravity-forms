@@ -28,9 +28,9 @@ defined( 'ABSPATH' ) || exit;
  *   Null when there is nothing to assess (no scheduled digest events at all -
  *   e.g. all digests are paused or none are configured).
  */
-function dsagfe_cron_health(): ?array {
+function edfgf_cron_health(): ?array {
 	$now   = time();
-	$grace = (int) apply_filters( 'dsagfe_cron_overdue_grace', HOUR_IN_SECONDS );
+	$grace = (int) apply_filters( 'edfgf_cron_overdue_grace', HOUR_IN_SECONDS );
 
 	// Find the earliest scheduled run across every instance of our hook
 	// (recurring, one-time, and any legacy no-arg events).
@@ -38,7 +38,7 @@ function dsagfe_cron_health(): ?array {
 	$crons    = _get_cron_array();
 	if ( ! empty( $crons ) ) {
 		foreach ( $crons as $ts => $hooks ) {
-			if ( isset( $hooks[ DSAGFE_CRON_HOOK ] ) && ( 0 === $earliest || (int) $ts < $earliest ) ) {
+			if ( isset( $hooks[ EDFGF_CRON_HOOK ] ) && ( 0 === $earliest || (int) $ts < $earliest ) ) {
 				$earliest = (int) $ts;
 			}
 		}
@@ -63,8 +63,8 @@ function dsagfe_cron_health(): ?array {
  *
  * Returned markup is fully escaped and safe to echo directly.
  */
-function dsagfe_cron_health_notice_html(): string {
-	$health = dsagfe_cron_health();
+function edfgf_cron_health_notice_html(): string {
+	$health = edfgf_cron_health();
 	if ( null === $health || $health['ok'] ) {
 		return '';
 	}
@@ -96,8 +96,8 @@ function dsagfe_cron_health_notice_html(): string {
 
 // ── Dismissible overdue notice (dashboard + digest list) ─────────
 
-add_action( 'admin_notices', 'dsagfe_maybe_show_overdue_notice' );
-add_action( 'wp_ajax_dsagfe_dismiss_overdue_notice', 'dsagfe_ajax_dismiss_overdue_notice' );
+add_action( 'admin_notices', 'edfgf_maybe_show_overdue_notice' );
+add_action( 'wp_ajax_edfgf_dismiss_overdue_notice', 'edfgf_ajax_dismiss_overdue_notice' );
 
 /**
  * Render a dismissible admin notice when the scheduler is overdue.
@@ -107,7 +107,7 @@ add_action( 'wp_ajax_dsagfe_dismiss_overdue_notice', 'dsagfe_ajax_dismiss_overdu
  * if the problem still exists.  A new overdue event (different timestamp) always
  * resets the dismissal regardless of the 7-day window.
  */
-function dsagfe_maybe_show_overdue_notice(): void {
+function edfgf_maybe_show_overdue_notice(): void {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
 	}
@@ -123,19 +123,19 @@ function dsagfe_maybe_show_overdue_notice(): void {
 	$page   = isset( $_GET['page'] )   ? sanitize_key( wp_unslash( $_GET['page'] ) )   : '';
 	$action = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : '';
 	// phpcs:enable
-	$is_list_page = ( 'dsagfe-entry-digest' === $page ) && ( '' === $action || 'list' === $action );
+	$is_list_page = ( 'edfgf-entry-digest' === $page ) && ( '' === $action || 'list' === $action );
 
 	if ( ! $is_dashboard && ! $is_list_page ) {
 		return;
 	}
 
-	$health = dsagfe_cron_health();
+	$health = edfgf_cron_health();
 	if ( null === $health || $health['ok'] ) {
 		return;
 	}
 
 	// Suppress if this exact overdue event was dismissed within the past 7 days.
-	$raw       = get_user_meta( get_current_user_id(), 'dsagfe_cron_notice_dismissed', true );
+	$raw       = get_user_meta( get_current_user_id(), 'edfgf_cron_notice_dismissed', true );
 	$dismissed = $raw ? json_decode( $raw, true ) : null;
 	if ( is_array( $dismissed )
 		&& isset( $dismissed['ts'], $dismissed['until'] )
@@ -154,15 +154,15 @@ function dsagfe_maybe_show_overdue_notice(): void {
 
 	$learn_url = 'https://developer.wordpress.org/plugins/cron/';
 	$list_url  = class_exists( 'GFForms' )
-		? admin_url( 'admin.php?page=dsagfe-entry-digest' )
-		: admin_url( 'tools.php?page=dsagfe-entry-digest' );
+		? admin_url( 'admin.php?page=edfgf-entry-digest' )
+		: admin_url( 'tools.php?page=edfgf-entry-digest' );
 
 	// The dismissal AJAX call is wired up by admin/js/notices.js, which is enqueued
 	// on this screen from admin/enqueue.php. The overdue event timestamp is passed
 	// to that script via the data-earliest attribute below; the nonce and AJAX URL
-	// are provided through wp_localize_script() as window.DSAGFE_NOTICE.
+	// are provided through wp_localize_script() as window.EDFGF_NOTICE.
 	?>
-	<div class="notice notice-warning is-dismissible" id="dsagfe-overdue-notice" data-earliest="<?php echo esc_attr( (string) $earliest ); ?>">
+	<div class="notice notice-warning is-dismissible" id="edfgf-overdue-notice" data-earliest="<?php echo esc_attr( (string) $earliest ); ?>">
 		<p><strong><?php esc_html_e( 'Entry Digest: scheduled sends may not be running', 'entry-digest-for-gravity-forms' ); ?></strong></p>
 		<p>
 			<?php
@@ -190,8 +190,8 @@ function dsagfe_maybe_show_overdue_notice(): void {
  * Stores the overdue event timestamp alongside a 7-day expiry so the notice
  * reappears automatically if the scheduler is still broken after that window.
  */
-function dsagfe_ajax_dismiss_overdue_notice(): void {
-	check_ajax_referer( 'dsagfe_dismiss_overdue_notice', 'nonce' );
+function edfgf_ajax_dismiss_overdue_notice(): void {
+	check_ajax_referer( 'edfgf_dismiss_overdue_notice', 'nonce' );
 
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( '', '', [ 'response' => 403 ] );
@@ -201,7 +201,7 @@ function dsagfe_ajax_dismiss_overdue_notice(): void {
 	if ( $earliest > 0 ) {
 		update_user_meta(
 			get_current_user_id(),
-			'dsagfe_cron_notice_dismissed',
+			'edfgf_cron_notice_dismissed',
 			wp_json_encode( [
 				'ts'    => $earliest,
 				'until' => time() + WEEK_IN_SECONDS,

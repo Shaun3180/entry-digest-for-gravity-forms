@@ -6,19 +6,19 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return array{id:string,is_new:bool} The saved digest id and whether it was newly created.
  */
-function dsagfe_handle_save(): array {
+function edfgf_handle_save(): array {
 	// Nonce already verified by check_admin_referer() in menu.php before this function is called.
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- nonce checked upstream; individual values sanitized below.
-	$raw = wp_unslash( (array) ( $_POST['dsagfe_digest'] ?? [] ) );
+	$raw = wp_unslash( (array) ( $_POST['edfgf_digest'] ?? [] ) );
 
-	$digests = dsagfe_get_digests();
+	$digests = edfgf_get_digests();
 	$id      = sanitize_text_field( $raw['id'] ?? '' );
 	$is_new  = ( '' === $id || ! isset( $digests[ $id ] ) );
 	if ( $is_new ) {
-		$id = dsagfe_new_id();
+		$id = edfgf_new_id();
 	}
 
-	$def = dsagfe_digest_defaults();
+	$def = edfgf_digest_defaults();
 	$d   = [ 'id' => $id ];
 
 	// Pause state isn't an editor field - it's toggled from the list - so carry the
@@ -96,13 +96,13 @@ function dsagfe_handle_save(): array {
 	 * attachment format) parsed from the submitted form.
 	 *
 	 * @param array $d        The sanitized digest configuration so far.
-	 * @param array $raw      The unslashed, raw submitted dsagfe_digest array.
+	 * @param array $raw      The unslashed, raw submitted edfgf_digest array.
 	 * @param int[] $form_ids The form IDs selected for this digest.
 	 */
-	$d = (array) apply_filters( 'dsagfe_save_digest', $d, $raw, $form_ids );
+	$d = (array) apply_filters( 'edfgf_save_digest', $d, $raw, $form_ids );
 
-	$digests[ $id ] = dsagfe_normalize_digest( $d, $id );
-	dsagfe_save_digests( $digests );
+	$digests[ $id ] = edfgf_normalize_digest( $d, $id );
+	edfgf_save_digests( $digests );
 
 	// Return the saved id so the router can redirect to its editor (post/redirect/get).
 	return [ 'id' => $id, 'is_new' => $is_new ];

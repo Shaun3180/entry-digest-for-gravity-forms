@@ -8,9 +8,9 @@ defined( 'ABSPATH' ) || exit;
  * Used only to link out from the informational "Entry Digest Pro" page and the
  * editor tip. This is a plain marketing link - it gates nothing.
  */
-function dsagfe_pro_url(): string {
+function edfgf_pro_url(): string {
 	return (string) apply_filters(
-		'dsagfe_pro_url',
+		'edfgf_pro_url',
 		'https://addasitebuilders.com/plugins/entry-digest-for-gravity-forms/'
 	);
 }
@@ -20,7 +20,7 @@ function dsagfe_pro_url(): string {
  * Translated weekday label for an internal English day key ('monday'…'sunday').
  * Falls back to a capitalized version of the key for anything unexpected.
  */
-function dsagfe_day_label( string $day ): string {
+function edfgf_day_label( string $day ): string {
 	$map = [
 		'monday'    => __( 'Monday', 'entry-digest-for-gravity-forms' ),
 		'tuesday'   => __( 'Tuesday', 'entry-digest-for-gravity-forms' ),
@@ -37,7 +37,7 @@ function dsagfe_day_label( string $day ): string {
 /**
  * Defaults for a single digest configuration.
  */
-function dsagfe_digest_defaults(): array {
+function edfgf_digest_defaults(): array {
 	return [
 		'id'            => '',
 		'label'         => __( 'Entry digest', 'entry-digest-for-gravity-forms' ),
@@ -62,9 +62,9 @@ function dsagfe_digest_defaults(): array {
 /**
  * Top-level option defaults.
  */
-function dsagfe_defaults(): array {
+function edfgf_defaults(): array {
 	return [
-		'schema'  => DSAGFE_SCHEMA_VERSION,
+		'schema'  => EDFGF_SCHEMA_VERSION,
 		'digests' => [],
 	];
 }
@@ -72,18 +72,18 @@ function dsagfe_defaults(): array {
 /**
  * Generate a short, unique digest id.
  */
-function dsagfe_new_id(): string {
+function edfgf_new_id(): string {
 	return 'd_' . substr( md5( uniqid( '', true ) ), 0, 10 );
 }
 
 /**
  * Normalize one digest config: fill defaults, coerce types.
  */
-function dsagfe_normalize_digest( array $d, string $id = '' ): array {
-	$def = dsagfe_digest_defaults();
+function edfgf_normalize_digest( array $d, string $id = '' ): array {
+	$def = edfgf_digest_defaults();
 	$out = wp_parse_args( $d, $def );
 
-	$out['id']            = $id ?: ( ! empty( $d['id'] ) ? (string) $d['id'] : dsagfe_new_id() );
+	$out['id']            = $id ?: ( ! empty( $d['id'] ) ? (string) $d['id'] : edfgf_new_id() );
 	$out['label']         = (string) $out['label'];
 	$out['to_email']      = (string) $out['to_email'];
 	$out['email_subject'] = (string) $out['email_subject'];
@@ -116,9 +116,9 @@ function dsagfe_normalize_digest( array $d, string $id = '' ): array {
 /**
  * Migrate the legacy flat (v1) settings blob into a single v2 digest.
  */
-function dsagfe_migrate_legacy( array $old ): array {
+function edfgf_migrate_legacy( array $old ): array {
 	$form_id = max( 1, (int) ( $old['form_id'] ?? 1 ) );
-	return dsagfe_normalize_digest( [
+	return edfgf_normalize_digest( [
 		'label'         => __( 'Digest', 'entry-digest-for-gravity-forms' ),
 		'form_ids'      => [ $form_id ],
 		'to_email'      => (string) ( $old['to_email'] ?? '' ),
@@ -136,18 +136,18 @@ function dsagfe_migrate_legacy( array $old ): array {
 /**
  * Load all settings, running migration and normalization.
  */
-function dsagfe_get_settings(): array {
-	$raw = get_option( DSAGFE_OPTION_KEY, [] );
+function edfgf_get_settings(): array {
+	$raw = get_option( EDFGF_OPTION_KEY, [] );
 	$raw = is_array( $raw ) ? $raw : [];
 
 	// Legacy v1 detection: a flat config carried 'form_id' at the top level.
 	if ( isset( $raw['form_id'] ) && ! isset( $raw['digests'] ) ) {
-		$migrated = dsagfe_migrate_legacy( $raw );
-		$raw      = [ 'schema' => DSAGFE_SCHEMA_VERSION, 'digests' => [ $migrated['id'] => $migrated ] ];
-		update_option( DSAGFE_OPTION_KEY, $raw );
+		$migrated = edfgf_migrate_legacy( $raw );
+		$raw      = [ 'schema' => EDFGF_SCHEMA_VERSION, 'digests' => [ $migrated['id'] => $migrated ] ];
+		update_option( EDFGF_OPTION_KEY, $raw );
 	}
 
-	$raw = wp_parse_args( $raw, dsagfe_defaults() );
+	$raw = wp_parse_args( $raw, edfgf_defaults() );
 	if ( ! is_array( $raw['digests'] ) ) {
 		$raw['digests'] = [];
 	}
@@ -155,7 +155,7 @@ function dsagfe_get_settings(): array {
 	$normalized = [];
 	foreach ( $raw['digests'] as $id => $d ) {
 		$id                = (string) $id;
-		$normalized[ $id ] = dsagfe_normalize_digest( (array) $d, $id );
+		$normalized[ $id ] = edfgf_normalize_digest( (array) $d, $id );
 	}
 	$raw['digests'] = $normalized;
 
@@ -165,8 +165,8 @@ function dsagfe_get_settings(): array {
 /**
  * All configured digests (associative by id, insertion order preserved).
  */
-function dsagfe_get_digests(): array {
-	return dsagfe_get_settings()['digests'];
+function edfgf_get_digests(): array {
+	return edfgf_get_settings()['digests'];
 }
 
 /**
@@ -174,25 +174,25 @@ function dsagfe_get_digests(): array {
  * is not paused. Paused digests keep their configuration but are excluded from
  * cron scheduling (manual "Send Now" and test sends still work on them).
  */
-function dsagfe_active_digests(): array {
-	return array_filter( dsagfe_get_digests(), static fn( $d ) => empty( $d['paused'] ) );
+function edfgf_active_digests(): array {
+	return array_filter( edfgf_get_digests(), static fn( $d ) => empty( $d['paused'] ) );
 }
 
 /**
  * Fetch a single digest by id, or null.
  */
-function dsagfe_get_digest( string $id ): ?array {
-	$digests = dsagfe_get_digests();
+function edfgf_get_digest( string $id ): ?array {
+	$digests = edfgf_get_digests();
 	return $digests[ $id ] ?? null;
 }
 
 /**
  * Persist the full digests map and re-sync the cron schedule.
  */
-function dsagfe_save_digests( array $digests ): void {
-	update_option( DSAGFE_OPTION_KEY, [
-		'schema'  => DSAGFE_SCHEMA_VERSION,
+function edfgf_save_digests( array $digests ): void {
+	update_option( EDFGF_OPTION_KEY, [
+		'schema'  => EDFGF_SCHEMA_VERSION,
 		'digests' => $digests,
 	] );
-	dsagfe_reschedule_all();
+	edfgf_reschedule_all();
 }

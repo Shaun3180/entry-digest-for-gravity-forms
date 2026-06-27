@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.6.4
+Stable tag: 2.6.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -127,9 +127,15 @@ As many as you like - there is no limit on the number of digests, and each diges
 
 == Changelog ==
 
+= 2.6.6 =
+* Maintenance: standardized every internal identifier (functions, classes of options, hooks, constants, AJAX actions, admin page slug, CSS classes, and script handles) under a single distinct plugin prefix to eliminate any chance of collision with other plugins. No change to features or behavior.
+
+= 2.6.5 =
+* Translations are now provided through translate.wordpress.org. The bundled locale .po/.mo files were removed and the translation template (.pot) refreshed for the current strings, so locale coverage stays current automatically without shipping stale catalogs.
+
 = 2.6.4 =
 * Code quality: the optional Pro upsell panel now loads its styles from an enqueued stylesheet (admin/css/pro-panel.css) using CSS classes instead of inline style attributes, and its dismiss action reads the nonce/AJAX URL from data attributes. No change to what the panel shows or does.
-* Fixed on-screen text: the free send log keeps the most recent 10 sends by default (filterable via `dsagfe_log_max`). The Features list and Pro upsell wording now match the actual default of ten.
+* Fixed on-screen text: the free send log keeps the most recent 10 sends by default (filterable via `edfgf_log_max`). The Features list and Pro upsell wording now match the actual default of ten.
 
 = 2.6.3 =
 * Multi-form digests are now a free, core feature: a single digest can combine entries from several forms into one email, selectable directly in the editor. Nothing is locked or gated.
@@ -138,7 +144,7 @@ As many as you like - there is no limit on the number of digests, and each diges
 
 = 2.6.2 =
 * Compliance: all admin JavaScript is now loaded through the standard wp_enqueue_script()/wp_localize_script() APIs - the remaining inline `<script>` blocks (overdue-cron notice and Pro panel) and inline `onsubmit` confirmations were moved into properly enqueued files, loaded only on the screens that use them and with the WordPress 6.3 `defer` strategy.
-* Compliance: renamed the admin page slug to a plugin-prefixed `dsagfe-entry-digest` so it cannot collide with another plugin's menu.
+* Compliance: renamed the admin page slug to a plugin-prefixed `edfgf-entry-digest` so it cannot collide with another plugin's menu.
 * Uninstall now also removes the plugin's per-user dismissal meta, leaving nothing behind.
 
 = 2.6.1 =
@@ -156,7 +162,7 @@ As many as you like - there is no limit on the number of digests, and each diges
 
 = 2.4.0 =
 * New: **Plain-text fallback** - digests are now sent as multipart email (HTML plus an automatically generated plain-text version), improving deliverability and accessibility for text-only clients and screen readers.
-* Change: the **send log** now retains the most recent 5 sends by default (filterable via `dsagfe_log_max`). The optional Pro add-on adds a configurable, extended history.
+* Change: the **send log** now retains the most recent 5 sends by default (filterable via `edfgf_log_max`). The optional Pro add-on adds a configurable, extended history.
 
 = 2.3.0 =
 * New: **Scheduler health check** - the digest list shows a warning when a scheduled send is overdue, which usually means WP-Cron isn't firing (a low-traffic site, or WP-Cron disabled without a working server cron). The message adapts to your setup and links to guidance. No warning is shown for a healthy scheduler.

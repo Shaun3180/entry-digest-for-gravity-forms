@@ -4,7 +4,7 @@ defined( 'ABSPATH' ) || exit;
 // ════════════════════════════════════════════════════════════════
 //  HTML digest builder - summary block + per-form entry tables
 // ════════════════════════════════════════════════════════════════
-function dsagfe_local_datetime( string $utc, string $format = 'M j, Y g:i A' ): string {
+function edfgf_local_datetime( string $utc, string $format = 'M j, Y g:i A' ): string {
 	$ts = strtotime( $utc . ' UTC' );
 	return $ts ? wp_date( $format, $ts ) : esc_html( $utc );
 }
@@ -19,15 +19,15 @@ function dsagfe_local_datetime( string $utc, string $format = 'M j, Y g:i A' ): 
  * @param string $end_date    UTC 'Y-m-d H:i:s'.
  * @param string $mode        'recurring' or 'once' (a one-time send).
  */
-function dsagfe_build_digest_html( array $sections, array $d, int $total_count, string $start_date, string $end_date, string $mode = 'recurring' ): string {
+function edfgf_build_digest_html( array $sections, array $d, int $total_count, string $start_date, string $end_date, string $mode = 'recurring' ): string {
 	$is_once    = ( 'once' === $mode );
 	$cadence    = $is_once ? 'one-time' : ( ( 'daily' === $d['frequency'] ) ? 'daily' : 'weekly' );
 	// A "whole history" one-time send uses a sentinel start date; show it as open-ended.
 	$open_ended = $is_once && ( strtotime( $start_date ) <= strtotime( '2000-01-02 00:00:00' ) );
 	$period     = $open_ended
 		/* translators: %s: an end date/time. */
-		? sprintf( __( 'All entries through %s', 'entry-digest-for-gravity-forms' ), dsagfe_local_datetime( $end_date ) )
-		: dsagfe_local_datetime( $start_date ) . ' &ndash; ' . dsagfe_local_datetime( $end_date );
+		? sprintf( __( 'All entries through %s', 'entry-digest-for-gravity-forms' ), edfgf_local_datetime( $end_date ) )
+		: edfgf_local_datetime( $start_date ) . ' &ndash; ' . edfgf_local_datetime( $end_date );
 	$cadence_label = $is_once
 		? __( 'One-time', 'entry-digest-for-gravity-forms' )
 		: ( ( 'daily' === $cadence )
@@ -60,7 +60,7 @@ function dsagfe_build_digest_html( array $sections, array $d, int $total_count, 
 	 * @param string $accent Default accent color.
 	 * @param array  $d      The digest configuration.
 	 */
-	$accent = (string) apply_filters( 'dsagfe_email_accent', '#2563eb', $d );
+	$accent = (string) apply_filters( 'edfgf_email_accent', '#2563eb', $d );
 	if ( ! preg_match( '/^#[0-9a-fA-F]{6}$/', $accent ) ) {
 		$accent = '#2563eb';
 	}
@@ -83,7 +83,7 @@ function dsagfe_build_digest_html( array $sections, array $d, int $total_count, 
 				 * @param string $logo_html HTML to render. Default empty.
 				 * @param array  $d         The digest configuration.
 				 */
-				$logo_html = (string) apply_filters( 'dsagfe_email_logo_html', '', $d );
+				$logo_html = (string) apply_filters( 'edfgf_email_logo_html', '', $d );
 				if ( '' !== $logo_html ) {
 					echo '<div style="margin-bottom:10px;">' . wp_kses_post( $logo_html ) . '</div>';
 				}
@@ -138,7 +138,7 @@ function dsagfe_build_digest_html( array $sections, array $d, int $total_count, 
 				</div>
 			<?php else : ?>
 				<?php foreach ( $sections as $sec ) : ?>
-					<?php echo dsagfe_render_section_table( $sec, $d, $multi_form, $accent, $muted, $border ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+					<?php echo edfgf_render_section_table( $sec, $d, $multi_form, $accent, $muted, $border ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				<?php endforeach; ?>
 			<?php endif; ?>
 
@@ -152,7 +152,7 @@ function dsagfe_build_digest_html( array $sections, array $d, int $total_count, 
 				 * @param string $credit Default credit text.
 				 * @param array  $d      The digest configuration.
 				 */
-				$footer_credit = (string) apply_filters( 'dsagfe_email_footer_credit', __( 'Sent automatically by Entry Digest for Gravity Forms.', 'entry-digest-for-gravity-forms' ), $d );
+				$footer_credit = (string) apply_filters( 'edfgf_email_footer_credit', __( 'Sent automatically by Entry Digest for Gravity Forms.', 'entry-digest-for-gravity-forms' ), $d );
 				if ( '' !== $footer_credit ) {
 					echo esc_html( $footer_credit ) . ' ';
 				}
@@ -163,7 +163,7 @@ function dsagfe_build_digest_html( array $sections, array $d, int $total_count, 
 					printf( esc_html__( 'Delivered daily at %s.', 'entry-digest-for-gravity-forms' ), esc_html( $d['send_time'] ) );
 				} else {
 					/* translators: 1: weekday name; 2: time of day. */
-					printf( esc_html__( 'Delivered every %1$s at %2$s.', 'entry-digest-for-gravity-forms' ), esc_html( dsagfe_day_label( $d['send_day'] ) ), esc_html( $d['send_time'] ) );
+					printf( esc_html__( 'Delivered every %1$s at %2$s.', 'entry-digest-for-gravity-forms' ), esc_html( edfgf_day_label( $d['send_day'] ) ), esc_html( $d['send_time'] ) );
 				}
 				?>
 			</div>
@@ -177,7 +177,7 @@ function dsagfe_build_digest_html( array $sections, array $d, int $total_count, 
 /**
  * Render one form's table block within the digest.
  */
-function dsagfe_render_section_table( array $sec, array $d, bool $multi_form, string $accent, string $muted, string $border ): string {
+function edfgf_render_section_table( array $sec, array $d, bool $multi_form, string $accent, string $muted, string $border ): string {
 	$entries   = $sec['entries'];
 	$field_map = $sec['field_map'];
 	$count     = $sec['count'];
@@ -215,12 +215,12 @@ function dsagfe_render_section_table( array $sec, array $d, bool $multi_form, st
 						<?php
 						$shown = 0;
 						foreach ( $entries as $entry ) :
-							if ( $shown >= DSAGFE_MAX_TABLE_ROWS ) {
+							if ( $shown >= EDFGF_MAX_TABLE_ROWS ) {
 								break;
 							}
 							$shown++;
 							$entry_id   = (int) ( $entry['id'] ?? 0 );
-							$date_label = dsagfe_local_datetime( $entry['date_created'] ?? '', 'M j, g:i A' );
+							$date_label = edfgf_local_datetime( $entry['date_created'] ?? '', 'M j, g:i A' );
 							$entry_url  = ( ! empty( $d['link_entries'] ) && $form_id && $entry_id )
 								? admin_url( 'admin.php?page=gf_entries&view=entry&id=' . $form_id . '&lid=' . $entry_id )
 								: '';
@@ -236,8 +236,8 @@ function dsagfe_render_section_table( array $sec, array $d, bool $multi_form, st
 								<?php foreach ( array_keys( $field_map ) as $fid ) : ?>
 									<?php
 									$val = (string) ( $entry[ $fid ] ?? '' );
-									if ( mb_strlen( $val ) > DSAGFE_MAX_CELL_CHARS ) {
-										$val = mb_substr( $val, 0, DSAGFE_MAX_CELL_CHARS ) . '…';
+									if ( mb_strlen( $val ) > EDFGF_MAX_CELL_CHARS ) {
+										$val = mb_substr( $val, 0, EDFGF_MAX_CELL_CHARS ) . '…';
 									}
 									?>
 									<td style="padding:8px 10px;border:1px solid <?php echo esc_attr( $border ); ?>;vertical-align:top;">
@@ -250,7 +250,7 @@ function dsagfe_render_section_table( array $sec, array $d, bool $multi_form, st
 				</table>
 			</div>
 
-			<?php if ( $count > DSAGFE_MAX_TABLE_ROWS ) : ?>
+			<?php if ( $count > EDFGF_MAX_TABLE_ROWS ) : ?>
 				<p style="font-size:12px;color:<?php echo esc_attr( $muted ); ?>;margin:12px 0 0 0;">
 					<?php
 					/**
@@ -262,12 +262,12 @@ function dsagfe_render_section_table( array $sec, array $d, bool $multi_form, st
 					 * @param array $d              The digest configuration.
 					 * @param array $sec            The current form section.
 					 */
-					$has_attachment = (bool) apply_filters( 'dsagfe_email_has_attachment', false, $d, $sec );
+					$has_attachment = (bool) apply_filters( 'edfgf_email_has_attachment', false, $d, $sec );
 					$suffix = $has_attachment
 						? __( ' - the complete set is in the attachment.', 'entry-digest-for-gravity-forms' )
 						: '.';
 					/* translators: 1: number of rows shown; 2: total number of entries; 3: trailing clause (a period, or a note about the attachment). */
-					printf( esc_html__( 'Showing the first %1$d of %2$d entries%3$s', 'entry-digest-for-gravity-forms' ), (int) DSAGFE_MAX_TABLE_ROWS, (int) $count, esc_html( $suffix ) );
+					printf( esc_html__( 'Showing the first %1$d of %2$d entries%3$s', 'entry-digest-for-gravity-forms' ), (int) EDFGF_MAX_TABLE_ROWS, (int) $count, esc_html( $suffix ) );
 					?>
 				</p>
 			<?php endif; ?>
@@ -295,14 +295,14 @@ function dsagfe_render_section_table( array $sec, array $d, bool $multi_form, st
  * @param string $end_date    UTC 'Y-m-d H:i:s'.
  * @param string $mode        'recurring' or 'once'.
  */
-function dsagfe_build_digest_text( array $sections, array $d, int $total_count, string $start_date, string $end_date, string $mode = 'recurring' ): string {
+function edfgf_build_digest_text( array $sections, array $d, int $total_count, string $start_date, string $end_date, string $mode = 'recurring' ): string {
 	$is_once    = ( 'once' === $mode );
 	$cadence    = $is_once ? 'one-time' : ( ( 'daily' === ( $d['frequency'] ?? 'weekly' ) ) ? 'daily' : 'weekly' );
 	$open_ended = $is_once && ( strtotime( $start_date ) <= strtotime( '2000-01-02 00:00:00' ) );
 	$period     = $open_ended
 		/* translators: %s: an end date/time. */
-		? sprintf( __( 'All entries through %s', 'entry-digest-for-gravity-forms' ), dsagfe_local_datetime( $end_date ) )
-		: dsagfe_local_datetime( $start_date ) . ' - ' . dsagfe_local_datetime( $end_date );
+		? sprintf( __( 'All entries through %s', 'entry-digest-for-gravity-forms' ), edfgf_local_datetime( $end_date ) )
+		: edfgf_local_datetime( $start_date ) . ' - ' . edfgf_local_datetime( $end_date );
 
 	$multi_form = count( $sections ) > 1;
 	$title      = $multi_form
@@ -345,34 +345,34 @@ function dsagfe_build_digest_text( array $sections, array $d, int $total_count, 
 
 			$shown = 0;
 			foreach ( $entries as $entry ) {
-				if ( $shown >= DSAGFE_MAX_TABLE_ROWS ) {
+				if ( $shown >= EDFGF_MAX_TABLE_ROWS ) {
 					break;
 				}
 				$shown++;
 
-				$when    = dsagfe_local_datetime( $entry['date_created'] ?? '', 'M j, Y g:i A' );
+				$when    = edfgf_local_datetime( $entry['date_created'] ?? '', 'M j, Y g:i A' );
 				$lines[] = '- ' . __( 'Submitted:', 'entry-digest-for-gravity-forms' ) . ' ' . $when;
 
 				foreach ( $field_map as $fid => $label ) {
 					$val = wp_strip_all_tags( (string) ( $entry[ $fid ] ?? '' ) );
 					$val = trim( (string) preg_replace( '/\s+/', ' ', $val ) );
-					if ( mb_strlen( $val ) > DSAGFE_MAX_CELL_CHARS ) {
-						$val = mb_substr( $val, 0, DSAGFE_MAX_CELL_CHARS ) . '…';
+					if ( mb_strlen( $val ) > EDFGF_MAX_CELL_CHARS ) {
+						$val = mb_substr( $val, 0, EDFGF_MAX_CELL_CHARS ) . '…';
 					}
 					$lines[] = '    ' . $label . ': ' . $val;
 				}
 				$lines[] = '';
 			}
 
-			if ( (int) $sec['count'] > DSAGFE_MAX_TABLE_ROWS ) {
+			if ( (int) $sec['count'] > EDFGF_MAX_TABLE_ROWS ) {
 				/* translators: 1: number of rows shown; 2: total number of entries. */
-				$lines[] = sprintf( __( 'Showing the first %1$d of %2$d entries.', 'entry-digest-for-gravity-forms' ), (int) DSAGFE_MAX_TABLE_ROWS, (int) $sec['count'] );
+				$lines[] = sprintf( __( 'Showing the first %1$d of %2$d entries.', 'entry-digest-for-gravity-forms' ), (int) EDFGF_MAX_TABLE_ROWS, (int) $sec['count'] );
 				$lines[] = '';
 			}
 		}
 	}
 
-	$footer_credit = (string) apply_filters( 'dsagfe_email_footer_credit', __( 'Sent automatically by Entry Digest for Gravity Forms.', 'entry-digest-for-gravity-forms' ), $d );
+	$footer_credit = (string) apply_filters( 'edfgf_email_footer_credit', __( 'Sent automatically by Entry Digest for Gravity Forms.', 'entry-digest-for-gravity-forms' ), $d );
 	if ( '' !== $footer_credit ) {
 		$lines[] = '--';
 		$lines[] = wp_strip_all_tags( $footer_credit );
