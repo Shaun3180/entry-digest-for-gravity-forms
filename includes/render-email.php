@@ -171,7 +171,17 @@ function edfgf_build_digest_html( array $sections, array $d, int $total_count, s
 		</div>
 	</div>
 	<?php
-	return (string) ob_get_clean();
+	$html = (string) ob_get_clean();
+
+	/**
+	 * Filter the complete HTML string for a digest email after it is built.
+	 * Add-ons can use this to post-process the markup (for example, to
+	 * restructure the header for a custom logo position).
+	 *
+	 * @param string $html  The complete email HTML.
+	 * @param array  $d     The digest configuration.
+	 */
+	return (string) apply_filters( 'edfgf_digest_html', $html, $d );
 }
 
 /**
