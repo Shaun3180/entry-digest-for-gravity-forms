@@ -84,71 +84,98 @@ function edfgfp_brand_accent( $accent, $d ) {
 
 add_filter( 'edfgf_email_logo_html', 'edfgfp_brand_logo', 10, 2 );
 /**
- * Return logo markup for the email header.
+ * Return logo <img> markup for the 'above' position (the free plugin's default
+ * behaviour: logo block sits above the title, wrapped in its own div).
  *
- * For 'above' (default): returns a plain <img> which the free plugin wraps in
- * its own <div> above the title — no change to the title rendering needed.
- *
- * For 'left' / 'right': the free plugin always renders the logo block *before*
- * the title block with no position awareness. To achieve a true side-by-side
- * layout we return a self-contained flex row that contains both the logo and a
- * copy of the title, then immediately follow it with a zero-height element that
- * collapses the real title <div> the free plugin appends. This keeps the free
- * plugin untouched while giving full layout control to Pro.
+ * For 'left' and 'right' the logo HTML alone isn't enough — we need to
+ * restructure the header so logo and title sit side-by-side. That is handled
+ * by edfgfp_rewrite_header_for_position(), which post-processes the finished
+ * HTML string via the edfgf_digest_html filter.
  */
 function edfgfp_brand_logo( string $html, array $d ): string {
 	$logo = (string) ( $d['brand_logo'] ?? '' );
 	if ( '' === $logo ) {
 		return $html;
 	}
+	// Return a plain img for all positions. For left/right the post-processor
+	// will move it into the correct flex layout after the full HTML is built.
+	return '<img src="' . esc_url( $logo ) . '" alt="" style="max-height:48px;max-width:200px;height:auto;display:block;">';
+}
+
+add_filter( 'edfgf_digest_html', 'edfgfp_rewrite_header_for_position', 10, 2 );
+/**
+ * Post-process the finished email HTML to restructure the header when
+ * logo position is 'left' or 'right'.
+ *
+ * The free plugin always renders:
+ *   <div style="margin-bottom:10px;"><img ...></div>   ← logo wrapper
+ *   <div style="color:#fff;font-size:18px;...">Title</div>
+ *   <div style="color:rgba(...);font-size:13px;...">subtitle</div>
+ *
+ * For left/right we collapse those three siblings into a single table-based
+ * row (tables for email-client compatibility) with the logo on one side and
+ * the title+subtitle stacked on the other, then justify them to opposite ends.
+ *
+ * We use a regex that matches the exact markup the free plugin produces, so
+ * this is precise and doesn't touch anything else in the email.
+ */
+function edfgfp_rewrite_header_for_position( string $html, array $d ): string {
+	$logo = (string) ( $d['brand_logo'] ?? '' );
+	if ( '' === $logo ) {
+		return $html;
+	}
 
 	$pos = (string) ( $d['brand_logo_position'] ?? 'above' );
-	if ( ! in_array( $pos, [ 'above', 'left', 'right' ], true ) ) {
-		$pos = 'above';
+	if ( ! in_array( $pos, [ 'left', 'right' ], true ) ) {
+		return $html; // 'above' needs no restructuring.
 	}
 
-	$img = '<img src="' . esc_url( $logo ) . '" alt="" style="max-height:48px;max-width:200px;height:auto;display:block;flex-shrink:0;">';
+	// Match the three-part header block the free plugin produces.
+	// The title and subtitle divs contain indented/whitespace-padded text
+	// as rendered by PHP, so we use .*? with the s (dotall) flag.
+	// We match on the opening style= values exactly as they appear in render-email.php.
+	$pattern = '~'
+		. '(<div style="margin-bottom:10px;">.*?</div>)'                               // logo wrapper
+		. '\s*'
+		. '(<div style="color:#ffffff;font-size:18px;font-weight:700;">.*?</div>)'    // title
+		. '\s*'
+		. '(<div style="color:rgba\(255,255,255,0\.85\);font-size:13px;margin-top:2px;">.*?</div>)'  // subtitle
+		. '~s';
 
-	if ( 'above' === $pos ) {
-		// Simple: logo above title. Free plugin wraps this in its own div with
-		// margin-bottom:10px, which is exactly what we want.
-		return str_replace( 'flex-shrink:0;', 'display:block;', $img );
-	}
+	$replaced = preg_replace_callback( $pattern, function ( $m ) use ( $pos ) {
+		$logo_block  = $m[1]; // <div style="margin-bottom:10px;"><img ...></div>
+		$title_block = $m[2];
+		$sub_block   = $m[3];
 
-	// Left or right: build a flex row containing the logo and the digest title.
-	// We pull the title text from the digest config (same logic the free plugin
-	// uses) so the copy is always in sync.
-	$multi_form = isset( $d['form_ids'] ) && count( (array) $d['form_ids'] ) > 1;
-	if ( $multi_form ) {
-		$title_text = ! empty( $d['label'] ) ? $d['label'] : __( 'Entry digest', 'entry-digest-for-gravity-forms' );
-	} else {
-		$fid  = (int) ( ( (array) ( $d['form_ids'] ?? [] ) )[0] ?? 0 );
-		$form = $fid && class_exists( 'GFAPI' ) ? GFAPI::get_form( $fid ) : null;
-		$title_text = ( $form && ! empty( $form['title'] ) ) ? $form['title'] : __( 'Entry digest', 'entry-digest-for-gravity-forms' );
-	}
+		// Strip the margin-bottom wrapper — we control spacing in the table cell.
+		$img_tag = preg_replace( '~^<div[^>]*>(.*)</div>$~s', '$1', trim( $logo_block ) );
 
-	$row_direction  = ( 'right' === $pos ) ? 'row-reverse' : 'row';
-	$logo_margin    = ( 'right' === $pos ) ? 'margin-left:14px;' : 'margin-right:14px;';
+		// For left: logo on left (text-align:left), title on right (text-align:right)
+		// For right: logo on right, title on left — swap the cells.
+		$logo_cell_html  = '<td style="vertical-align:middle;padding:0;">' . $img_tag . '</td>';
+		$title_cell_html = '<td style="vertical-align:middle;padding:0;text-align:right;">'
+			. $title_block
+			. $sub_block
+			. '</td>';
 
-	// The flex row replaces both the logo placeholder and the title that follows.
-	// After outputting this block we emit a zero-height/zero-font style that
-	// collapses the real title <div> the free plugin appends unconditionally.
-	$flex_row  = '<div style="display:flex;flex-direction:' . $row_direction . ';align-items:center;gap:0;">';
-	$flex_row .= '<div style="' . $logo_margin . 'flex-shrink:0;">' . $img . '</div>';
-	$flex_row .= '<div style="color:#ffffff;font-size:18px;font-weight:700;line-height:1.3;">' . esc_html( $title_text ) . '</div>';
-	$flex_row .= '</div>';
+		if ( 'right' === $pos ) {
+			// Logo on right: title cell first (left-aligned), logo cell second.
+			$title_cell_html = '<td style="vertical-align:middle;padding:0;">'
+				. $title_block
+				. $sub_block
+				. '</td>';
+			$logo_cell_html  = '<td style="vertical-align:middle;padding:0;text-align:right;">' . $img_tag . '</td>';
+		}
 
-	// Immediately after the logo block the free plugin emits:
-	//   <div style="color:#ffffff;font-size:18px;font-weight:700;">$title</div>
-	// We cancel it with an inline style injected via the wrapper the free plugin
-	// adds: the logo block is wrapped in <div style="margin-bottom:10px;">.
-	// We close that div early and open a zero-height div to swallow the title.
-	$flex_row .= '</div><div style="font-size:0;line-height:0;max-height:0;overflow:hidden;color:transparent;">';
-	// The free plugin will close its own wrapper divs correctly; the extra open
-	// <div> above is intentional — it will be closed by the free plugin's next
-	// </div> (the one that closes the title block), keeping the DOM balanced.
+		return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">'
+			. '<tr>'
+			. $logo_cell_html
+			. $title_cell_html
+			. '</tr>'
+			. '</table>';
+	}, $html, 1 );
 
-	return $flex_row;
+	return $replaced ?? $html;
 }
 
 add_filter( 'edfgf_email_footer_credit', 'edfgfp_brand_footer', 10, 2 );
