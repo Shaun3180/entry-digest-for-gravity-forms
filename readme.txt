@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.7.1
+Stable tag: 2.8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -126,6 +126,11 @@ As many as you like - there is no limit on the number of digests, and each diges
 5. Per-form field selection for the entry table.
 
 == Changelog ==
+
+= 2.8.0 =
+* New: **Date submitted column** - an editor toggle to show or hide the "Submitted" date/time column in the entry table, so you can keep the digest focused on field values when you don't need timestamps.
+* Improved: when entry links are enabled but the Date submitted column is hidden, each row's admin link now attaches to the first field column instead of disappearing, so every row stays clickable.
+* Developer: new email-rendering filters - `edfgf_email_font_family`, `edfgf_email_header_text_color`, `edfgf_email_footer_bg`, and `edfgf_email_footer_text` - let the Pro add-on (and other extensions) customize the email's typography and header/footer colors.
 
 = 2.7.1 =
 * New: **Reply-to address** — each digest can now have an optional Reply-To email address. When a recipient replies to a digest, their reply goes to that address instead of the site mailer default. Leave it blank to keep the existing behavior.
