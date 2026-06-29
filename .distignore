@@ -18,9 +18,7 @@
 /icons
 
 # Development docs and notes (not part of the plugin)
-/SUBMISSION-STEPS.md
-/landing-page-copy.md
-/launch-plan.md
+/docs
 /reviewer-reply.txt
 *.md
 
