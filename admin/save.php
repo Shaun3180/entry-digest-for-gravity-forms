@@ -80,6 +80,9 @@ function edfgf_handle_save(): array {
 	// Whether to link each entry row to the WP admin (checkbox: absent = off).
 	$d['link_entries'] = ! empty( $raw['link_entries'] );
 
+	// Whether to show the "Submitted" date column in the entry table (checkbox: absent = off).
+	$d['show_date_column'] = ! empty( $raw['show_date_column'] );
+
 	// Per-form fields.
 	$fields_in = (array) ( $raw['fields'] ?? [] );
 	$fields    = [];

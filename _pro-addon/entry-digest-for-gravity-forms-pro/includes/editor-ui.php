@@ -51,6 +51,29 @@ function edfgfp_editor_attachment_row( array $d ): void {
 	<?php
 }
 
+// ── Max entries in email table (Entries & fields section) ────────────────────
+add_action( 'edfgf_editor_entries_options', 'edfgfp_editor_table_limit_row' );
+function edfgfp_editor_table_limit_row( array $d ): void {
+	?>
+	<tr>
+		<th scope="row"><label for="edfgf_table_limit"><?php esc_html_e( 'Max entries in email', 'entry-digest-for-gravity-forms-pro' ); ?></label></th>
+		<td>
+			<input type="number" id="edfgf_table_limit" name="edfgf_digest[email_table_limit]" value="<?php echo null !== $d['email_table_limit'] ? esc_attr( (string) $d['email_table_limit'] ) : ''; ?>" min="0" step="1" class="small-text" placeholder="<?php esc_attr_e( 'All', 'entry-digest-for-gravity-forms-pro' ); ?>">
+			<p class="description">
+				<?php
+				printf(
+					/* translators: 1: the digit 0 wrapped in a code tag; 2: word "All" wrapped in a code tag. */
+					esc_html__( '%1$s = no table (attachment only). Leave blank (%2$s) to show entries up to the system limit. Enter a number to cap the table at that many rows - the email will note how many total entries exist.', 'entry-digest-for-gravity-forms-pro' ),
+					'<code>0</code>', // phpcs:ignore WordPress.Security.EscapeOutput
+					'<code>' . esc_html__( 'All', 'entry-digest-for-gravity-forms-pro' ) . '</code>' // phpcs:ignore WordPress.Security.EscapeOutput
+				);
+				?>
+			</p>
+		</td>
+	</tr>
+	<?php
+}
+
 // ── Conditional filtering (inside each per-form block) ───────────────────────
 add_action( 'edfgf_editor_form_block', 'edfgfp_editor_filter_ui', 10, 3 );
 function edfgfp_editor_filter_ui( string $fid, array $d, array $field_map ): void {
@@ -141,6 +164,12 @@ function edfgfp_save_pro_fields( array $d, array $raw, array $form_ids ): array 
 	// Attachment format.
 	$fmt = $raw['attach_format'] ?? 'none';
 	$d['attach_format'] = in_array( $fmt, [ 'none', 'xlsx', 'csv' ], true ) ? $fmt : 'none';
+
+	// Max entries in email table: null = system cap; 0 = no table; positive int = row cap.
+	if ( isset( $raw['email_table_limit'] ) ) {
+		$limit_raw = $raw['email_table_limit'];
+		$d['email_table_limit'] = ( '' === $limit_raw ) ? null : max( 0, (int) $limit_raw );
+	}
 
 	return $d;
 }
