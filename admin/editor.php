@@ -318,6 +318,17 @@ function edfgf_render_editor( string $action, string $notice ): void {
 						</td>
 					</tr>
 
+					<?php
+					/**
+					 * Fires inside the Entries & fields section table, after the built-in
+					 * entry options. Add-ons can inject additional <tr> controls here
+					 * (for example, a per-digest inline-table row cap).
+					 *
+					 * @param array $d The digest configuration being edited.
+					 */
+					do_action( 'edfgf_editor_entries_options', $d );
+					?>
+
 				</tbody></table>
 
 				<p class="description" style="margin:4px 0 12px;"><?php esc_html_e( 'Choose which fields appear in the entry table for each form.', 'entry-digest-for-gravity-forms' ); ?></p>

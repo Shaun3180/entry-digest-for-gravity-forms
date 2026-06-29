@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.8.2
+Stable tag: 2.9.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,7 @@ A digest can cover one form or several - combine entries from multiple forms int
 A separate, optional Pro add-on - distributed from [addasitebuilders.com](https://addasitebuilders.com/plugins), not from WordPress.org - adds exports, filtering, routing, and branding for teams and agencies:
 
 * CSV and Excel (.xlsx) attachments of the full period's entries - the email shows the summary, the attachment carries the complete dataset.
+* Max-entries cap - limit the inline entry table to N rows; the email notes the total count so recipients always know how many entries arrived. Set it to 0 to suppress the table entirely and let the attachment carry the data.
 * Conditional filtering - include only entries that match your rules (for example "Status is Complete" or "Budget greater than 1000").
 * Per-recipient and role-based routing - send each form's entries to the right person or to every user in a chosen WordPress role.
 * Custom email branding - your logo, accent color, and a white-label footer.
@@ -126,6 +127,10 @@ As many as you like - there is no limit on the number of digests, and each diges
 5. Per-form field selection for the entry table.
 
 == Changelog ==
+
+= 2.9.0 =
+* The "Max entries in email" setting has moved to the Pro add-on, where it pairs naturally with the CSV/Excel attachment feature (setting the cap to 0 suppresses the email table entirely, leaving the full dataset in the attachment). The underlying behavior in the email renderer is unchanged - existing digests with this value already set will continue to work. Free users without Pro active use the standard system limit as before.
+* Developer: new `edfgf_editor_entries_options` action fires inside the Entries & fields section table so add-ons can inject additional `<tr>` controls there.
 
 = 2.8.2 =
 * Updated the optional "Entry Digest Pro" description panel to reflect current add-on features, including form and field ordering, email preview, notification controls, and the expanded email branding options.
@@ -217,6 +222,9 @@ As many as you like - there is no limit on the number of digests, and each diges
 * Initial release: single scheduled digest with summary block and entry table, daily/weekly delivery.
 
 == Upgrade Notice ==
+
+= 2.9.0 =
+The "Max entries in email" setting has moved to the Pro add-on. Free users will use the standard system limit; no data is lost. Safe to update.
 
 = 2.5.0 =
 The scheduler health warning now also appears on the main WordPress dashboard as a dismissible notice. No settings changes required. Safe to update.
