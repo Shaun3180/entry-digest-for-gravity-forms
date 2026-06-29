@@ -10,6 +10,21 @@ function edfgf_local_datetime( string $utc, string $format = 'M j, Y g:i A' ): s
 }
 
 /**
+ * Convert a 6-digit hex color (e.g. #ffffff) to an rgba() string at the given
+ * opacity. Falls back to white if the hex is malformed. Used so a single
+ * header text color can drive both the solid title and the softened subtitle.
+ */
+function edfgf_hex_to_rgba( string $hex, float $alpha ): string {
+	if ( ! preg_match( '/^#([0-9a-fA-F]{6})$/', $hex, $m ) ) {
+		$m = [ 1 => 'ffffff' ];
+	}
+	$r = hexdec( substr( $m[1], 0, 2 ) );
+	$g = hexdec( substr( $m[1], 2, 2 ) );
+	$b = hexdec( substr( $m[1], 4, 2 ) );
+	return 'rgba(' . $r . ',' . $g . ',' . $b . ',' . rtrim( rtrim( number_format( $alpha, 2, '.', '' ), '0' ), '.' ) . ')';
+}
+
+/**
  * Build the full HTML email body for a digest run.
  *
  * @param array  $sections    [ [ form, entries, field_map, count ], ... ]
@@ -67,9 +82,62 @@ function edfgf_build_digest_html( array $sections, array $d, int $total_count, s
 	$muted  = '#6b7280';
 	$border = '#e5e7eb';
 
+	$default_font = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
+
+	/**
+	 * Filter the CSS font-family stack applied to the whole email. Add-ons use
+	 * this for custom typography. Must be a plain font-family list (no quotes
+	 * that would break the inline style attribute beyond single quotes).
+	 *
+	 * @param string $font_family Default font stack.
+	 * @param array  $d           The digest configuration.
+	 */
+	$font_family = (string) apply_filters( 'edfgf_email_font_family', $default_font, $d );
+	if ( '' === trim( $font_family ) ) {
+		$font_family = $default_font;
+	}
+
+	/**
+	 * Filter the header text color (digest title and subtitle). Must be a 6-digit
+	 * hex color; invalid values fall back to white.
+	 *
+	 * @param string $header_text Default header text color.
+	 * @param array  $d           The digest configuration.
+	 */
+	$header_text = (string) apply_filters( 'edfgf_email_header_text_color', '#ffffff', $d );
+	if ( ! preg_match( '/^#[0-9a-fA-F]{6}$/', $header_text ) ) {
+		$header_text = '#ffffff';
+	}
+	// Subtitle is the header color at 85% opacity, matching the default look.
+	$header_subtle = edfgf_hex_to_rgba( $header_text, 0.85 );
+
+	/**
+	 * Filter the footer background color. Empty string (default) keeps the card's
+	 * white background. Must be a 6-digit hex color when set.
+	 *
+	 * @param string $footer_bg Default footer background (empty = none).
+	 * @param array  $d         The digest configuration.
+	 */
+	$footer_bg = (string) apply_filters( 'edfgf_email_footer_bg', '', $d );
+	if ( '' !== $footer_bg && ! preg_match( '/^#[0-9a-fA-F]{6}$/', $footer_bg ) ) {
+		$footer_bg = '';
+	}
+
+	/**
+	 * Filter the footer text color. Must be a 6-digit hex color; invalid values
+	 * fall back to the muted gray default.
+	 *
+	 * @param string $footer_text Default footer text color.
+	 * @param array  $d           The digest configuration.
+	 */
+	$footer_text = (string) apply_filters( 'edfgf_email_footer_text', $muted, $d );
+	if ( ! preg_match( '/^#[0-9a-fA-F]{6}$/', $footer_text ) ) {
+		$footer_text = $muted;
+	}
+
 	ob_start();
 	?>
-	<div style="margin:0;padding:24px;background:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;">
+	<div style="margin:0;padding:24px;background:#f3f4f6;font-family:<?php echo esc_attr( $font_family ); ?>;color:#111827;">
 		<div style="max-width:680px;margin:0 auto;background:#ffffff;border:1px solid <?php echo esc_attr( $border ); ?>;border-radius:10px;overflow:hidden;">
 
 			<!-- Header -->
@@ -88,10 +156,10 @@ function edfgf_build_digest_html( array $sections, array $d, int $total_count, s
 					echo '<div style="margin-bottom:10px;">' . wp_kses_post( $logo_html ) . '</div>';
 				}
 				?>
-				<div style="color:#ffffff;font-size:18px;font-weight:700;">
+				<div style="color:<?php echo esc_attr( $header_text ); ?>;font-size:18px;font-weight:700;">
 					<?php echo esc_html( $title ); ?>
 				</div>
-				<div style="color:rgba(255,255,255,0.85);font-size:13px;margin-top:2px;">
+				<div style="color:<?php echo esc_attr( $header_subtle ); ?>;font-size:13px;margin-top:2px;">
 					<?php
 					/* translators: %s: cadence label such as Daily, Weekly, or One-time. */
 					printf( esc_html__( 'Entry digest · %s', 'entry-digest-for-gravity-forms' ), esc_html( $cadence_label ) );
@@ -143,7 +211,7 @@ function edfgf_build_digest_html( array $sections, array $d, int $total_count, s
 			<?php endif; ?>
 
 			<!-- Footer -->
-			<div style="padding:18px 24px 24px 24px;margin-top:8px;border-top:1px solid <?php echo esc_attr( $border ); ?>;font-size:12px;color:<?php echo esc_attr( $muted ); ?>;">
+			<div style="padding:18px 24px 24px 24px;margin-top:8px;border-top:1px solid <?php echo esc_attr( $border ); ?>;<?php echo '' !== $footer_bg ? 'background:' . esc_attr( $footer_bg ) . ';' : ''; ?>font-size:12px;color:<?php echo esc_attr( $footer_text ); ?>;">
 				<?php
 				/**
 				 * Filter the footer credit line. Add-ons can replace it with custom
@@ -188,10 +256,11 @@ function edfgf_build_digest_html( array $sections, array $d, int $total_count, s
  * Render one form's table block within the digest.
  */
 function edfgf_render_section_table( array $sec, array $d, bool $multi_form, string $accent, string $muted, string $border ): string {
-	$entries   = $sec['entries'];
-	$field_map = $sec['field_map'];
-	$count     = $sec['count'];
-	$form_id   = (int) ( $sec['form']['id'] ?? 0 );
+	$entries          = $sec['entries'];
+	$field_map        = $sec['field_map'];
+	$count            = $sec['count'];
+	$form_id          = (int) ( $sec['form']['id'] ?? 0 );
+	$show_date_column = ! isset( $d['show_date_column'] ) || ! empty( $d['show_date_column'] );
 
 	ob_start();
 	?>
@@ -213,7 +282,9 @@ function edfgf_render_section_table( array $sec, array $d, bool $multi_form, str
 				<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:13px;">
 					<thead>
 						<tr>
-							<th style="text-align:left;padding:8px 10px;background:#f9fafb;border:1px solid <?php echo esc_attr( $border ); ?>;color:<?php echo esc_attr( $muted ); ?>;font-weight:600;white-space:nowrap;"><?php esc_html_e( 'Submitted', 'entry-digest-for-gravity-forms' ); ?></th>
+							<?php if ( $show_date_column ) : ?>
+								<th style="text-align:left;padding:8px 10px;background:#f9fafb;border:1px solid <?php echo esc_attr( $border ); ?>;color:<?php echo esc_attr( $muted ); ?>;font-weight:600;white-space:nowrap;"><?php esc_html_e( 'Submitted', 'entry-digest-for-gravity-forms' ); ?></th>
+							<?php endif; ?>
 							<?php foreach ( $field_map as $label ) : ?>
 								<th style="text-align:left;padding:8px 10px;background:#f9fafb;border:1px solid <?php echo esc_attr( $border ); ?>;color:<?php echo esc_attr( $muted ); ?>;font-weight:600;">
 									<?php echo esc_html( $label ); ?>
@@ -236,22 +307,34 @@ function edfgf_render_section_table( array $sec, array $d, bool $multi_form, str
 								: '';
 							?>
 							<tr>
-								<td style="padding:8px 10px;border:1px solid <?php echo esc_attr( $border ); ?>;white-space:nowrap;color:<?php echo esc_attr( $muted ); ?>;">
-									<?php if ( $entry_url ) : ?>
-										<a href="<?php echo esc_url( $entry_url ); ?>" style="color:<?php echo esc_attr( $accent ); ?>;text-decoration:underline;white-space:nowrap;"><?php echo esc_html( $date_label ); ?></a>
-									<?php else : ?>
-										<?php echo esc_html( $date_label ); ?>
-									<?php endif; ?>
-								</td>
-								<?php foreach ( array_keys( $field_map ) as $fid ) : ?>
-									<?php
+								<?php if ( $show_date_column ) : ?>
+									<td style="padding:8px 10px;border:1px solid <?php echo esc_attr( $border ); ?>;white-space:nowrap;color:<?php echo esc_attr( $muted ); ?>;">
+										<?php if ( $entry_url ) : ?>
+											<a href="<?php echo esc_url( $entry_url ); ?>" style="color:<?php echo esc_attr( $accent ); ?>;text-decoration:underline;white-space:nowrap;"><?php echo esc_html( $date_label ); ?></a>
+										<?php else : ?>
+											<?php echo esc_html( $date_label ); ?>
+										<?php endif; ?>
+									</td>
+								<?php endif; ?>
+								<?php
+								$first_field = true;
+								foreach ( array_keys( $field_map ) as $fid ) :
 									$val = (string) ( $entry[ $fid ] ?? '' );
 									if ( mb_strlen( $val ) > EDFGF_MAX_CELL_CHARS ) {
 										$val = mb_substr( $val, 0, EDFGF_MAX_CELL_CHARS ) . '…';
 									}
+									$cell = nl2br( esc_html( $val ) );
+									// When the date column is hidden the per-row admin link has no
+									// home, so attach it to the first field column instead — that
+									// keeps every row clickable when entry links are enabled.
+									if ( $entry_url && ! $show_date_column && $first_field ) {
+										$link_text = ( '' !== $val ) ? $cell : esc_html__( 'View entry', 'entry-digest-for-gravity-forms' );
+										$cell      = '<a href="' . esc_url( $entry_url ) . '" style="color:' . esc_attr( $accent ) . ';text-decoration:underline;">' . $link_text . '</a>';
+									}
+									$first_field = false;
 									?>
 									<td style="padding:8px 10px;border:1px solid <?php echo esc_attr( $border ); ?>;vertical-align:top;">
-										<?php echo nl2br( esc_html( $val ) ); ?>
+										<?php echo $cell; // phpcs:ignore WordPress.Security.EscapeOutput - value is escaped above. ?>
 									</td>
 								<?php endforeach; ?>
 							</tr>
@@ -360,8 +443,10 @@ function edfgf_build_digest_text( array $sections, array $d, int $total_count, s
 				}
 				$shown++;
 
-				$when    = edfgf_local_datetime( $entry['date_created'] ?? '', 'M j, Y g:i A' );
-				$lines[] = '- ' . __( 'Submitted:', 'entry-digest-for-gravity-forms' ) . ' ' . $when;
+				$when = edfgf_local_datetime( $entry['date_created'] ?? '', 'M j, Y g:i A' );
+				if ( ! isset( $d['show_date_column'] ) || ! empty( $d['show_date_column'] ) ) {
+					$lines[] = '- ' . __( 'Submitted:', 'entry-digest-for-gravity-forms' ) . ' ' . $when;
+				}
 
 				foreach ( $field_map as $fid => $label ) {
 					$val = wp_strip_all_tags( (string) ( $entry[ $fid ] ?? '' ) );

@@ -2,7 +2,7 @@
 Requires at least: 6.1
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,6 +38,21 @@ The free plugin must be installed and active for this add-on to work. All free f
 * PHP 7.4+
 
 == Changelog ==
+
+= 1.3.0 =
+* New: **Email font** - choose the font family for the whole email from a list of email-safe stacks (system sans-serif, Helvetica/Arial, Georgia, Times, and more). Set it under Email branding > Advanced colors & typography.
+* New: **Header text color** - set the color of the digest title and subtitle in the email header.
+* New: **Footer colors** - set a custom footer background color and footer text color.
+* Fix: the "Right of title" logo position now places the logo flush against the right edge of the header. Previously the logo stayed on the left regardless of this setting.
+* The finer styling controls are grouped under a collapsible "Advanced colors & typography" section so the branding panel stays uncluttered.
+
+= 1.2.1 =
+* Fix: Email preview now correctly displays logo images (removed iframe sandbox restriction that blocked external image URLs).
+* New: Logo position control - choose whether the logo appears above, to the left of, or to the right of the digest title in the email header. Set it under Email branding in the digest editor.
+
+= 1.2.0 =
+* New: Email Preview - a "Preview Email" card in the digest editor renders the full styled email using your saved branding, fields, and settings, with realistic sample data. No real entries are used; Pro logo, accent color, and footer are applied so the preview is pixel-perfect to what recipients receive.
+* New: Dynamic filter rows - conditional filter rules can now be added and removed live in the editor without a page reload. Row indices are automatically resequenced so saved rules are always clean and sequential.
 
 = 1.1.0 =
 * New: manage a form's Gravity Forms notifications right from the digest editor - switch any notification off so its per-entry email stops and only the digest goes out. Toggles edit Gravity Forms directly, are user-owned (never auto-reverted), and include a link to each notification.
