@@ -53,7 +53,19 @@ function edfgf_pro_features(): array {
 		],
 		[
 			'title' => __( 'Custom Email Branding', 'entry-digest-for-gravity-forms' ),
-			'body'  => __( 'Upload your logo, set an accent color, and replace the default footer credit with your own text. Every digest your site sends reflects your brand instead of the plugin’s.', 'entry-digest-for-gravity-forms' ),
+			'body'  => __( 'Make every digest yours: add your logo above, left, or right of the title, set the header accent and text colors, pick an email-safe font, and customize the footer background, text color, and credit line.', 'entry-digest-for-gravity-forms' ),
+		],
+		[
+			'title' => __( 'Form & Field Ordering', 'entry-digest-for-gravity-forms' ),
+			'body'  => __( 'Arrange a digest exactly how you want it. Simple up/down controls set the order forms appear and the order fields show as columns in the entry table.', 'entry-digest-for-gravity-forms' ),
+		],
+		[
+			'title' => __( 'Email Preview', 'entry-digest-for-gravity-forms' ),
+			'body'  => __( 'See what recipients will get before you send. Preview the fully styled digest - with your branding, fields, and realistic sample data - right in the editor, instead of waiting for the next scheduled run.', 'entry-digest-for-gravity-forms' ),
+		],
+		[
+			'title' => __( 'Notification Controls', 'entry-digest-for-gravity-forms' ),
+			'body'  => __( 'Manage each form’s Gravity Forms notifications from inside the digest editor. Switch off the per-entry emails once a scheduled digest covers them - the toggles change Gravity Forms directly and take effect immediately.', 'entry-digest-for-gravity-forms' ),
 		],
 		[
 			'title' => __( 'Extended Send History', 'entry-digest-for-gravity-forms' ),

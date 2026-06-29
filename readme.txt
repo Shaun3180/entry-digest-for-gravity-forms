@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.8.1
+Stable tag: 2.8.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -126,6 +126,9 @@ As many as you like - there is no limit on the number of digests, and each diges
 5. Per-form field selection for the entry table.
 
 == Changelog ==
+
+= 2.8.2 =
+* Updated the optional "Entry Digest Pro" description panel to reflect current add-on features, including form and field ordering, email preview, notification controls, and the expanded email branding options.
 
 = 2.8.1 =
 * Improved: email column order now follows your selected-field order, so add-ons (and future options) can control how columns are arranged.
