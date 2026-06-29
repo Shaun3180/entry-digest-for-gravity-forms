@@ -24,6 +24,36 @@ function edfgf_render_editor( string $action, string $notice ): void {
 	$all_forms = $gf ? GFAPI::get_forms() : [];
 	$days      = [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ];
 
+	/**
+	 * Whether the editor should present its form and field lists in a reorderable
+	 * layout (selected items first, in saved order) so an add-on can offer manual
+	 * ordering controls. Core renders in native order and returns false.
+	 *
+	 * @param bool $reorderable Default false.
+	 */
+	$reorderable = (bool) apply_filters( 'edfgf_editor_reorderable', false );
+
+	/**
+	 * Order a [ key => value ] map so the keys listed in $order come first (in the
+	 * order given), followed by any remaining keys in their original order. Used to
+	 * present selected forms/fields first when reordering is enabled.
+	 */
+	$edfgf_order_first = static function ( array $map, array $order ): array {
+		$out = [];
+		foreach ( $order as $k ) {
+			$k = (string) $k;
+			if ( isset( $map[ $k ] ) ) {
+				$out[ $k ] = $map[ $k ];
+			}
+		}
+		foreach ( $map as $k => $v ) {
+			if ( ! isset( $out[ (string) $k ] ) ) {
+				$out[ (string) $k ] = $v;
+			}
+		}
+		return $out;
+	};
+
 	// One-time send: datetime-local needs 'Y-m-d\TH:i'; we store 'Y-m-d H:i'.
 	$onetime_input = $d['onetime_at'] ? str_replace( ' ', 'T', $d['onetime_at'] ) : '';
 	// Sensible minimum for the picker = now (site timezone).
@@ -77,15 +107,25 @@ function edfgf_render_editor( string $action, string $notice ): void {
 								 */
 								$multiple = (bool) apply_filters( 'edfgf_form_selector_multiple', true );
 								?>
-								<fieldset>
+								<fieldset class="edfgf-form-list">
 									<p class="description" style="margin-bottom:8px;">
 										<?php echo esc_html( $multiple
 											? __( 'Select one or more forms for this digest.', 'entry-digest-for-gravity-forms' )
 											: __( 'Choose the form this digest covers.', 'entry-digest-for-gravity-forms' ) ); ?>
 									</p>
-									<?php foreach ( $all_forms as $form ) : ?>
+									<?php
+									// When reorderable, list selected forms first (in saved order).
+									$forms_by_id = [];
+									foreach ( $all_forms as $form ) {
+										$forms_by_id[ (string) $form['id'] ] = $form;
+									}
+									$forms_list = ( $reorderable && $multiple )
+										? array_values( $edfgf_order_first( $forms_by_id, array_map( 'strval', $d['form_ids'] ) ) )
+										: $all_forms;
+									?>
+									<?php foreach ( $forms_list as $form ) : ?>
 										<?php $fid = (string) $form['id']; $checked = in_array( (int) $fid, $d['form_ids'], true ); ?>
-										<label style="display:block;margin-bottom:4px;">
+										<label class="edfgf-orderable-item" style="display:block;margin-bottom:4px;">
 											<input type="<?php echo esc_attr( $multiple ? 'checkbox' : 'radio' ); ?>" name="edfgf_digest[form_ids][]" value="<?php echo esc_attr( $fid ); ?>" class="edfgf-form-toggle" data-fid="<?php echo esc_attr( $fid ); ?>" <?php checked( $checked ); ?>>
 											<?php echo esc_html( $form['title'] ); ?> <span style="color:#888;"><?php /* translators: %s: numeric form ID. */ printf( esc_html__( '(ID %s)', 'entry-digest-for-gravity-forms' ), esc_html( $fid ) ); ?></span>
 										</label>
@@ -263,7 +303,18 @@ function edfgf_render_editor( string $action, string $notice ): void {
 								<input type="checkbox" name="edfgf_digest[link_entries]" value="1" <?php checked( ! empty( $d['link_entries'] ) ); ?>>
 								<?php esc_html_e( 'Link each row to its entry in the WordPress admin', 'entry-digest-for-gravity-forms' ); ?>
 							</label>
-							<p class="description"><?php esc_html_e( 'Adds an admin link on each entry’s date. It only works for recipients who can log in and view Gravity Forms entries, so turn it off when emailing people without admin access.', 'entry-digest-for-gravity-forms' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Adds an admin link on each entry\'s date. It only works for recipients who can log in and view Gravity Forms entries, so turn it off when emailing people without admin access.', 'entry-digest-for-gravity-forms' ); ?></p>
+						</td>
+					</tr>
+
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Date submitted column', 'entry-digest-for-gravity-forms' ); ?></th>
+						<td>
+							<label>
+								<input type="checkbox" name="edfgf_digest[show_date_column]" value="1" <?php checked( ! isset( $d['show_date_column'] ) || ! empty( $d['show_date_column'] ) ); ?>>
+								<?php esc_html_e( 'Show the date submitted column in the entry table', 'entry-digest-for-gravity-forms' ); ?>
+							</label>
+							<p class="description"><?php esc_html_e( 'When checked, each entry row shows the date and time it was submitted. Uncheck to keep the table focused on field values only.', 'entry-digest-for-gravity-forms' ); ?></p>
 						</td>
 					</tr>
 
@@ -284,9 +335,15 @@ function edfgf_render_editor( string $action, string $notice ): void {
 						<h3 style="margin-top:4px;"><?php echo esc_html( $form['title'] ); ?> <span style="color:#888;font-weight:400;"><?php /* translators: %s: numeric form ID. */ printf( esc_html__( '(ID %s)', 'entry-digest-for-gravity-forms' ), esc_html( $fid ) ); ?></span> <span class="edfgf-form-count" data-fid="<?php echo esc_attr( $fid ); ?>" style="color:#2271b1;font-weight:400;font-size:13px;"></span></h3>
 
 						<p style="font-weight:600;margin-bottom:6px;"><?php esc_html_e( 'Fields to include', 'entry-digest-for-gravity-forms' ); ?> <span style="font-weight:400;color:#888;"><?php esc_html_e( '(none checked = all)', 'entry-digest-for-gravity-forms' ); ?></span></p>
-						<fieldset style="columns:2;max-width:680px;">
-							<?php foreach ( $field_map as $key => $label ) : ?>
-								<label style="display:block;margin-bottom:3px;">
+						<?php
+						// When reorderable, list selected fields first (in saved order).
+						$fields_render = ( $reorderable && $sel_fields )
+							? $edfgf_order_first( $field_map, array_map( 'strval', $sel_fields ) )
+							: $field_map;
+						?>
+						<fieldset class="edfgf-field-list" style="columns:2;max-width:680px;">
+							<?php foreach ( $fields_render as $key => $label ) : ?>
+								<label class="edfgf-orderable-item" style="display:block;margin-bottom:3px;">
 									<input type="checkbox" name="edfgf_digest[fields][<?php echo esc_attr( $fid ); ?>][]" value="<?php echo esc_attr( $key ); ?>" <?php checked( in_array( (string) $key, array_map( 'strval', $sel_fields ), true ) ); ?>>
 									<?php echo esc_html( $label ); ?> <span style="color:#aaa;">(<?php echo esc_html( $key ); ?>)</span>
 								</label>

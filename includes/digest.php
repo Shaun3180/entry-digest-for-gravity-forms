@@ -73,10 +73,14 @@ function edfgf_filter_field_map( array $field_map, array $include_fields ): arra
 	if ( empty( $include_fields ) ) {
 		return $field_map;
 	}
+	// Iterate the include list (not the native field map) so the resulting column
+	// order follows the saved selection order. With no add-on reordering this is
+	// identical to native order, because selections are stored in field order.
 	$filtered = [];
-	foreach ( $field_map as $key => $label ) {
-		if ( in_array( (string) $key, array_map( 'strval', $include_fields ), true ) ) {
-			$filtered[ $key ] = $label;
+	foreach ( $include_fields as $key ) {
+		$key = (string) $key;
+		if ( isset( $field_map[ $key ] ) ) {
+			$filtered[ $key ] = $field_map[ $key ];
 		}
 	}
 	return $filtered ?: $field_map;

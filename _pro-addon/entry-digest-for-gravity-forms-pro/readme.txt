@@ -2,7 +2,7 @@
 Requires at least: 6.1
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,6 +38,9 @@ The free plugin must be installed and active for this add-on to work. All free f
 * PHP 7.4+
 
 == Changelog ==
+
+= 1.4.0 =
+* New: **Form and field ordering** - use up/down arrows in the digest editor to set the order forms appear (in multi-form digests) and the order fields appear as columns in the entry table. Selected items are listed first so they're easy to arrange.
 
 = 1.3.0 =
 * New: **Email font** - choose the font family for the whole email from a list of email-safe stacks (system sans-serif, Helvetica/Arial, Georgia, Times, and more). Set it under Email branding > Advanced colors & typography.

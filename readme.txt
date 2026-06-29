@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.8.0
+Stable tag: 2.8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -126,6 +126,10 @@ As many as you like - there is no limit on the number of digests, and each diges
 5. Per-form field selection for the entry table.
 
 == Changelog ==
+
+= 2.8.1 =
+* Improved: email column order now follows your selected-field order, so add-ons (and future options) can control how columns are arranged.
+* Developer: new `edfgf_editor_reorderable` filter lets the Pro add-on present the form and field lists in a reorderable layout. No change for the free plugin on its own.
 
 = 2.8.0 =
 * New: **Date submitted column** - an editor toggle to show or hide the "Submitted" date/time column in the entry table, so you can keep the digest focused on field values when you don't need timestamps.
