@@ -68,10 +68,6 @@ function edfgf_pro_features(): array {
 			'body'  => __( 'Arrange a digest exactly how you want it. Simple up/down controls set the order forms appear and the order fields show as columns in the entry table.', 'entry-digest-for-gravity-forms' ),
 		],
 		[
-			'title' => __( 'Extended Send History', 'entry-digest-for-gravity-forms' ),
-			'body'  => __( 'Configurable send-log retention beyond the default of ten recent sends.', 'entry-digest-for-gravity-forms' ),
-		],
-		[
 			'title' => __( 'Priority Support', 'entry-digest-for-gravity-forms' ),
 			'body'  => __( 'Get fast, direct help from the developer. Pro licenses come with priority email support so setup questions and edge cases don’t sit in a queue.', 'entry-digest-for-gravity-forms' ),
 		],

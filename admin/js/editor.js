@@ -75,6 +75,23 @@
 		var timer   = null;
 		var seq     = 0;
 
+		function activeFilterCount( fid ) {
+			var filterTable = document.querySelector( '.edfgfp-filters[data-fid="' + fid + '"]' );
+			if ( ! filterTable ) { return 0; }
+			var count = 0;
+			filterTable.querySelectorAll( 'tr.edfgfp-filter-row' ).forEach( function ( row ) {
+				var fieldSel = row.querySelector( 'select[name*="[field]"]' );
+				if ( fieldSel && fieldSel.value !== '' ) { count++; }
+			} );
+			return count;
+		}
+
+		function filterSuffix( fid ) {
+			var n = activeFilterCount( fid );
+			if ( n === 0 ) { return ''; }
+			return ' (' + n + ' ' + ( n === 1 ? I18N.filterApplied : I18N.filtersApplied ) + ')';
+		}
+
 		function render( data ) {
 			var total = data.total | 0;
 			var word  = ( total === 1 ) ? I18N.entry : I18N.entries;
@@ -83,11 +100,14 @@
 			if ( fids.length > 1 ) {
 				html += '<ul style="margin:6px 0 0 18px;list-style:disc;">';
 				fids.forEach( function ( fid ) {
-					var t = ( data.titles && data.titles[ fid ] ) ? data.titles[ fid ] : ( 'Form ' + fid );
-					html += '<li>' + esc( t ) + ': <strong>' + ( data.per_form[ fid ] | 0 ) + '</strong></li>';
+					var t      = ( data.titles && data.titles[ fid ] ) ? data.titles[ fid ] : ( 'Form ' + fid );
+					var suffix = esc( filterSuffix( fid ) );
+					html += '<li>' + esc( t ) + ': <strong>' + ( data.per_form[ fid ] | 0 ) + '</strong>' + suffix + '</li>';
 				} );
 				html += '</ul>';
-			} else if ( fids.length === 0 ) {
+			} else if ( fids.length === 1 ) {
+				html += esc( filterSuffix( fids[ 0 ] ) );
+			} else {
 				html = '<em>' + esc( I18N.selectForm ) + '</em>';
 			}
 			preview.innerHTML = html;
@@ -95,9 +115,10 @@
 			badges.forEach( function ( b ) {
 				var fid = b.dataset.fid;
 				if ( data.per_form && Object.prototype.hasOwnProperty.call( data.per_form, fid ) ) {
-					var n = data.per_form[ fid ] | 0;
-					var w = ( n === 1 ) ? I18N.entry : I18N.entries;
-					b.textContent = '· ' + n + ' ' + w + ' ' + I18N.inWord + ' ' + data.window;
+					var n    = data.per_form[ fid ] | 0;
+					var w    = ( n === 1 ) ? I18N.entry : I18N.entries;
+					var text = '· ' + n + ' ' + w + ' ' + I18N.inWord + ' ' + data.window + filterSuffix( fid );
+					b.textContent = text;
 				} else {
 					b.textContent = '';
 				}

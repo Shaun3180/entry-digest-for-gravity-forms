@@ -8,8 +8,11 @@ defined( 'ABSPATH' ) || exit;
  */
 function edfgf_handle_save(): array {
 	// Nonce already verified by check_admin_referer() in menu.php before this function is called.
-	// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- nonce checked upstream; individual values sanitized below.
-	$raw = wp_unslash( (array) ( $_POST['edfgf_digest'] ?? [] ) );
+	// Sanitize early: every submitted value is run through sanitize_text_field() the moment it
+	// is read - before any of it is used or handed to the edfgf_save_digest filter - and the
+	// values are then further validated/coerced below (intval, sanitize_email, whitelists).
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- nonce verified upstream in menu.php via check_admin_referer().
+	$raw = map_deep( wp_unslash( (array) ( $_POST['edfgf_digest'] ?? [] ) ), 'sanitize_text_field' );
 
 	$digests = edfgf_get_digests();
 	$id      = sanitize_text_field( $raw['id'] ?? '' );
@@ -82,6 +85,11 @@ function edfgf_handle_save(): array {
 
 	// Whether to show the "Submitted" date column in the entry table (checkbox: absent = off).
 	$d['show_date_column'] = ! empty( $raw['show_date_column'] );
+
+	// Max entries shown in the email table. Blank = system cap (stored as null);
+	// 0 = no table (summary only); a positive integer = cap at that many rows.
+	$limit_raw = $raw['email_table_limit'] ?? '';
+	$d['email_table_limit'] = ( '' === $limit_raw ) ? null : max( 0, (int) $limit_raw );
 
 	// Per-form fields.
 	$fields_in = (array) ( $raw['fields'] ?? [] );

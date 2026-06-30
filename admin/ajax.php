@@ -17,8 +17,10 @@ function edfgf_ajax_entry_count(): void {
 		wp_send_json_error( [ 'message' => __( 'Gravity Forms is not active.', 'entry-digest-for-gravity-forms' ) ] );
 	}
 
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- wp_unslash() applied; individual values are sanitized below via sanitize_text_field/intval/etc.
-	$raw = wp_unslash( (array) ( $_POST['edfgf_digest'] ?? [] ) );
+	// Sanitize early: every submitted value is run through sanitize_text_field() the moment it
+	// is read - before it is used or handed to the edfgf_preview_count filter. The nonce is
+	// verified above via check_ajax_referer(). Values are further coerced below (intval/whitelist).
+	$raw = map_deep( wp_unslash( (array) ( $_POST['edfgf_digest'] ?? [] ) ), 'sanitize_text_field' );
 
 	$form_ids = array_values( array_unique( array_map( 'intval', (array) ( $raw['form_ids'] ?? [] ) ) ) );
 	$form_ids = array_values( array_filter( $form_ids, static fn( $f ) => $f > 0 ) );

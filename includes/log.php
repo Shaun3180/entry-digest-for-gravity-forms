@@ -17,11 +17,11 @@ define( 'EDFGF_LOG_DEFAULT_MAX', 10 );
 /**
  * Number of log records to retain (filterable).
  *
- * The free plugin keeps the most recent few sends - enough to confirm digests
- * are running and to debug a recent problem. The retention count is exposed via
- * the 'edfgf_log_max' filter, so it is a default, not a hard limit: any site
- * owner (or the optional Pro add-on, which offers a configurable history) can
- * raise it.
+ * The send log keeps the most recent few sends - enough to confirm digests are
+ * running and to debug a recent problem. The default of ten is a sensible cap to
+ * keep the stored option small, not a hard limit: it is exposed through the
+ * standard 'edfgf_log_max' filter so site owners and developers can raise or
+ * lower it to suit their site.
  */
 function edfgf_log_max(): int {
 	$max = (int) apply_filters( 'edfgf_log_max', EDFGF_LOG_DEFAULT_MAX );
