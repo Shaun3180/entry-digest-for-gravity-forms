@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.9.0
+Stable tag: 2.9.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,7 @@ Everything here is free and fully functional - no feature is locked, time-limite
 * Configurable lookback window for one-time sends.
 * Configurable quiet-period behavior: send a "no new entries" note or stay silent, per digest.
 * Per-field selection for the entry table.
+* Max entries in email - cap the inline table at a chosen number of rows, or set it to 0 for a summary-only email; the email always notes the total entry count.
 * Live entry-count preview as you build a digest.
 * Summary block with entry count and date range.
 * "Send Now" button to preview a digest on demand.
@@ -57,11 +58,9 @@ A digest can cover one form or several - combine entries from multiple forms int
 A separate, optional Pro add-on - distributed from [addasitebuilders.com](https://addasitebuilders.com/plugins), not from WordPress.org - adds exports, filtering, routing, and branding for teams and agencies:
 
 * CSV and Excel (.xlsx) attachments of the full period's entries - the email shows the summary, the attachment carries the complete dataset.
-* Max-entries cap - limit the inline entry table to N rows; the email notes the total count so recipients always know how many entries arrived. Set it to 0 to suppress the table entirely and let the attachment carry the data.
 * Conditional filtering - include only entries that match your rules (for example "Status is Complete" or "Budget greater than 1000").
 * Per-recipient and role-based routing - send each form's entries to the right person or to every user in a chosen WordPress role.
 * Custom email branding - your logo, accent color, and a white-label footer.
-* Extended send-log history - retain a configurable number of past sends instead of just the most recent few.
 * Priority email support.
 
 This plugin is complete and fully functional without it. The Pro add-on simply hooks in if installed; nothing here is disabled while it is absent.
@@ -127,6 +126,11 @@ As many as you like - there is no limit on the number of digests, and each diges
 5. Per-form field selection for the entry table.
 
 == Changelog ==
+
+= 2.9.1 =
+* The "Max entries in email" setting is now a free, core feature again - it appears directly in the digest editor, so any user can cap the inline table (or set 0 for a summary-only email). No feature is gated behind the add-on.
+* Send-log retention is a plain, filterable default (`edfgf_log_max`) and is no longer presented as an add-on feature.
+* Hardening: all submitted editor values are sanitized the moment they are read (before any filter receives them), and the contextual-help screen check now sanitizes its request input.
 
 = 2.9.0 =
 * The "Max entries in email" setting has moved to the Pro add-on, where it pairs naturally with the CSV/Excel attachment feature (setting the cap to 0 suppresses the email table entirely, leaving the full dataset in the attachment). The underlying behavior in the email renderer is unchanged - existing digests with this value already set will continue to work. Free users without Pro active use the standard system limit as before.
@@ -222,6 +226,9 @@ As many as you like - there is no limit on the number of digests, and each diges
 * Initial release: single scheduled digest with summary block and entry table, daily/weekly delivery.
 
 == Upgrade Notice ==
+
+= 2.9.1 =
+The "Max entries in email" setting is a free editor option again, send-log retention is a plain filterable default, and submitted values are sanitized earlier. No data changes. Safe to update.
 
 = 2.9.0 =
 The "Max entries in email" setting has moved to the Pro add-on. Free users will use the standard system limit; no data is lost. Safe to update.

@@ -318,11 +318,28 @@ function edfgf_render_editor( string $action, string $notice ): void {
 						</td>
 					</tr>
 
+					<tr>
+						<th scope="row"><label for="edfgf_table_limit"><?php esc_html_e( 'Max entries in email', 'entry-digest-for-gravity-forms' ); ?></label></th>
+						<td>
+							<?php $table_limit_val = $d['email_table_limit'] ?? null; ?>
+							<input type="number" id="edfgf_table_limit" name="edfgf_digest[email_table_limit]" value="<?php echo null !== $table_limit_val ? esc_attr( (string) $table_limit_val ) : ''; ?>" min="0" step="1" class="small-text" placeholder="<?php esc_attr_e( 'All', 'entry-digest-for-gravity-forms' ); ?>">
+							<p class="description">
+								<?php
+								printf(
+									/* translators: 1: the digit 0 wrapped in a code tag; 2: the word "All" wrapped in a code tag. */
+									esc_html__( '%1$s = no table (summary only). Leave blank (%2$s) to include entries up to the system limit. Enter a number to cap the table at that many rows - the email always notes the total number of entries.', 'entry-digest-for-gravity-forms' ),
+									'<code>0</code>',
+									'<code>' . esc_html__( 'All', 'entry-digest-for-gravity-forms' ) . '</code>'
+								); // phpcs:ignore WordPress.Security.EscapeOutput -- format string escaped via esc_html__(); the <code> tags are literal hardcoded markup.
+								?>
+							</p>
+						</td>
+					</tr>
+
 					<?php
 					/**
 					 * Fires inside the Entries & fields section table, after the built-in
-					 * entry options. Add-ons can inject additional <tr> controls here
-					 * (for example, a per-digest inline-table row cap).
+					 * entry options. Add-ons can inject additional <tr> controls here.
 					 *
 					 * @param array $d The digest configuration being edited.
 					 */

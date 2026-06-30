@@ -53,8 +53,10 @@ function edfgf_enqueue_admin_assets(): void {
 			'selectForm'  => __( 'Select a form to see a count.', 'entry-digest-for-gravity-forms' ),
 			'entry'       => __( 'entry', 'entry-digest-for-gravity-forms' ),
 			'entries'     => __( 'entries', 'entry-digest-for-gravity-forms' ),
-			'inThe'       => _x( 'in the', 'precedes a time window such as "past 7 days"', 'entry-digest-for-gravity-forms' ),
-			'inWord'      => _x( 'in', 'precedes a time window in the per-form count badge', 'entry-digest-for-gravity-forms' ),
+			'inThe'          => _x( 'in the', 'precedes a time window such as "past 7 days"', 'entry-digest-for-gravity-forms' ),
+			'inWord'         => _x( 'in', 'precedes a time window in the per-form count badge', 'entry-digest-for-gravity-forms' ),
+			'filterApplied'  => __( 'filter applied', 'entry-digest-for-gravity-forms' ),
+			'filtersApplied' => __( 'filters applied', 'entry-digest-for-gravity-forms' ),
 		] );
 
 		wp_localize_script( 'edfgf-editor', 'EDFGF_COUNT', [

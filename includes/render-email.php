@@ -262,6 +262,11 @@ function edfgf_render_section_table( array $sec, array $d, bool $multi_form, str
 	$form_id          = (int) ( $sec['form']['id'] ?? 0 );
 	$show_date_column = ! isset( $d['show_date_column'] ) || ! empty( $d['show_date_column'] );
 
+	// Determine the effective row cap for the inline table.
+	// null = use the system hard cap; 0 = no table; positive int = user-set cap.
+	$table_limit = isset( $d['email_table_limit'] ) ? $d['email_table_limit'] : null;
+	$row_cap     = null === $table_limit ? EDFGF_MAX_TABLE_ROWS : (int) $table_limit;
+
 	ob_start();
 	?>
 	<div style="padding:0 24px 8px 24px;">
@@ -277,6 +282,31 @@ function edfgf_render_section_table( array $sec, array $d, bool $multi_form, str
 
 		<?php if ( 0 === $count ) : ?>
 			<p style="font-size:13px;color:<?php echo esc_attr( $muted ); ?>;margin:0 0 14px 0;"><?php esc_html_e( 'No new entries for this form.', 'entry-digest-for-gravity-forms' ); ?></p>
+		<?php elseif ( 0 === $row_cap ) : ?>
+			<?php
+			/**
+			 * Filter whether this digest email includes a file attachment.
+			 * Used here to tailor the "no table" message when email_table_limit = 0.
+			 *
+			 * @param bool  $has_attachment Whether an attachment is included.
+			 * @param array $d              The digest configuration.
+			 * @param array $sec            The current form section.
+			 */
+			$has_attachment = (bool) apply_filters( 'edfgf_email_has_attachment', false, $d, $sec );
+			?>
+			<p style="font-size:13px;color:<?php echo esc_attr( $muted ); ?>;margin:0 0 14px 0;">
+				<?php if ( $has_attachment ) : ?>
+					<?php
+					/* translators: %d: number of entries included in the attachment. */
+					printf( esc_html( _n( '%d entry is included in the attached spreadsheet.', '%d entries are included in the attached spreadsheet.', $count, 'entry-digest-for-gravity-forms' ) ), (int) $count );
+					?>
+				<?php else : ?>
+					<?php
+					/* translators: %d: number of entries received this period. */
+					printf( esc_html( _n( '%d entry was received this period. Log in to Gravity Forms to view the entries.', '%d entries were received this period. Log in to Gravity Forms to view the entries.', $count, 'entry-digest-for-gravity-forms' ) ), (int) $count );
+					?>
+				<?php endif; ?>
+			</p>
 		<?php else : ?>
 			<div style="overflow-x:auto;">
 				<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:13px;">
@@ -296,7 +326,7 @@ function edfgf_render_section_table( array $sec, array $d, bool $multi_form, str
 						<?php
 						$shown = 0;
 						foreach ( $entries as $entry ) :
-							if ( $shown >= EDFGF_MAX_TABLE_ROWS ) {
+							if ( $shown >= $row_cap ) {
 								break;
 							}
 							$shown++;
@@ -343,7 +373,7 @@ function edfgf_render_section_table( array $sec, array $d, bool $multi_form, str
 				</table>
 			</div>
 
-			<?php if ( $count > EDFGF_MAX_TABLE_ROWS ) : ?>
+			<?php if ( $count > $shown ) : ?>
 				<p style="font-size:12px;color:<?php echo esc_attr( $muted ); ?>;margin:12px 0 0 0;">
 					<?php
 					/**
@@ -360,7 +390,7 @@ function edfgf_render_section_table( array $sec, array $d, bool $multi_form, str
 						? __( ' - the complete set is in the attachment.', 'entry-digest-for-gravity-forms' )
 						: '.';
 					/* translators: 1: number of rows shown; 2: total number of entries; 3: trailing clause (a period, or a note about the attachment). */
-					printf( esc_html__( 'Showing the first %1$d of %2$d entries%3$s', 'entry-digest-for-gravity-forms' ), (int) EDFGF_MAX_TABLE_ROWS, (int) $count, esc_html( $suffix ) );
+					printf( esc_html__( 'Displaying %1$d of %2$d entries%3$s', 'entry-digest-for-gravity-forms' ), (int) $shown, (int) $count, esc_html( $suffix ) );
 					?>
 				</p>
 			<?php endif; ?>
@@ -418,15 +448,20 @@ function edfgf_build_digest_text( array $sections, array $d, int $total_count, s
 	$lines[] = __( 'Period:', 'entry-digest-for-gravity-forms' ) . ' ' . wp_strip_all_tags( $period );
 	$lines[] = '';
 
+	// Determine the effective row cap for the inline table (mirrors HTML builder logic).
+	$table_limit_txt = isset( $d['email_table_limit'] ) ? $d['email_table_limit'] : null;
+	$row_cap_txt     = null === $table_limit_txt ? EDFGF_MAX_TABLE_ROWS : (int) $table_limit_txt;
+
 	if ( 0 === $total_count ) {
 		$lines[] = __( 'No new entries were submitted during this period.', 'entry-digest-for-gravity-forms' );
 	} else {
 		foreach ( $sections as $sec ) {
 			$entries   = $sec['entries'];
 			$field_map = $sec['field_map'];
+			$sec_count = (int) $sec['count'];
 
 			if ( $multi_form ) {
-				$lines[] = '## ' . $sec['form']['title'] . ' (' . (int) $sec['count'] . ')';
+				$lines[] = '## ' . $sec['form']['title'] . ' (' . $sec_count . ')';
 				$lines[] = '';
 			}
 
@@ -436,9 +471,23 @@ function edfgf_build_digest_text( array $sections, array $d, int $total_count, s
 				continue;
 			}
 
+			// When limit = 0, skip the table and show a count note instead.
+			if ( 0 === $row_cap_txt ) {
+				$has_attachment_txt = (bool) apply_filters( 'edfgf_email_has_attachment', false, $d, $sec );
+				if ( $has_attachment_txt ) {
+					/* translators: %d: number of entries included in the attachment. */
+					$lines[] = sprintf( _n( '%d entry is included in the attached spreadsheet.', '%d entries are included in the attached spreadsheet.', $sec_count, 'entry-digest-for-gravity-forms' ), $sec_count );
+				} else {
+					/* translators: %d: number of entries received this period. */
+					$lines[] = sprintf( _n( '%d entry was received this period. Log in to Gravity Forms to view the entries.', '%d entries were received this period. Log in to Gravity Forms to view the entries.', $sec_count, 'entry-digest-for-gravity-forms' ), $sec_count );
+				}
+				$lines[] = '';
+				continue;
+			}
+
 			$shown = 0;
 			foreach ( $entries as $entry ) {
-				if ( $shown >= EDFGF_MAX_TABLE_ROWS ) {
+				if ( $shown >= $row_cap_txt ) {
 					break;
 				}
 				$shown++;
@@ -459,9 +508,9 @@ function edfgf_build_digest_text( array $sections, array $d, int $total_count, s
 				$lines[] = '';
 			}
 
-			if ( (int) $sec['count'] > EDFGF_MAX_TABLE_ROWS ) {
+			if ( $sec_count > $shown ) {
 				/* translators: 1: number of rows shown; 2: total number of entries. */
-				$lines[] = sprintf( __( 'Showing the first %1$d of %2$d entries.', 'entry-digest-for-gravity-forms' ), (int) EDFGF_MAX_TABLE_ROWS, (int) $sec['count'] );
+				$lines[] = sprintf( __( 'Displaying %1$d of %2$d entries.', 'entry-digest-for-gravity-forms' ), $shown, $sec_count );
 				$lines[] = '';
 			}
 		}
