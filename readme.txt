@@ -4,7 +4,7 @@ Tags: gravity forms, email digest, form notifications, scheduled email, form ent
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.9.1
+Stable tag: 2.9.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -126,6 +126,12 @@ As many as you like - there is no limit on the number of digests, and each diges
 5. Per-form field selection for the entry table.
 
 == Changelog ==
+
+= 2.9.3 =
+* Hardening: the schedule column on the digest list is now output through wp_kses_post() rather than an escaping-check suppression.
+
+= 2.9.2 =
+* Output the entry-table cell value through wp_kses_post() instead of suppressing the escaping check, so every cell is explicitly escaped on output.
 
 = 2.9.1 =
 * The "Max entries in email" setting is now a free, core feature again - it appears directly in the digest editor, so any user can cap the inline table (or set 0 for a summary-only email). No feature is gated behind the add-on.

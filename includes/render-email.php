@@ -364,7 +364,7 @@ function edfgf_render_section_table( array $sec, array $d, bool $multi_form, str
 									$first_field = false;
 									?>
 									<td style="padding:8px 10px;border:1px solid <?php echo esc_attr( $border ); ?>;vertical-align:top;">
-										<?php echo $cell; // phpcs:ignore WordPress.Security.EscapeOutput - value is escaped above. ?>
+										<?php echo wp_kses_post( $cell ); ?>
 									</td>
 								<?php endforeach; ?>
 							</tr>

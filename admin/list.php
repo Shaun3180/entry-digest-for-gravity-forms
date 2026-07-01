@@ -105,7 +105,7 @@ function edfgf_render_list( string $notice ): void {
 							</td>
 							<td><?php echo esc_html( implode( ', ', $form_names ) ); ?></td>
 							<td><?php echo esc_html( $rcpts ? implode( ', ', $rcpts ) : __( '- none -', 'entry-digest-for-gravity-forms' ) ); ?></td>
-							<td><?php echo $sched; // phpcs:ignore WordPress.Security.EscapeOutput -- $parts individually escaped above; <br> separators are literal markup. ?></td>
+							<td><?php echo wp_kses_post( $sched ); ?></td>
 							<td><?php echo esc_html( $next_fmt ); ?></td>
 							<td>
 								<a href="<?php echo esc_url( $base_url . '&action=edit&digest=' . rawurlencode( $id ) ); ?>" class="button button-small"><?php esc_html_e( 'Edit', 'entry-digest-for-gravity-forms' ); ?></a>

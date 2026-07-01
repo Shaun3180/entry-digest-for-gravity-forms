@@ -149,8 +149,8 @@ function edfgf_maybe_show_overdue_notice(): void {
 	$earliest = (int) $health['next'];
 
 	$fix = $health['disabled']
-		? esc_html__( 'WP-Cron is turned off on this site (DISABLE_WP_CRON), so a real cron job must call wp-cron.php. Check that your server cron or host scheduler is configured and running.', 'entry-digest-for-gravity-forms' )
-		: esc_html__( 'On low-traffic sites WP-Cron may rarely fire, because it only runs when someone visits the site. A server cron job calling wp-cron.php on a fixed schedule makes sends reliable.', 'entry-digest-for-gravity-forms' );
+		? __( 'WP-Cron is turned off on this site (DISABLE_WP_CRON), so a real cron job must call wp-cron.php. Check that your server cron or host scheduler is configured and running.', 'entry-digest-for-gravity-forms' )
+		: __( 'On low-traffic sites WP-Cron may rarely fire, because it only runs when someone visits the site. A server cron job calling wp-cron.php on a fixed schedule makes sends reliable.', 'entry-digest-for-gravity-forms' );
 
 	$learn_url = 'https://developer.wordpress.org/plugins/cron/';
 	$list_url  = class_exists( 'GFForms' )
@@ -179,7 +179,7 @@ function edfgf_maybe_show_overdue_notice(): void {
 				&nbsp;<a href="<?php echo esc_url( $list_url ); ?>"><?php esc_html_e( 'View digest list →', 'entry-digest-for-gravity-forms' ); ?></a>
 			<?php endif; ?>
 		</p>
-		<p><?php echo $fix; // phpcs:ignore WordPress.Security.EscapeOutput -- already escaped above. ?> <a href="<?php echo esc_url( $learn_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Learn about WP-Cron', 'entry-digest-for-gravity-forms' ); ?></a></p>
+		<p><?php echo esc_html( $fix ); ?> <a href="<?php echo esc_url( $learn_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Learn about WP-Cron', 'entry-digest-for-gravity-forms' ); ?></a></p>
 	</div>
 	<?php
 }

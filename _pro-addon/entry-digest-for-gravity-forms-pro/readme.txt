@@ -2,7 +2,7 @@
 Requires at least: 6.1
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,6 +38,9 @@ The free plugin must be installed and active for this add-on to work. All free f
 * PHP 7.4+
 
 == Changelog ==
+
+= 1.5.1 =
+* Polish: the send-log retention control now appears only alongside the send-log table (not on the empty first-run screen), and its heading no longer carries a redundant "(Pro)" label.
 
 = 1.5.0 =
 * New: **Max entries in email** - cap the inline entry table at N rows per digest. The email notes the total entry count so recipients always know how many entries arrived, even when the table is capped or suppressed (0 = no table, attachment only). Pairs naturally with the CSV/Excel attachment, which always carries the full dataset regardless of the cap.

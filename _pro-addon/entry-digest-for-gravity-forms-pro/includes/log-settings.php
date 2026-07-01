@@ -24,6 +24,12 @@ function edfgfp_render_log_setting(): void {
 		return;
 	}
 
+	// Only render alongside the send-log table this setting governs, so it does not
+	// appear on the empty first-run screen (before any digests have sent).
+	if ( ! function_exists( 'edfgf_get_log' ) || empty( edfgf_get_log() ) ) {
+		return;
+	}
+
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only confirmation flag, no state change.
 	if ( isset( $_GET['edfgfp_log_saved'] ) ) {
 		echo '<div class="notice notice-success is-dismissible"><p>'
@@ -36,7 +42,7 @@ function edfgfp_render_log_setting(): void {
 		$current = EDFGFP_LOG_MAX_DEFAULT;
 	}
 	?>
-	<h2 style="margin-top:30px;"><?php esc_html_e( 'Send-log history (Pro)', 'entry-digest-for-gravity-forms-pro' ); ?></h2>
+	<h2 style="margin-top:30px;"><?php esc_html_e( 'Send-log history', 'entry-digest-for-gravity-forms-pro' ); ?></h2>
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 		<input type="hidden" name="action" value="edfgfp_save_log_max">
 		<?php wp_nonce_field( 'edfgfp_save_log_max' ); ?>
