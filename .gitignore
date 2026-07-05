@@ -19,3 +19,13 @@ wp-config.php
 
 # Composer (vendor is committed, but these shouldn't be)
 /node_modules/
+
+# Build artifacts / packaged zips (repo-only, never tracked)
+/archives/
+*.zip
+
+# Reviewer correspondence / dev notes (not part of the plugin)
+reviewer-reply.txt
+
+# Cloud-mount temp files (Claude synced folder)
+.fuse_hidden*
