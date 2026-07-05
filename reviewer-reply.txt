@@ -1,9 +1,0 @@
-Hi, thanks for the review. I've uploaded a corrected build (2.6.0) and tested it on a clean install with WP_DEBUG on.
-
-Key context:
-- Output escaping: all admin output is now escaped, including the flagged admin/list.php strings and the same pattern elsewhere.
-- Multi-form: removed from core entirely. Digests are plainly single-form now, with no locked or disabled code. Multi-form exists only in a separate add-on hosted on my own site, which is not part of this submission.
-- The in-plugin references to that add-on are plain text links (a tip and one dismissible info panel); nothing is gated.
-- Ownership: the DNS TXT record (wordpressorg-shaun3180-verification) is in place at addasitebuilders.com.
-
-Happy to clarify anything further.

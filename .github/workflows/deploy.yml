@@ -1,0 +1,28 @@
+name: Deploy to WordPress.org
+
+# Fires when you push a version tag (e.g. `git tag 2.9.4 && git push origin 2.9.4`).
+# The tag name becomes the WordPress.org release version, so tag with the bare
+# version number and make sure it matches the `Stable tag:` line in readme.txt.
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  deploy:
+    name: Deploy new release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: WordPress Plugin Deploy
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          # Listing assets (banner/icon/screenshots) live in /assets in this repo.
+          # The action copies them to SVN's top-level /assets folder.
+          ASSETS_DIR: assets
+          # SLUG defaults to the repo name (entry-digest-for-gravity-forms),
+          # which already matches your WordPress.org slug — no override needed.
