@@ -22,10 +22,6 @@
 /reviewer-reply.txt
 *.md
 
-# The separate Pro add-on lives here for convenience but is its own plugin,
-# distributed off WordPress.org. Never bundle it into the free plugin.
-/_pro-addon
-
 # Dependencies / build artifacts
 /node_modules
 /vendor
