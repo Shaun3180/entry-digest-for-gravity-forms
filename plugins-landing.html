@@ -1,0 +1,239 @@
+<!--
+  Add-A-Site  /  Plugins landing page
+  -------------------------------------------------
+  This is a self-contained preview file. To use it on the site:
+  edit the /plugins/ page in WordPress, drop in an Elementor
+  "HTML" widget (or a Custom HTML block), and paste EVERYTHING
+  between the <!-- PASTE START --> and <!-- PASTE END --> markers below.
+  The theme header/footer and menu stay in place; this only fills the
+  page body. All styles are scoped under .ads-plugins so nothing leaks.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plugins &ndash; Add-A-Site Web Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#fff}</style>
+</head>
+<body>
+
+<!-- PASTE START -->
+<div class="ads-plugins">
+  <style>
+    .ads-plugins{
+      --brand:#4632DA;
+      --brand-2:#0FC0DB;
+      --grad:linear-gradient(130deg,#4632DA 0%,#0FC0DB 90%);
+      --ink:#333;
+      --muted:#6b7280;
+      --line:#e7e8ee;
+      --card:#fff;
+      --bg:#f6f7fb;
+      --head:"Varela Round",-apple-system,"Segoe UI",Roboto,sans-serif;
+      --btn:"Montserrat",-apple-system,"Segoe UI",Roboto,sans-serif;
+      font-family:-apple-system,"system-ui","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      color:var(--ink);
+      line-height:1.6;
+    }
+    .ads-plugins *{box-sizing:border-box}
+
+    /* Hero */
+    .ads-plugins .adp-hero{
+      background:var(--grad);
+      color:#fffefe;
+      text-align:center;
+      padding:70px 24px 78px;
+    }
+    .ads-plugins .adp-eyebrow{
+      font-family:var(--btn);
+      font-weight:600;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-size:13px;
+      opacity:.9;
+      margin:0 0 14px;
+    }
+    .ads-plugins .adp-hero h1{
+      font-family:var(--head);
+      font-weight:400;
+      font-size:clamp(32px,5vw,50px);
+      line-height:1.12;
+      margin:0 auto 16px;
+      max-width:15ch;
+    }
+    .ads-plugins .adp-hero p{
+      font-size:clamp(16px,2.2vw,20px);
+      max-width:60ch;
+      margin:0 auto;
+      opacity:.95;
+    }
+
+    /* Cards grid */
+    .ads-plugins .adp-wrap{
+      background:var(--bg);
+      padding:56px 24px 72px;
+    }
+    .ads-plugins .adp-grid{
+      max-width:1100px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:26px;
+    }
+    @media(max-width:900px){.ads-plugins .adp-grid{grid-template-columns:1fr;max-width:520px}}
+
+    .ads-plugins .adp-card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:30px 28px 28px;
+      display:flex;
+      flex-direction:column;
+      box-shadow:0 6px 22px rgba(30,30,60,.05);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .ads-plugins .adp-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 14px 34px rgba(70,50,218,.12);
+    }
+
+    .ads-plugins .adp-icon{
+      width:52px;height:52px;border-radius:13px;
+      background:var(--grad);
+      display:flex;align-items:center;justify-content:center;
+      margin-bottom:18px;
+    }
+    .ads-plugins .adp-icon svg{width:26px;height:26px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+    .ads-plugins .adp-tag{
+      font-family:var(--btn);font-weight:600;font-size:11px;letter-spacing:.08em;
+      text-transform:uppercase;color:var(--muted);margin-bottom:6px;
+    }
+    .ads-plugins .adp-card h2{
+      font-family:var(--head);font-weight:400;
+      font-size:22px;line-height:1.25;margin:0 0 4px;color:#1c1c2b;
+    }
+    .ads-plugins .adp-tagline{
+      font-weight:600;color:var(--brand);font-size:14.5px;margin:0 0 12px;
+    }
+    .ads-plugins .adp-card > p{font-size:14.5px;color:#4a4a55;margin:0 0 16px}
+
+    .ads-plugins .adp-feats{list-style:none;margin:0 0 22px;padding:0}
+    .ads-plugins .adp-feats li{
+      position:relative;padding-left:26px;font-size:14px;color:#4a4a55;margin-bottom:9px;
+    }
+    .ads-plugins .adp-feats li::before{
+      content:"";position:absolute;left:0;top:6px;width:15px;height:15px;border-radius:50%;
+      background:var(--grad);
+    }
+    .ads-plugins .adp-feats li::after{
+      content:"";position:absolute;left:4.5px;top:9.5px;width:5px;height:2.5px;
+      border-left:1.6px solid #fff;border-bottom:1.6px solid #fff;transform:rotate(-45deg);
+    }
+
+    .ads-plugins .adp-foot{margin-top:auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+    .ads-plugins .adp-btn{
+      font-family:var(--btn);font-weight:600;font-size:14px;
+      display:inline-block;padding:11px 20px;border-radius:4px;text-decoration:none;
+      background:var(--brand);color:#fff;transition:background .15s ease;
+    }
+    .ads-plugins .adp-btn:hover{background:#3826c4}
+    .ads-plugins .adp-link{
+      font-family:var(--btn);font-weight:600;font-size:14px;color:var(--brand);text-decoration:none;
+    }
+    .ads-plugins .adp-link:hover{text-decoration:underline}
+
+    .ads-plugins .adp-badge{
+      font-family:var(--btn);font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+      display:inline-block;padding:6px 12px;border-radius:999px;
+      background:#eef0ff;color:var(--brand);
+    }
+    .ads-plugins .adp-badge.soon{background:#f0f1f4;color:#8a8a97}
+
+    .ads-plugins .adp-note{
+      text-align:center;color:var(--muted);font-size:14px;margin:44px auto 0;max-width:60ch;
+    }
+    .ads-plugins .adp-note a{color:var(--brand);text-decoration:none;font-weight:600}
+    .ads-plugins .adp-note a:hover{text-decoration:underline}
+  </style>
+
+  <section class="adp-hero">
+    <p class="adp-eyebrow">WordPress Plugins &middot; Gravity Forms Add-ons</p>
+    <h1>Small plugins that fix real Gravity Forms headaches</h1>
+    <p>Practical, no-nonsense add-ons built from real client work. Each one is free, fully functional on its own, and does one job well.</p>
+  </section>
+
+  <div class="adp-wrap">
+    <div class="adp-grid">
+
+      <!-- Entry Digest -->
+      <div class="adp-card">
+        <div class="adp-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        </div>
+        <div class="adp-tag">Gravity Forms Add-on</div>
+        <h2>Entry Digest for Gravity Forms</h2>
+        <p class="adp-tagline">One email. All your submissions.</p>
+        <p>Replace the flood of one-email-per-submission notifications with a single, scheduled digest: a summary block plus a table of the entries you care about.</p>
+        <ul class="adp-feats">
+          <li>Daily, weekly, or one-time scheduled sends</li>
+          <li>Pick the forms, fields, and recipients</li>
+          <li>Send Now previews and a delivery log</li>
+        </ul>
+        <div class="adp-foot">
+          <a class="adp-btn" href="/plugins/entry-digest-for-gravity-forms/">Learn more</a>
+          <a class="adp-link" href="https://wordpress.org/plugins/entry-digest-for-gravity-forms/">On WordPress.org &rsaquo;</a>
+        </div>
+      </div>
+
+      <!-- Auto Archive -->
+      <div class="adp-card">
+        <div class="adp-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M10 12h4"/></svg>
+        </div>
+        <div class="adp-tag">Gravity Forms Add-on</div>
+        <h2>Auto Archive for Gravity Forms</h2>
+        <p class="adp-tagline">New cycle. Clean slate.</p>
+        <p>Automatically move last cycle's entries into a dedicated Archived view on the schedule you choose, so your team only sees what matters now. Archiving never deletes anything.</p>
+        <ul class="adp-feats">
+          <li>Soft archive and one-click restore</li>
+          <li>Dedicated Archived tab with accurate counts</li>
+          <li>Automatic age-based rule with Run Now</li>
+        </ul>
+        <div class="adp-foot">
+          <a class="adp-btn" href="/plugins/auto-archive-for-gravity-forms/">Learn more</a>
+        </div>
+      </div>
+
+      <!-- Entry Judging -->
+      <div class="adp-card">
+        <div class="adp-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 15.5 7.1 18.2 8 12.7 4 8.8 9.5 8z"/></svg>
+        </div>
+        <div class="adp-tag">Gravity Forms Add-on</div>
+        <h2>Entry Judging for Gravity Forms</h2>
+        <p class="adp-tagline">Fair, blind panel scoring.</p>
+        <p>Anonymous judging of form entries: identifying fields stay hidden and each judge's score is stored on its own. Built for photo contests, scholarships, and awards.</p>
+        <ul class="adp-feats">
+          <li>Blind review hides name and email</li>
+          <li>Independent per-judge scoring</li>
+          <li>Designate any user as a judge</li>
+        </ul>
+        <div class="adp-foot">
+          <span class="adp-badge soon">In development</span>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="adp-note">Every plugin here is free and built to WordPress.org security and coding standards. Need something custom for your forms? <a href="/contact-us/">Get in touch</a>.</p>
+  </div>
+</div>
+<!-- PASTE END -->
+
+</body>
+</html>
