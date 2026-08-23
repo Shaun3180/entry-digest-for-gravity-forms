@@ -2,7 +2,7 @@
 Contributors: Shaun3180
 Tags: gravity forms, entries, export, notifications, digest
 Requires at least: 6.1
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
 Stable tag: 2.9.3
 License: GPLv2 or later
