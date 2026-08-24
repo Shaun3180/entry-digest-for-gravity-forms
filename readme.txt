@@ -4,7 +4,7 @@ Tags: gravity forms, entries, export, notifications, digest
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.9.3
+Stable tag: 2.9.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -126,6 +126,9 @@ As many as you like - there is no limit on the number of digests, and each diges
 5. Per-form field selection for the entry table.
 
 == Changelog ==
+
+= 2.9.4 =
+* Confirmed compatibility with WordPress 7.1 (Tested up to bump).
 
 = 2.9.3 =
 * Hardening: the schedule column on the digest list is now output through wp_kses_post() rather than an escaping-check suppression.
